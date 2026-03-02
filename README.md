@@ -6,3 +6,5 @@
 - frontend/ — User interface (HTML, CSS, JS)
 - backend/ — Python
 - database/ — MySQL
+
+Testing commit!
