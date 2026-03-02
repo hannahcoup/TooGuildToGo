@@ -1,6 +1,7 @@
 const vendors = [
   { name: "Guild Shop", bags: 5, price: 3.50 },
-  { name: "Union Brew", bags: 2, price: 4.00 }
+  { name: "Union Brew", bags: 2, price: 4.00 },
+  { name: "Sphinx", bags: 2, price: 4.00 }
 ];
 
 const container = document.getElementById("vendors");

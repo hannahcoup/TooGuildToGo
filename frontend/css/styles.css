@@ -6,9 +6,54 @@ body {
 header {
   background: #2c7;
   color: white;
-  padding: 1rem;
+  padding: 0px;
 }
 
+
 main {
+  padding: 1rem;
+}
+h2 {
+    text-align: center;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width:200px;
+  background-color: rgb(10, 107, 58);
+
+}
+
+li a {
+  display: block;
+  color: rgb(255, 255, 255);
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+ul li a:hover {
+  background-color: #a9f0b2;
+}
+.active{
+    background-color: #a9f0b2;
+}
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+
+#vendors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.vendor-card {
+  background: rgb(255, 255, 255);
+  border: 1px solid #a0f3b6;
+  border-radius: 8px;
   padding: 1rem;
 }
