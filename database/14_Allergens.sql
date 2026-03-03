@@ -1,6 +1,6 @@
 INSERT INTO allergen (allergen_id, name, notes) VALUES
 (1,  'Celery', NULL),
-(2,  'Cereals containing gluten', 'e.g. wheat, rye, barley, oats'),
+(2,  'Gluten', NULL),
 (3,  'Crustaceans', NULL),
 (4,  'Eggs', NULL),
 (5,  'Fish', NULL),
