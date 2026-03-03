@@ -1,0 +1,15 @@
+INSERT INTO allergen (allergen_id, name, notes) VALUES
+(1,  'Celery', NULL),
+(2,  'Cereals containing gluten', 'e.g. wheat, rye, barley, oats'),
+(3,  'Crustaceans', NULL),
+(4,  'Eggs', NULL),
+(5,  'Fish', NULL),
+(6,  'Lupin', NULL),
+(7,  'Milk', NULL),
+(8,  'Molluscs', NULL),
+(9,  'Mustard', NULL),
+(10, 'Nuts', 'Tree nuts'),
+(11, 'Peanuts', NULL),
+(12, 'Sesame', NULL),
+(13, 'Soya', NULL),
+(14, 'Sulphur dioxide / sulphites', 'If > 10ppm');
