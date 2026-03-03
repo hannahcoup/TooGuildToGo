@@ -12,4 +12,4 @@ INSERT INTO allergen (allergen_id, name, notes) VALUES
 (11, 'Peanuts', NULL),
 (12, 'Sesame', NULL),
 (13, 'Soya', NULL),
-(14, 'Sulphur dioxide / sulphites', 'If > 10ppm');
+(14, 'Sulphites', NULL); -- If > 10ppm
