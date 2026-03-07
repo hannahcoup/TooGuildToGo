@@ -22,9 +22,35 @@
 </nav>
 
 </header>
+<main>
+    <div class="box">
+  <h2>Time to add a bag! </h2>
+  <form id="addBagForm">
+
+  <div class="container">
+    <label for="desc"><b>Description: </b></label><br>
+    <textarea id="desc" placeholder="Enter bag description..." rows="10" cols="50"> </textarea> <br>
+    <label for="category"><b>Category: </b></label>
+    <select name="catergory" id="category">
+        <option value="Pastries">Pastries</option>
+        <option value="Sandwiches">Sandwiches</option>
+    </select><br>
+    <label for="price"><b>Price: </b></label>
+    <input type="text" name="price" id="price" placeholder="Enter Price...">
+    <p id="error" style="color: red;"></p>
+    <button type="submit" class="button">Add</button>
+    
+  </div>
+
+  <div class="container">
+    <a href= "vDashboard.html">
+    <button type="button" class="button">Cancel</button>
+    </a>
+  </div>
+  </div>
+</form>
 
 
-
-<script src="vMain.js"></script>
+<script src="addBag.js"></script>
 </body>
 </html>

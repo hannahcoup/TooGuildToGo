@@ -31,6 +31,19 @@ main {
 	padding: 70px 30px;
 	border-radius: 10px;
 }
+.box{
+    width: 600px;
+	height: 700px;
+	background: #d5f6d2;
+	color: #000;
+	top: 40%;
+    left:25%;
+	position: absolute;
+	align-items: center;
+	box-sizing: border-box; 
+	padding: 70px 30px;
+	border-radius: 10px;
+}
 .button{
     border: none;
   color: white;
