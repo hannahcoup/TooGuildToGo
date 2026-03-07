@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Too Guild To Go</title>
+  <link rel="stylesheet" href="vStyles.css">
+</head>
+
+<body>
+
+<header>
+    <div class = "nav-container"></div>
+  <h1>Too Guild To Go</h1>
+
+</header>
+
+<main>
+    <div class="loginBox">
+  <h2>Welcome back! <br> Let's login to your account </h2>
+  <form id="loginForm">
+
+  <div class="container">
+    <label for="email"><b>Email: </b></label>
+    <input type="text" id="email" placeholder="Enter Vendor Email..." name="email" required>
+    <br>
+    <label for="password"><b>Password:</b></label>
+    <input type="password" id="password" placeholder="Enter Password..." name="password" required>
+    <br>
+    <p id="error" style="color: red;"></p>
+    <button type="submit" class="button">Login</button>
+    
+  </div>
+
+  <div class="container">
+    <a href= "../index.html">
+    <button type="button" class="button">Cancel</button>
+    </a>
+  </div>
+  </div>
+</form>
+  
+</main>
+
+<script src="vAuth.js"></script>
+</body>
+</html>

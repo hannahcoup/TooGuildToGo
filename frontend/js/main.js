@@ -16,3 +16,4 @@ vendors.forEach(v => {
   `;
   container.appendChild(card);
 });
+
