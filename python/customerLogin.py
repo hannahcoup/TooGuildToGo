@@ -6,8 +6,8 @@ app = FastAPI()
 # test students
 
 students = [
-    {"email" : "student1@liverpool.ac.uk", "password": "helloworld", "name": "Lara"}
-    {"email" : "student2@liverpool.ac.uk", "password": "student2026", "name": "Hannah"}
+    {"email" : "student1@liverpool.ac.uk", "password": "helloworld", "name": "Lara"},
+    {"email" : "student2@liverpool.ac.uk", "password": "student2026", "name": "Hannah"},
 ]
 
 class loginRequest(BaseModel):  #  this does automatic data conversions and validaton checks 
