@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-app.add_middleware(
+app.add_middleware( # CORS middleware is used in situations when a frontend running in a browser has JavaScript code that communicates with a backend with different 'orign'
     CORSMiddleware,
     allow_origins=["http://127.0.0.1:5500"],
     allow_methods=["*"],
@@ -26,7 +26,7 @@ class loginRequest(BaseModel):  #  this does automatic data conversions and vali
 def login(data: loginRequest):
     for vendor in vendors:
         if vendor["email"] == data.email and vendor["password"] == data.password:
-            return "login successful"
+            return {"message": "login successful", "name": vendor["name"]} 
         
-    return "incorrect email or password"
+    return {"error": "incorrect email or password"} 
 

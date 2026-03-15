@@ -22,3 +22,27 @@ def login(data: loginRequest):
         
     return "incorrect email or password"
 
+# code for customer sign up
+import re
+
+class signupRequest(BaseModel):
+    email: str
+    password: str
+    confirmPassword: str
+
+@app.post("/signup")
+def signup(data: signupRequest):
+
+    pattern = r'[A-Za-z0-9]+@liverpool\.ac\.uk'
+    if re.match(pattern,data.email):
+        if data.password == data.confirmPassword:
+            if len(data.password) >= 8:
+                return {"message": "signup successful"} # need to redirect to login
+            else:
+                return {"error": "password must be at least 8 characters"}
+        else:
+            return {"error": "passwords must match"}
+    else:
+        return {"error": "email must be a @liverpool.ac.uk addresss"}
+
+       
