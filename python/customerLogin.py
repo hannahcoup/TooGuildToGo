@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
-
+# needs middleware, and needs a vAuth file for the customer login.html 
 # test students
 
 students = [
@@ -33,7 +33,7 @@ class signupRequest(BaseModel):
 @app.post("/signup")
 def signup(data: signupRequest):
 
-    pattern = r'[A-Za-z0-9]+@liverpool\.ac\.uk'
+    pattern = r'[A-Za-z0-9]+@liverpool\.ac\.uk'  # geeks for geeks email pattern matching in python
     if re.match(pattern,data.email):
         if data.password == data.confirmPassword:
             if len(data.password) >= 8:
