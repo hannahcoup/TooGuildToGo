@@ -1,11 +1,11 @@
-
+-- ==========================================
 -- MOCK DATA FOR GUILD FOOD SURPLUS SYSTEM
 -- ==========================================
 
 
 
 -- ========================
--- ALLERGENS
+-- 14 ALLERGENS
 -- ========================
 INSERT INTO allergen (allergen_id, name, notes) VALUES
 (1,  'Celery', NULL),
