@@ -30,17 +30,38 @@
   <div class="container">
     <label for="desc"><b>Description: </b></label><br>
     <textarea id="desc" placeholder="Enter bag description..." rows="10" cols="50"> </textarea> <br>
+    <hr>
     <label for="category"><b>Category: </b></label>
     <select name="catergory" id="category">
         <option value="Pastries">Pastries</option>
         <option value="Sandwiches">Sandwiches</option>
-    </select><br>
+    </select>
+    <hr>
     <label for="price"><b>Price: </b></label>
     <input type="text" name="price" id="price" placeholder="Enter Price...">
+<hr>
+    <label for="time"><b>Time for collection: </b></label>
+    <input type="time" id="time" />
+<hr>
+    <div class="allergenSelector">
+    <fieldset class="SegmentedControl SegmentedControl--outline">
+  <legend class="accessibility-hidden"><b>Allergens</b></legend>
+
+  <input type="checkbox" id="nuts" name="nuts" checked/>
+  <label for="nuts">Nuts</label>
+
+  <input type="checkbox" id="dairy" name="dairy"/>
+  <label for="dairy" >Dairy</label>
+
+  <input type="checkbox" id="gluten" name="gluten"/>
+  <label for="gluten" >Gluten</label>
+    
+</fieldset>
+    </div>
+  </div>
+
     <p id="error" style="color: red;"></p>
     <button type="submit" class="button">Add</button>
-    
-  </div>
 
   <div class="container">
     <a href= "vDashboard.html">
