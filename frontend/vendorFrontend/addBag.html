@@ -43,18 +43,32 @@
     <label for="time"><b>Time for collection: </b></label>
     <input type="time" id="time" />
 <hr>
+
+<fieldset>
+  <legend><b>Allergens</b></legend>
+
+  <label><input type="checkbox" id="allergen-2" name="allergen"> Gluten</label>
+  <label><input type="checkbox" id="allergen-4" name="allergen"> Eggs</label>
+  <label><input type="checkbox" id="allergen-7" name="allergen"> Milk</label>
+  <label><input type="checkbox" id="allergen-10" name="allergen"> Nuts</label>
+  <label><input type="checkbox" id="allergen-11" name="allergen"> Peanuts</label>
+  <label><input type="checkbox" id="allergen-12" name="allergen"> Sesame</label>
+  <label><input type="checkbox" id="allergen-13" name="allergen"> Soya</label>
+  <label><input type="checkbox" id="allergen-1" name="allergen"> Celery</label>
+  <label><input type="checkbox" id="allergen-3" name="allergen"> Crustaceans</label>
+  <label><input type="checkbox" id="allergen-5" name="allergen"> Fish</label>
+  <label><input type="checkbox" id="allergen-6" name="allergen"> Lupin</label>
+  <label><input type="checkbox" id="allergen-8" name="allergen"> Molluscs</label>
+  <label><input type="checkbox" id="allergen-9" name="allergen"> Mustard</label>
+  <label><input type="checkbox" id="allergen-14" name="allergen"> Sulphites</label>
+</fieldset>
     <div class="allergenSelector">
     <fieldset class="SegmentedControl SegmentedControl--outline">
   <legend class="accessibility-hidden"><b>Allergens</b></legend>
 
-  <input type="checkbox" id="nuts" name="nuts" checked/>
-  <label for="nuts">Nuts</label>
-
-  <input type="checkbox" id="dairy" name="dairy"/>
-  <label for="dairy" >Dairy</label>
-
-  <input type="checkbox" id="gluten" name="gluten"/>
-  <label for="gluten" >Gluten</label>
+  <label><input type="checkbox" id="is_vegan"> Vegan</label>
+  <label><input type="checkbox" id="is_vegetarian"> Vegetarian</label>
+  <label><input type="checkbox" id="is_gluten_free"> Gluten-Free</label>
     
 </fieldset>
     </div>

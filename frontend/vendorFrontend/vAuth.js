@@ -1,6 +1,7 @@
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
+
+/**document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-/** 
+
   const res = await fetch('http://localhost:5000/vendorFrontend/vendorLogin.html', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -17,7 +18,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   } else {
     document.getElementById('error').textContent = 'Invalid username or password';
   }
-    */
+});
+*/
+  /** 
    const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
   if (email === 'v' && password === 'p') {
@@ -27,10 +30,10 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     document.getElementById('error').textContent = 'Invalid email or password';
   }
 });
-
+*/
 // Tested version 
 
-/*
+//*
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   
@@ -52,4 +55,3 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     document.getElementById('error').textContent = 'Invalid username or password';
   }
 });
-*/ 

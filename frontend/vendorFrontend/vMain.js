@@ -1,12 +1,5 @@
 //need some way of having name set for session?
-if (!localStorage.getItem('bags')) {
-  const defaultBags = [
-    { name: "Guild Shop", category: "Pastries" },
-    { name: "Guild Shop", category: "Sandwiches" },
-    { name: "Guild Shop", category: "Sweet Treat" }
-  ];
-  localStorage.setItem('bags', JSON.stringify(defaultBags));
-}
+
 const container = document.getElementById("bags");
 const bags = JSON.parse(localStorage.getItem('bags') || '[]');
 

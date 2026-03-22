@@ -117,3 +117,11 @@ ul li a:hover {
   background-color: #3eb246;
   
 }
+.split-screen {
+  display: flex;
+  gap: 2rem;
+}
+
+.split-panel {
+  flex: 1;
+}
