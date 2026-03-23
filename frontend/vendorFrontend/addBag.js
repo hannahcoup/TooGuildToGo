@@ -12,6 +12,7 @@ document.getElementById('addBagForm').addEventListener('submit', (e) => {
   const newBag = {
     name: "Guild Shop",
     category: document.getElementById("category").value,
+    description: document.getElementById("description").value,
     price: document.getElementById("price").value,
     collection_time: document.getElementById("time").value,
     is_vegan: document.getElementById("is_vegan").checked,
