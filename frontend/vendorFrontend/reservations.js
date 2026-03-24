@@ -8,6 +8,7 @@ const allergenNames = {
   13: 'Soya', 14: 'Sulphites'
 };
 
+// TODO: replace with GET /reservations?vendor_id=X when backend ready
 const bags = JSON.parse(localStorage.getItem('bags') || '[]');
 let selectedIndex = null;
 /**
@@ -17,6 +18,8 @@ let selectedIndex = null;
  * clicking on a bag opens a modal view which provides more detail on a bag such as a longer description and allergens
  * +to do - get upcoming bags sorted by time - need to have CUSTOMER name aswell???
  */
+bags.sort((a, b) => a.collection_time.localeCompare(b.collection_time));
+//sorts bags by time of collection
 bags.forEach((bag, index) => {
   const card = document.createElement('div');
   const shortDesc = bag.description && bag.description.length > 20 ? bag.description.substring(0, 20) + '...' : bag.description

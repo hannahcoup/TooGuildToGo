@@ -9,16 +9,24 @@ document.getElementById('addBagForm').addEventListener('submit', (e) => {
     allergen_id: parseInt(cb.id.replace('allergen-', '')),
     may_contain: false
     }));
+
+const dietaryIds = [];
+if (document.getElementById("is_vegan").checked) dietaryIds.push(1);
+if (document.getElementById("is_vegetarian").checked) dietaryIds.push(2);
+if (document.getElementById("is_gluten_free").checked) dietaryIds.push(3);
+if (document.getElementById("contains_meat").checked) dietaryIds.push(4);
+if (document.getElementById("contains_dairy").checked) dietaryIds.push(5);
+if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
+
   const newBag = {
     name: "Guild Shop",
     category: document.getElementById("category").value,
     description: document.getElementById("description").value,
     price: document.getElementById("price").value,
     collection_time: document.getElementById("time").value,
-    is_vegan: document.getElementById("is_vegan").checked,
-    is_vegetarian: document.getElementById("is_vegetarian").checked,
-    is_gluten_free: document.getElementById("is_gluten_free").checked,
-    allergens: allergens
+    dietary_tag_ids: dietaryIds,
+    allergens: allergens,
+    status: 'available'
   };
 
   const saved = JSON.parse(localStorage.getItem('bags') || '[]');
