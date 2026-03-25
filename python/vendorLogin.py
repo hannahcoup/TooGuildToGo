@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-import mySQL.connector
+import mysql.connector
+import hashlib
+
+salt =  "5ab" # for password hashing
 
 app = FastAPI()
 
@@ -12,20 +15,14 @@ app.add_middleware( # CORS middleware is used in situations when a frontend runn
     allow_headers=["*"],
 )
 
-# test vendors
-
-vendors = [
-    {"email" : "spudgame@liverpool.ac.uk", "password": "helloworld", "name": "Spud Game"},
-    {"email" : "unionbrew@liverpool.ac.uk", "password": "student2026", "name": "Union Brew"},
-]
-
 def getDatabase():
-    dataBase = mySQL.connector.connect (
+    dataBase = mysql.connector.connect (
         host = "localhost",
         user = "user",
-        password = "password"
+        password = "password",
+        database = "vendors",
     )
-
+    return dataBase
 
 class loginRequest(BaseModel):  #  this does automatic data conversions and validaton checks 
     email: str
@@ -37,23 +34,34 @@ def login(data: loginRequest):
     database = getDatabase()
     cursorObject = database.cursor()
 
-    cursorObject.execute("SELECT name, password_hash")# %s is a placeholder to prevent SQL injection, comma is needed after (data.email,) so it is treated as a tuple
+    cursorObject.execute("SELECT name, password_hash FROM vendors WHERE email = %s", (data.email,)) # %s is a placeholder to prevent SQL injection, comma is needed after (data.email,) so it is treated as a tuple
 
-    vendors = cursorObject.fetchall()
+    vendor = cursorObject.fetchone() # returns None if no data is found
 
-    for vendor in vendors:
-        if vendor["email"] == data.email and vendor["password"] == data.password:
-            return {"message": "login successful", "name": vendor["name"]} 
+    dataPassword = data.password + salt
+    dataPasswordHash = hashlib.sha256(dataPassword.encode()) 
+
+    # need to hash the password entered by the user to see if this hash matches the one stored in the database
+    if vendor != None and dataPasswordHash == vendor["password_hash"]:
+        return {"message": "login successful", "name": vendor["name"]} 
         
     return {"error": "incorrect email or password"} 
 
+'''
+Hashing passwords, using SHA-256 one-way hashing algorithm (fast and secure)
 
-# hashing passwords 
-
-import hashlib
-
-password1 = "jacketPotatoes"
-salt =  "5ab"
+password1 = "jacketPotato12!"
 spudPass = password1 + salt
-spudPassHashed = password1.sha256(spudPass.encode())
-print(spudPassHashed)
+spudPassHashed = hashlib.sha256(spudPass.encode())
+print(spudPassHashed.h)
+
+password2 = "yummyTacos34!"
+
+tacontentPass = password2 + salt
+tacontentPassHashed = hashlib.sha256(tacontentPass.encode())
+
+password3 = "coffeeAndTea123!"
+unionBrewPass = password3 + salt
+unionBrewPassHashed = hashlib.sha256(unionBrewPass.encode())
+
+'''

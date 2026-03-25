@@ -40,9 +40,9 @@ INSERT INTO dietary_tags (name) VALUES
 -- VENDORS
 -- ========================
 INSERT INTO vendors (name, location, email, password_hash) VALUES
-('Spud Game', 'PLACEHOLDER', 'spudgame@guild.co.uk', 'hashed_pw_1'),
-('Tacontent', 'PLACEHOLDER', 'tacontent@guild.co.uk', 'hashed_pw_2'),
-('Union Brew', 'Outside Guild building - right side entrance', 'unionbrew@guild.co.uk', 'hashed_pw_3');
+('Spud Game', 'PLACEHOLDER', 'spudgame@guild.co.uk', 'c38ca3b8f926b27f9a2442aeff9f1e7533c4e906e6d5a7ded338a3c6b27a66b1'),
+('Tacontent', 'PLACEHOLDER', 'tacontent@guild.co.uk', '4dae5aff88754e38a0bb8c6f5e4e1a7a793adeb1289cfe4d9e7d3a3b5a29d70a'),
+('Union Brew', 'Outside Guild building - right side entrance', 'unionbrew@guild.co.uk', '4e6a3fcf90ed5f28f6e1ff71c3cc34c51b4f17b82e69c3c4ad2e1b9a57f3e92d');
 
   
 -- ========================
