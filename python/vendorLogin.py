@@ -15,7 +15,7 @@ app.add_middleware( # CORS middleware is used in situations when a frontend runn
     allow_headers=["*"],
 )
 
-def getDatabase():
+def getDatabase(): # connecting to database
     dataBase = mysql.connector.connect (
         host = "localhost",
         user = "user",
