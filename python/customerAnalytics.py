@@ -5,7 +5,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import io
 import base64
-from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
@@ -96,3 +95,41 @@ def getSummary():
 
    return summary
 
+# extra - make a bar chart with weekly c02 and money savings 
+
+@app.get("/graph/bothMoneyAndCo2")
+def getWeekyCo2AndMoney():
+   df = generateStudentAnalytics()
+
+   barWidth = 0.3
+   fig, ax1 = plt.subplots(figsize =(12, 8)) 
+
+   weeklyCo2 = df["weeklyCo2"]
+   weeklyMoney = df["weeklyMoney"]
+
+   bar1 = np.arange(len(weeklyCo2)) 
+   bar2 = barWidth + bar1
+
+   ax1.bar(bar1, weeklyCo2, color ='hotpink', width = barWidth, 
+        edgecolor ='grey', label ='Co2 Saved') 
+   ax1.set_xlabel('Dates',fontweight ='bold', fontsize = 15, color='hotpink')
+   ax1.set_ylabel('Kg of Co2', fontweight ='bold', fontsize = 15, color = 'hotpink')
+   
+   ax2 = ax1.twinx()
+   ax2.bar(bar2, weeklyMoney, color ='darkturquoise', width = barWidth, 
+        edgecolor ='grey', label ='Weekly £ Saved') 
+   ax2.set_ylabel('£ Saved', fontweight ='bold', fontsize = 15, color = 'darkturquoise')
+   plt.xticks(bar1 + barWidth / 2, df.index, rotation=45)
+
+   plt.title("Weekly CO2 and Money Saved", fontweight ='bold', fontsize = 15)
+
+   # Had to rely on medium https://medium.com/data-science/3-ways-to-embed-a-matplotlib-chart-into-an-html-page-8e11fa66a4b0 
+   tempFile = io.BytesIO()
+   fig.savefig(tempFile, format='png')
+   plt.close(fig) 
+   
+   encoded = base64.b64encode(tempFile.getvalue()).decode('utf-8')
+
+   htmlString = f'<html><body><img src="data:image/png;base64,{encoded}" style="width:100%;"></body></html>'
+
+   return HTMLResponse(content=htmlString)

@@ -13,7 +13,8 @@ async function loadSummary() {
   }
  }
   function loadGraphs() {
-   document.getElementById('co2Graph').src = 'http://127.0.0.1:8000/graph/co2';
+    document.getElementById('co2AndMoneyGraph').src = 'http://127.0.0.1:8000/graph/bothMoneyAndCo2';
+    document.getElementById('co2Graph').src = 'http://127.0.0.1:8000/graph/co2';
     document.getElementById('moneyGraph').src = 'http://127.0.0.1:8000/graph/money';
   }
   
