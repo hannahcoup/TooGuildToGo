@@ -24,6 +24,7 @@ if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
     description: document.getElementById("description").value,
     price: document.getElementById("price").value,
     collection_time: document.getElementById("time").value,
+    quantity: document.getElementById("quantity").value,
     dietary_tag_ids: dietaryIds,
     allergens: allergens,
     status: 'available'

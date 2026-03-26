@@ -16,6 +16,7 @@ function addBagCard(bag) {
     <button class="bagButton"><img src="../images/binICON.png" width=30 height=30></button>
     <p>Category: ${bag.category}</p>
     <p>Price: £${bag.price}</p>
+    <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} remaining</span>`}</p>
   `;
   container.appendChild(card);
 }

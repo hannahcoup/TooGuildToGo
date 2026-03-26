@@ -30,7 +30,7 @@ bags.forEach((bag, index) => {
     <p>Price: £${bag.price}</p>
     <p>Collection: ${bag.collection_time || "TBD"}</p>
     <span style="color: blue;">Reserved</span>
-    ${bag.status !== 'collected' ? '<button class="bagButton">Mark as Collected</button>' : ''}
+    ${bag.status !== 'collected' ? '<button class="bagButton">Mark as Collected</button> <button class="editButton">Edit</button>' : ''}
   `;
     if (bag.status === 'collected') {
     past.appendChild(card);  // already collected goes to past
@@ -71,6 +71,14 @@ if(collectBtn){
     });
 }
 });
+
+const editBtn = card.querySelector('.editButton');
+if(editBtn){
+    collectBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    
+    });
+}
 
 const span = document.getElementsByClassName('close')[0];
 const modal = document.getElementById('myModal');
