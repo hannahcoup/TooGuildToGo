@@ -1,8 +1,16 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
-# needs middleware, and needs a vAuth file for the customer login.html 
+# needs middleware, and needs a vAuth.js file for the customer login.html 
+app.add_middleware( # CORS middleware is used in situations when a frontend running in a browser has JavaScript code that communicates with a backend with different 'orign'
+    CORSMiddleware,
+    allow_origins=["http://127.0.0.1:5500"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # test students
 
 students = [
