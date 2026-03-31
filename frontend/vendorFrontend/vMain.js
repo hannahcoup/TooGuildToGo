@@ -15,7 +15,7 @@ function addBagCard(bag, index) {
     ${bag.status !== 'collected' ? '<button class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>'  : ''}
     <p>Category: ${bag.category}</p>
     <p>Price: £${bag.price}</p>
-    <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} remaining</span>`}</p>
+    <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} </span>`}</p>
     ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}
   `;
 

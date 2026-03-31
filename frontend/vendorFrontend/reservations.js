@@ -37,7 +37,7 @@
         <p>${shortDesc || "No Description"}</p>
         <p>Price: £${bag.price}</p>
         <p>Collection: ${reservation.collection_time || "TBD"}</p>
-        <span style="color: blue;">Reserved</span>
+        <span style="font-style:italic">Reserved </span>
         ${reservation.status !== 'collected' ? '<button class="bagButton">Mark as Collected</button>' : ''}
     `;
         if (reservation.status === 'collected') {
