@@ -34,8 +34,8 @@ def login(data: loginRequest):
     database = getDatabase()
     cursorObject = database.cursor()
 
-    cursorObject.execute("SELECT name, password_hash FROM vendors WHERE email = %s", (data.email,)) # %s is a placeholder to prevent SQL injection, comma is needed after (data.email,) so it is treated as a tuple
-
+    cursorObject.execute("SELECT id, name, password_hash FROM vendors WHERE email = %s", (data.email,)) # %s is a placeholder to prevent SQL injection, comma is needed after (data.email,) so it is treated as a tuple
+    #changed to select vendor id aswell
     vendor = cursorObject.fetchone() # returns None if no data is found
 
     dataPassword = data.password + salt
@@ -43,7 +43,7 @@ def login(data: loginRequest):
 
     # need to hash the password entered by the user to see if this hash matches the one stored in the database
     if vendor != None and dataPasswordHash == vendor["password_hash"]:
-        return {"message": "login successful", "name": vendor["name"]} 
+        return {"message": "login successful", "name": vendor["name"], "id": vendor[0]}
         
     return {"error": "incorrect email or password"} 
 
