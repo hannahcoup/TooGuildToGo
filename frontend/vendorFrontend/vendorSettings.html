@@ -21,10 +21,22 @@
 
 </ul>
 </nav>
+<button onclick="logout()" class="logoutBtn">Log Out</button>
 </div>
+
+
+
 
 
 <header>
   <h1>Too Guild To Go</h1>
 </header>
 </body>
+
+<script>
+    function logout() {
+  localStorage.clear();
+  window.location.href = 'vendorLogin.html';
+}   
+</script>
+</html>

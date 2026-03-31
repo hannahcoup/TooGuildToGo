@@ -16,9 +16,11 @@
   <li><a href="vendorProfile.html">Profile</a></li>
   <li><a href="vendorSettings.html">Settings</a></li>
   <li><a href="vendorHelp.html">Help</a></li>
+   <li><a href="index.html">Logout</a></li>
 
 </ul>
 </nav>
+<button onclick="logout()" class="logoutBtn">Log Out</button>
 </div>
 
 <header>
@@ -26,6 +28,7 @@
 </header>
 
 <main>
+    <div id = "welcome"> </div>
   <div id="bags"></div>
 </main>
 <!-- Modal view to edit bags if they havent been collected-->
@@ -51,6 +54,13 @@
   </div>
 </div>
 
+
+<script>
+    function logout() {
+  localStorage.clear();
+  window.location.href = 'vendorLogin.html';
+}   
+</script>
 <script src="vMain.js"></script>
 </body>
 </html>

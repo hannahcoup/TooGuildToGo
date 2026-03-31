@@ -5,18 +5,22 @@ const bags = JSON.parse(localStorage.getItem('bags') || '[]');
 let editIndex = null;
 bags.forEach((bag, index) => addBagCard(bag, index));
 
+welcome.innerHTML= ` <p> WELCOME BACK, ${localStorage.getItem('vendor_name')} </p>`;
 
+// TODO: replace with GET /bags?vendor_id=${localStorage.getItem('vendor_id')}
 
 function addBagCard(bag, index) {
   const card = document.createElement("div");
   card.className = "bag-card";
   card.innerHTML = `
     <h3>${bag.name}</h3>
-    ${bag.status !== 'collected' ? '<button class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>'  : ''}
     <p>Category: ${bag.category}</p>
     <p>Price: £${bag.price}</p>
     <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} </span>`}</p>
+    ${bag.status !== 'collected' ? '<button class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>'  : ''}
+    
     ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}
+    
   `;
 
   const editBtn = card.querySelector('.editBtn');

@@ -19,6 +19,7 @@ if (document.getElementById("contains_dairy").checked) dietaryIds.push(5);
 if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
 
   const newBag = {
+    vendor_id: localStorage.getItem('vendor_id') || 1, // 1 for now since im testing
     name: "Guild Shop",
     category: document.getElementById("category").value,
     description: document.getElementById("description").value,
