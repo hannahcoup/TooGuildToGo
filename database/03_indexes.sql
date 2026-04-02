@@ -1,8 +1,3 @@
--- ============================================================
--- 03_indexes.sql
--- Indexes
--- ============================================================
-
 CREATE INDEX idx_food_category              ON food(category);
 CREATE INDEX idx_food_allergen_food         ON food_allergen(food_id);
 CREATE INDEX idx_food_allergen_allergen     ON food_allergen(allergen_id);
