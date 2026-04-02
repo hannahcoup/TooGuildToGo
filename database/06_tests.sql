@@ -1,8 +1,3 @@
--- ============================================================
--- 06_tests.sql
--- Constraint and foreign-key test queries
--- ============================================================
-
 SELECT 'users' AS table_name, COUNT(*) AS row_count FROM users
 UNION ALL
 SELECT 'vendors', COUNT(*) FROM vendors
