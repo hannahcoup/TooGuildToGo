@@ -1,8 +1,3 @@
--- ============================================================
--- 05_queries.sql
--- Demo queries for Guild Food Surplus System
--- ============================================================
-
 SELECT * FROM view_available_bags ORDER BY pickup_window_start;
 
 SELECT
