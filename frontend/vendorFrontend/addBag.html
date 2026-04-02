@@ -35,6 +35,8 @@
   <form id="addBagForm">
 
   <div class="container">
+    <label for="product_name"><b>Bag Name: </b></label>
+    <input type="text" name="product_name" id="product_name" placeholder="Enter Bag Name...">
     <label for="desc"><b>Description: </b></label><br>
     <textarea id="description" placeholder="Enter bag description..." rows="10" cols="50"> </textarea> <br>
     <hr>
@@ -46,14 +48,21 @@
         <option value="Snack">Snack</option>
     </select>
     <hr>
-    <label for="price"><b>Price: </b></label>
-    <input type="text" name="price" id="price" placeholder="Enter Price...">
+    <label for="original_price"><b>Original Price: </b></label>
+    <input type="text" name="original_price" id="original_price" placeholder="Enter Original Price...">
+    <label for="discounted_price"><b>Discounted Price: </b></label>
+    <input type="text" name="discounted_price" id="discounted_price" placeholder="Enter Discounted Price...">
 <hr>
-    <label for="time"><b>Time for collection: </b></label>
-    <input type="time" id="time" />
+    <label for="pickup_window_start"><b>Start of Pickup Window: </b></label>
+    <input type="datetime-local" id="pickup_window_start" />
+    <label for="pickup_window_end"><b>End of Pickup Window: </b></label>
+    <input type="date" id="pickup_window_end" />
 <hr>
     <label for="quantity"><b>Quantity:</b></label>
     <input type="number" id="quantity" min="1" placeholder="How many bags?">
+<hr>
+    <label for="expires_at"><b>Expiry Date:</b></label>
+    <input type="date" id="expires_at"/>
 <hr>
 <fieldset>
   <legend><b>Allergens</b></legend>

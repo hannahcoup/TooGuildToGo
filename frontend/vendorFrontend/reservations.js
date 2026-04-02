@@ -32,13 +32,17 @@
     const shortDesc = bag.description && bag.description.length > 20 ? bag.description.substring(0, 20) + '...' : bag.description
     card.className = 'bag-card';
     card.innerHTML = `
-        <h3>${reservation.student_name}</h3>
-        <p>${reservation.student_email}</p>
+        <h3>${reservation.user_id}</h3> 
         <p>${shortDesc || "No Description"}</p>
-        <p>Price: £${bag.price}</p>
-        <p>Collection: ${reservation.collection_time || "TBD"}</p>
+        <p>Price: £${bag.discounted_price}</p>
+        <p>Collection Window: ${reservation.pickup_window_start || "TBD"} - ${reservation.pickup_window_end || "TBD"}</p>
         <span style="font-style:italic">Reserved </span>
         ${reservation.status !== 'collected' ? '<button class="bagButton">Mark as Collected</button>' : ''}
+
+        ${reservation.status !== 'collected' ? "Payment Status: ":" "}  
+        ${reservation.status !== 'collected' ?  reservation.payment_status : ''} 
+        
+        
     `;
         if (reservation.status === 'collected') {
         past.appendChild(card);  // already collected goes to past
@@ -51,10 +55,10 @@
     card.addEventListener('click', () => {
         selectedIndex = index;
         const modal = document.getElementById('myModal');
-        document.getElementById('modal-name').textContent = reservation.student_name;
+        document.getElementById('modal-name').textContent = reservation.product_name;
         document.getElementById('modal-desc').textContent = bag.description || "No Description";
-        document.getElementById('modal-price').textContent = 'Price : £' + bag.price;
-        document.getElementById('modal-time').textContent = "Time : " + reservation.collection_time;
+        document.getElementById('modal-price').textContent = 'Price : £' + bag.discounted_price;
+        document.getElementById('modal-time').textContent = "Pickup Window : " + reservation.pickup_window_start +"-"+ reservation.pickup_window_end;
 
         document.getElementById('modal-allergens').textContent = bag.allergens && bag.allergens.length > 0 ? bag.allergens.map(a => allergenNames[a.allergen_id]).join(', ') : 'None';
 
@@ -65,6 +69,7 @@
 
         document.getElementById('modal-dietary').textContent = dietary.length > 0 ? dietary.join(', ') : 'None';
         document.getElementById('modal-collect').style.display = reservation.status === 'collected' ? 'none' : 'block';
+        document.getElementById('modal-payment_status').style.display = reservation.status === 'collected' ? reservation.payment_status ? "Payment Status: "  : "" + reservation.payment_status : 'block';
         modal.style.display = 'block';
         });
 
@@ -96,3 +101,15 @@
     location.reload(); //  re-render the cards
     });
 //}
+
+/**
+ * id             SERIAL PRIMARY KEY,
+    user_id        INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    bag_id         INT NOT NULL REFERENCES bags(id),
+    status         VARCHAR(20) NOT NULL DEFAULT 'reserved',
+    transaction_id VARCHAR(50),
+    payment_status VARCHAR(20) NOT NULL DEFAULT 'paid',
+    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (status IN ('reserved', 'collected', 'cancelled')),
+    CHECK (payment_status IN ('paid', 'failed', 'refunded'))
+ */

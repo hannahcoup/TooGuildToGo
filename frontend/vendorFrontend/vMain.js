@@ -13,10 +13,11 @@ function addBagCard(bag, index) {
   const card = document.createElement("div");
   card.className = "bag-card";
   card.innerHTML = `
-    <h3>${bag.name}</h3>
+    <h3>${bag.product_name}</h3>
     <p>Category: ${bag.category}</p>
-    <p>Price: £${bag.price}</p>
+    <p>Discounted Price: £${bag.discounted_price}</p>
     <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} </span>`}</p>
+    <p>Expiry Date: ${bag.expires_at <= bag.pickup_window_end ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${bag.expires_at} </span>`}</p>
     ${bag.status !== 'collected' ? '<button class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>'  : ''}
     
     ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}
@@ -30,10 +31,12 @@ function addBagCard(bag, index) {
         editIndex = index;
 
         // fills the form with current values
+        document.getElementById('edit-product_name').value = bag.product_name || '';
         document.getElementById('edit-description').value = bag.description || '';
         document.getElementById('edit-category').value = bag.category || '';
-        document.getElementById('edit-price').value = bag.price || '';
-        document.getElementById('edit-time').value = bag.collection_time || '';
+        document.getElementById('edit-price').value = bag.discounted_price || '';
+        document.getElementById('edit-pickup_window_start').value = bag.pickup_window_start || '';
+        document.getElementById('edit-pickup_window_end').value = bag.pickup_window_end || '';
         document.getElementById('edit-quantity').value = bag.quantity || '';
 
         document.getElementById('editModal').style.display = 'block';
@@ -83,3 +86,25 @@ window.onclick = (e) => {
 };
 
 
+ /**
+   * bag schema:
+   * CREATE TABLE bags (
+    id                  SERIAL PRIMARY KEY,
+    vendor_id           INT NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
+    product_name        VARCHAR(120) NOT NULL,
+    description         TEXT,
+    category            VARCHAR(80) NOT NULL,
+    original_price      DECIMAL(6,2) NOT NULL CHECK (original_price > 0),
+    discounted_price    DECIMAL(6,2) NOT NULL CHECK (discounted_price > 0),
+    quantity            INT NOT NULL CHECK (quantity >= 0),
+    pickup_window_start TIMESTAMP NOT NULL,
+    pickup_window_end   TIMESTAMP NOT NULL,
+    expires_at          TIMESTAMP NOT NULL,
+    status              VARCHAR(20) NOT NULL DEFAULT 'available',
+    created_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (status IN ('available', 'reserved', 'collected')),
+    CHECK (discounted_price <= original_price),
+    CHECK (pickup_window_end > pickup_window_start),
+    CHECK (expires_at <= pickup_window_end)
+);
+   */
