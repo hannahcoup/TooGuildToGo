@@ -1,10 +1,3 @@
--- ============================================================
--- 01_schema.sql
--- Guild Food Surplus System
--- Schema only: drop + tables + constraints
--- PostgreSQL
--- ============================================================
-
 DROP VIEW  IF EXISTS view_user_safe_bags;
 DROP VIEW  IF EXISTS view_user_order_history;
 DROP VIEW  IF EXISTS view_available_bags;
