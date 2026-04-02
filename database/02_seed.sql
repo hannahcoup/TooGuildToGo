@@ -1,9 +1,3 @@
--- ============================================================
--- 02_seed.sql
--- Guild Food Surplus System
--- Seed / dummy prototype data
--- ============================================================
-
 INSERT INTO allergen (allergen_id, name, notes) VALUES
 (1,  'Celery',      NULL),
 (2,  'Gluten',      NULL),
