@@ -58,6 +58,9 @@ INSERT INTO food (food_id, name, description, category, is_vegan, is_vegetarian,
 (26,'Vegetarian Sausage Bun','Vegetarian sausage in a bun','Bakery/Lunch',FALSE,TRUE,FALSE,TRUE),
 (27,'Coronation Chicken Wrap','Wrap with coronation chicken filling','Wrap',FALSE,FALSE,FALSE,TRUE);
 
+-- Make next food_id continue from the last inserted value
+SELECT setval(pg_get_serial_sequence('food', 'food_id'),
+  (SELECT MAX(food_id) FROM food));
 
 INSERT INTO food_allergen (food_id, allergen_id, contains)
 SELECT f.food_id, a.allergen_id, FALSE
