@@ -1,15 +1,15 @@
 
-document.getElementById('loginForm').addEventListener('submit',  (e) => {
+/**document.getElementById('loginForm').addEventListener('submit',  (e) => {
   e.preventDefault();
 
-  /*const res = await fetch('http://localhost:5000/vendorFrontend/vendorLogin.html', {
+  const res = await fetch('http://localhost:5000/vendorFrontend/vendorLogin.html', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       email: document.getElementById('email').value,
       password: document.getElementById('password').value
     })
-  });*/
+  });
       const email= document.getElementById('email').value;
       const password= document.getElementById('password').value;
   //const data = await res.json();
@@ -22,7 +22,7 @@ document.getElementById('loginForm').addEventListener('submit',  (e) => {
     document.getElementById('error').textContent = 'Invalid username or password';
   }
 });
-
+*/
   /** 
    const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
@@ -35,7 +35,7 @@ document.getElementById('loginForm').addEventListener('submit',  (e) => {
 });
  Tested version  -- uncomment when mysql ready
 
-
+*/
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   
@@ -59,4 +59,3 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     document.getElementById('error').textContent = 'Invalid username or password';
   }
 });
-*/
