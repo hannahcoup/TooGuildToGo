@@ -7,38 +7,39 @@ from models import Bag, DietaryTag, BagDietaryTag, Vendor
 router = APIRouter()
 
 @router.get("/bags")
-def get_bags(tag: str = None, db: Session = Depends(get_db)):
+def get_bags(tag: str = None, vendor_id: int = None, db: Session = Depends(get_db)):
+    query = db.query(Bag, Vendor).join(Vendor, Vendor.id == Bag.vendor_id)
 
-    # Step 1: get correct bags
-    if not tag:
-        bags = db.query(Bag).all()
-    else:
+    if tag:
         dietary_tag = db.query(DietaryTag).filter(DietaryTag.name == tag).first()
-
         if not dietary_tag:
             return []
-
-        links = db.query(BagDietaryTag).filter(
+        query = query.join(BagDietaryTag, BagDietaryTag.bag_id == Bag.id).filter(
             BagDietaryTag.dietary_tag_id == dietary_tag.id
-        ).all()
+        )
 
-        bag_ids = [link.bag_id for link in links]
+    if vendor_id:
+        query = query.filter(Bag.vendor_id == vendor_id)
 
-        bags = db.query(Bag).filter(Bag.id.in_(bag_ids)).all()
+    query = query.filter(Bag.status == "available", Bag.quantity > 0)
 
-    # Grouping bags by vendor
-    vendor_map = {}
-
-    for bag in bags:
-        vendor = db.query(Vendor).filter(Vendor.id == bag.vendor_id).first()
-
-        if vendor.id not in vendor_map:
-            vendor_map[vendor.id] = {
-                "vendor_name": vendor.name,
-                "vendor_location": vendor.location,
-                "bag_count": 0
-            }
-
-        vendor_map[vendor.id]["bag_count"] += 1
-
-    return list(vendor_map.values())
+    results = query.all()
+    response = []
+    for bag, vendor in results:
+        response.append({
+            "bag_id": bag.id,
+            "product_name": bag.product_name,
+            "description": bag.description,
+            "category": bag.category,
+            "original_price": float(bag.original_price),
+            "discounted_price": float(bag.discounted_price),
+            "quantity": bag.quantity,
+            "pickup_window_start": str(bag.pickup_window_start),
+            "pickup_window_end": str(bag.pickup_window_end),
+            "expires_at": str(bag.expires_at),
+            "status": bag.status,
+            "vendor_id": vendor.id,
+            "vendor_name": vendor.name,
+            "vendor_location": vendor.location
+        })
+    return response
