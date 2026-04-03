@@ -1,4 +1,3 @@
-# Filtering logic
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from db_connection import get_db
