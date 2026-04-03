@@ -1,12 +1,24 @@
 //JS for Dashboard
 
 const container = document.getElementById("bags");
+/** 
 const bags = JSON.parse(localStorage.getItem('bags') || '[]');
-let editIndex = null;
+
 bags.forEach((bag, index) => addBagCard(bag, index));
+*/
 
+async function loadBags() {
+  const vendor_id = localStorage.getItem('vendor_id');
+  
+  const res = await fetch(`http://127.0.0.1:8000/bags`);
+  const data = await res.json();
+  bags = data;
+  bags.forEach((bag, index) => addBagCard(bag, index));
+}
+
+loadBags();
 document.getElementById("welcome").innerHTML= ` <p> WELCOME BACK, ${localStorage.getItem('vendor_name')} </p>`;
-
+let editIndex = null;
 // TODO: replace with GET /bags?vendor_id=${localStorage.getItem('vendor_id')}
 
 function addBagCard(bag, index) {

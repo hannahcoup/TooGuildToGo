@@ -1,52 +1,77 @@
+async function loadFoodItems() {
+  const vendor_id = localStorage.getItem('vendor_id') || 1;
+  
+  /*const res = await fetch(`http://127.0.0.1:8000/vendor_food_items?vendor_id=${vendor_id}`);
+  const foodItems = await res.json();*/
 
-//local storage version for frontend testing
-document.getElementById('addBagForm').addEventListener('submit', (e) => {
+  const foodItems = [
+    { food_id: 1, name: "Baked Beans", category: "Hot Filling" },
+    { food_id: 2, name: "BBQ Sloppy Joe", category: "Hot Filling" },
+    { food_id: 3, name: "Garlic and Chilli Chicken", category: "Hot Filling" },
+    { food_id: 4, name: "Butters", category: "Hot Filling" },
+    { food_id: 5, name: "Seasoned", category: "Hot Filling" },
+    { food_id: 6, name: "Garlic Vegan", category: "Hot Filling" },
+    { food_id: 7, name: "Firecracker", category: "Hot Filling" },
+    { food_id: 8, name: "Tuna Mayo", category: "Cold Filling" },
+    { food_id: 9, name: "Grated Cheese", category: "Cold Filling" },
+    { food_id: 10, name: "Chicken Mayo", category: "Cold Filling" },
+    { food_id: 11, name: "Coleslaw", category: "Cold Filling" },
+    { food_id: 12, name: "Chef's Choice", category: "Cold Filling" }
+  ];
+
+  const grouped = {};
+  foodItems.forEach(item => {
+    if (!grouped[item.category]) grouped[item.category] = [];
+    grouped[item.category].push(item);
+  });
+
+  const container = document.getElementById('foodItemsContainer');
+  container.innerHTML = '';
+  
+  Object.entries(grouped).forEach(([category, items]) => {
+    const legend = document.createElement('p');
+    legend.innerHTML = `<b>${category}</b>`;
+    container.appendChild(legend);
+    items.forEach(item => {
+      const label = document.createElement('label');
+      label.innerHTML = `<input type="checkbox" id="food-${item.food_id}" name="food_item" value="${item.food_id}"> ${item.name}`;
+      container.appendChild(label);
+    });
+  });
+}
+
+loadFoodItems();
+
+document.getElementById('addBagForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
+  const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
+  const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
 
-  const allergenCheckboxes = document.querySelectorAll('input[name="allergen"]:checked');
-    const allergens = Array.from(allergenCheckboxes).map(cb => ({
-    allergen_id: parseInt(cb.id.replace('allergen-', '')),
-    may_contain: false
-    }));
-
-const dietaryIds = [];
-if (document.getElementById("is_vegan").checked) dietaryIds.push(1);
-if (document.getElementById("is_vegetarian").checked) dietaryIds.push(2);
-if (document.getElementById("is_gluten_free").checked) dietaryIds.push(3);
-if (document.getElementById("contains_meat").checked) dietaryIds.push(4);
-if (document.getElementById("contains_dairy").checked) dietaryIds.push(5);
-if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
+  /*const dietaryIds = [];
+  if (document.getElementById("is_vegan").checked) dietaryIds.push(1);
+  if (document.getElementById("is_vegetarian").checked) dietaryIds.push(2);
+  if (document.getElementById("is_gluten_free").checked) dietaryIds.push(3);
+  if (document.getElementById("contains_meat").checked) dietaryIds.push(4);
+  if (document.getElementById("contains_dairy").checked) dietaryIds.push(5);
+  if (document.getElementById("is_spicy").checked) dietaryIds.push(6);*/
 
   const newBag = {
-    //need to create bag id somehow
-    vendor_id: localStorage.getItem('vendor_id') || 1, // 1 for now since im testing
+    vendor_id: parseInt(localStorage.getItem('vendor_id')) || 1,
     product_name: document.getElementById("product_name").value,
     category: document.getElementById("category").value,
     description: document.getElementById("description").value,
-    original_price: document.getElementById("original_price").value,
-    discounted_price: document.getElementById("discounted_price").value,
+    original_price: parseFloat(document.getElementById("original_price").value),
+    discounted_price: parseFloat(document.getElementById("discounted_price").value),
     pickup_window_start: document.getElementById("pickup_window_start").value,
     pickup_window_end: document.getElementById("pickup_window_end").value,
     expires_at: document.getElementById("expires_at").value,
-    quantity: document.getElementById("quantity").value,
-    dietary_tag_ids: dietaryIds,//wont need
-    allergens: allergens,
-    status: 'available',
-    created_at: Date.now()
+    quantity: parseInt(document.getElementById("quantity").value),
+    food_ids: food_ids,
+    status: 'available'
   };
 
-  const saved = JSON.parse(localStorage.getItem('bags') || '[]');
-  saved.push(newBag);
-  localStorage.setItem('bags', JSON.stringify(saved));
-  window.location.href = 'vDashboard.html';
-});
-
-
-//uncomment when backend ready
-/*
-
-  const res = await fetch('http://127.0.0.1:8000/create_bag', {
+  const res = await fetch('http://127.0.0.1:8000/vendor/add-bag', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newBag)
@@ -54,13 +79,12 @@ if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
 
   const data = await res.json();
 
-  if (data.message === "Bag created successfully!") {
+  if (data.message === "bag created successfully") {
     window.location.href = 'vDashboard.html';
   } else {
-    document.getElementById('error').textContent = 'Something went wrong, please try again.';
+    document.getElementById('error').textContent = data.error || 'Something went wrong, please try again.';
   }
-  */
-
+});
   /**
    * bag schema:
    * CREATE TABLE bags (
