@@ -1,56 +1,44 @@
-from fastapi import FastAPI
+import re
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+from db_connection import get_db
+from models import User
 
-app = FastAPI()
-# needs middleware, and needs a vAuth.js file for the customer login.html 
-app.add_middleware( # CORS middleware is used in situations when a frontend running in a browser has JavaScript code that communicates with a backend with different 'orign'
-    CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+router = APIRouter()
 
-# test students
-
-students = [
-    {"email" : "student1@liverpool.ac.uk", "password": "helloworld", "name": "Lara"},
-    {"email" : "student2@liverpool.ac.uk", "password": "student2026", "name": "Hannah"},
-]
-
-class loginRequest(BaseModel):  #  this does automatic data conversions and validaton checks 
+class LoginRequest(BaseModel):
     email: str
     password: str
 
-@app.post("/login")
-def login(data: loginRequest):
-    for student in students:
-        if student["email"] == data.email and student["password"] == data.password:
-            return "login successful"
-        
-    return "incorrect email or password"
-
-# code for customer sign up
-import re
-
-class signupRequest(BaseModel):
+class SignupRequest(BaseModel):
+    name: str
     email: str
     password: str
     confirmPassword: str
 
-@app.post("/signup")
-def signup(data: signupRequest):
+@router.post("/login")
+def login(data: LoginRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == data.email).first()
+    if not user or user.password_hash != data.password:
+        return {"error": "incorrect email or password"}
+    return {"message": "login successful", "user_id": user.id, "name": user.name}
 
-    pattern = r'[A-Za-z0-9]+@liverpool\.ac\.uk'  # geeks for geeks email pattern matching in python
-    if re.match(pattern,data.email):
-        if data.password == data.confirmPassword:
-            if len(data.password) >= 8:
-                return {"message": "signup successful"} # need to redirect to login
-            else:
-                return {"error": "password must be at least 8 characters"}
-        else:
-            return {"error": "passwords must match"}
-    else:
-        return {"error": "email must be a @liverpool.ac.uk addresss"}
+@router.post("/signup")
+def signup(data: SignupRequest, db: Session = Depends(get_db)):
+    pattern = r'^[A-Za-z0-9._%+-]+@liverpool\.ac\.uk$'
+    if not re.match(pattern, data.email):
+        return {"error": "email must be a @liverpool.ac.uk address"}
+    if data.password != data.confirmPassword:
+        return {"error": "passwords must match"}
+    if len(data.password) < 8:
+        return {"error": "password must be at least 8 characters"}
+    existing_user = db.query(User).filter(User.email == data.email).first()
+    if existing_user:
+        return {"error": "email already registered"}
 
-       
+    new_user = User(name=data.name, email=data.email, password_hash=data.password)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return {"message": "signup successful", "user_id": new_user.id, "name": new_user.name}
