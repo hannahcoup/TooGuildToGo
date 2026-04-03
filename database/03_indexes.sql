@@ -2,6 +2,9 @@ CREATE INDEX idx_food_category              ON food(category);
 CREATE INDEX idx_food_allergen_food         ON food_allergen(food_id);
 CREATE INDEX idx_food_allergen_allergen     ON food_allergen(allergen_id);
 
+CREATE INDEX idx_vendor_food_items_vendor   ON vendor_food_items(vendor_id);
+CREATE INDEX idx_vendor_food_items_food     ON vendor_food_items(food_id);
+
 CREATE INDEX idx_bags_vendor                ON bags(vendor_id);
 CREATE INDEX idx_bags_status                ON bags(status);
 CREATE INDEX idx_bags_pickup_start          ON bags(pickup_window_start);
@@ -19,3 +22,4 @@ CREATE INDEX idx_reservations_user          ON reservations(user_id);
 CREATE INDEX idx_reservations_bag           ON reservations(bag_id);
 CREATE INDEX idx_reservations_status        ON reservations(status);
 CREATE INDEX idx_reservations_payment       ON reservations(payment_status);
+
