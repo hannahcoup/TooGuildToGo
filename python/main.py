@@ -2,7 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import bags_filtering
-import addbagfeature
+import vendor_addbag
+import customer_cart
 import customerLogin
 import vendorLogin
 
@@ -17,7 +18,8 @@ app.add_middleware(
 )
 
 app.include_router(bags_filtering.router)
-app.include_router(addbagfeature.router)
+app.include_router(vendor_addbag.router)
+app.include_router(customer_cart.router)
 app.include_router(customerLogin.router)
 app.include_router(vendorLogin.router)
 
