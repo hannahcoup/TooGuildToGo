@@ -31,7 +31,6 @@ INSERT INTO vendors (name, location, email, password_hash) VALUES
 INSERT INTO users (name, email, password_hash) VALUES
 ('Sarah Wu',         'sarah.wu@liverpool.ac.uk',     'hashed_pw_a'),
 ('Hussein Shaverdi', 'hussein.shav@liverpool.ac.uk', 'hashed_pw_b'),
-('Lucas Evans',      'lucas.evans@liverpool.ac.uk',  'hashed_pw_c');
 
 INSERT INTO food (food_id, name, description, category, is_vegan, is_vegetarian, is_gluten_free, active) VALUES
 (1,  'Baked Beans',                  'Hot filling for jacket potatoes',                   'Hot Filling',   TRUE,  TRUE,  TRUE,  TRUE),
@@ -78,6 +77,11 @@ INSERT INTO food_allergen (food_id, allergen_id, may_contain) VALUES
 (25, 2,  FALSE),
 (26, 2,  FALSE),
 (26, 4,  TRUE);
+
+INSERT INTO vendor_food_items (vendor_id, food_id) VALUES
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12),
+(2, 13), (2, 14), (2, 15), (2, 16), (2, 17), (2, 18), (2, 19), (2, 20),
+(3, 21), (3, 22), (3, 23), (3, 24), (3, 25), (3, 26);
 
 INSERT INTO bags (vendor_id, product_name, description, category, original_price, discounted_price, quantity, pickup_window_start, pickup_window_end, expires_at, status) VALUES
 (1, 'Spud Game Mixed Bag',       'Jacket potato bag with mixed hot and cold fillings',    'Hot Food',     6.50, 3.50, 5, '2026-03-18 13:15:00', '2026-03-18 13:45:00', '2026-03-18 13:30:00', 'available'),
