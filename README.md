@@ -5,6 +5,6 @@
 
 - frontend/ — User interface (HTML, CSS, JS)
 - backend/ — Python
-- database/ — MySQL
+- database/ — PostgreSQL
 
 Testing commit!
