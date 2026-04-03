@@ -21,7 +21,7 @@
      * clicking on a bag opens a modal view which provides more detail on a bag such as a longer description and allergens
      * +to do - get upcoming bags sorted by time - need to have CUSTOMER name aswell???
      */
-    reservations.sort((a, b) => a.collection_time.localeCompare(b.collection_time));
+    reservations.sort((a, b) => a.pickup_window_start.localeCompare(b.pickup_window_start));
     //sorts bags by time of collection
     reservations.forEach((reservation, index) => {
         const bag = bags[reservation.bag_id];
@@ -29,18 +29,20 @@
     const card = document.createElement('div');
     
     // BACKEND: will be reservation.bag_description
-    const shortDesc = bag.description && bag.description.length > 20 ? bag.description.substring(0, 20) + '...' : bag.description
+    const shortDesc = bag.description && bag.description.length > 30 ? bag.description.substring(0, 30) + '...' : bag.description
     card.className = 'bag-card';
     card.innerHTML = `
-        <h3>${reservation.user_id}</h3> 
+        <h3>${reservation.student_name}</h3> 
         <p>${shortDesc || "No Description"}</p>
-        <p>Price: £${bag.discounted_price}</p>
+        <p>Discounted Price: £${bag.discounted_price}</p>
         <p>Collection Window: ${reservation.pickup_window_start || "TBD"} - ${reservation.pickup_window_end || "TBD"}</p>
-        <span style="font-style:italic">Reserved </span>
+        <p><span style="font-style:italic">Reserved </span><p>
+        ${reservation.status !== 'collected' ? " Payment Status: ":" "} 
+        ${reservation.status !== 'collected' ?  reservation.payment_status : ''} <hr> 
         ${reservation.status !== 'collected' ? '<button class="bagButton">Mark as Collected</button>' : ''}
 
-        ${reservation.status !== 'collected' ? "Payment Status: ":" "}  
-        ${reservation.status !== 'collected' ?  reservation.payment_status : ''} 
+        
+        
         
         
     `;
@@ -57,8 +59,9 @@
         const modal = document.getElementById('myModal');
         document.getElementById('modal-name').textContent = reservation.product_name;
         document.getElementById('modal-desc').textContent = bag.description || "No Description";
-        document.getElementById('modal-price').textContent = 'Price : £' + bag.discounted_price;
-        document.getElementById('modal-time').textContent = "Pickup Window : " + reservation.pickup_window_start +"-"+ reservation.pickup_window_end;
+        document.getElementById('modal-discounted_price').textContent = 'Price : £' + bag.discounted_price;
+        document.getElementById('modal-pickup_window_start').textContent = "Pickup Window start time: " + reservation.pickup_window_start;
+        document.getElementById('modal-pickup_window_end').textContent = "Pickup Window end time: " + reservation.pickup_window_end;
 
         document.getElementById('modal-allergens').textContent = bag.allergens && bag.allergens.length > 0 ? bag.allergens.map(a => allergenNames[a.allergen_id]).join(', ') : 'None';
 

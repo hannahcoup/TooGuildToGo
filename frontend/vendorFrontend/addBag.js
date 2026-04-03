@@ -21,7 +21,7 @@ if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
   const newBag = {
     //need to create bag id somehow
     vendor_id: localStorage.getItem('vendor_id') || 1, // 1 for now since im testing
-    product_name: "Guild Shop",
+    product_name: document.getElementById("product_name").value,
     category: document.getElementById("category").value,
     description: document.getElementById("description").value,
     original_price: document.getElementById("original_price").value,

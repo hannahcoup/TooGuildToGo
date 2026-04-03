@@ -5,7 +5,7 @@ const bags = JSON.parse(localStorage.getItem('bags') || '[]');
 let editIndex = null;
 bags.forEach((bag, index) => addBagCard(bag, index));
 
-welcome.innerHTML= ` <p> WELCOME BACK, ${localStorage.getItem('vendor_name')} </p>`;
+document.getElementById("welcome").innerHTML= ` <p> WELCOME BACK, ${localStorage.getItem('vendor_name')} </p>`;
 
 // TODO: replace with GET /bags?vendor_id=${localStorage.getItem('vendor_id')}
 
@@ -17,7 +17,7 @@ function addBagCard(bag, index) {
     <p>Category: ${bag.category}</p>
     <p>Discounted Price: £${bag.discounted_price}</p>
     <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} </span>`}</p>
-    <p>Expiry Date: ${bag.expires_at <= bag.pickup_window_end ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${bag.expires_at} </span>`}</p>
+    <p>Expiry Date: ${new Date(bag.expires_at) < new Date() ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${bag.expires_at} </span>`}</p>
     ${bag.status !== 'collected' ? '<button class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>'  : ''}
     
     ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}
