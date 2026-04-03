@@ -60,7 +60,7 @@ CREATE TABLE food (
 CREATE TABLE food_allergen (
     food_id INTEGER NOT NULL REFERENCES food(food_id) ON DELETE CASCADE,
     allergen_id INTEGER NOT NULL REFERENCES allergen(allergen_id),
-    may_contain BOOLEAN NOT NULL DEFAULT FALSE,
+    contains BOOLEAN NOT NULL,
     PRIMARY KEY (food_id, allergen_id)
 );
 
