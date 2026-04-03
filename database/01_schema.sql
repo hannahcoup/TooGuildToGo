@@ -3,6 +3,7 @@ DROP VIEW  IF EXISTS view_user_order_history;
 DROP VIEW  IF EXISTS view_available_bags;
 DROP VIEW  IF EXISTS view_bag_allergens;
 
+DROP TABLE IF EXISTS vendor_food_items;
 DROP TABLE IF EXISTS user_allergen_exclusions;
 DROP TABLE IF EXISTS user_dietary_preferences;
 DROP TABLE IF EXISTS reservations;
@@ -62,6 +63,12 @@ CREATE TABLE food_allergen (
     PRIMARY KEY (food_id, allergen_id)
 );
 
+CREATE TABLE vendor_food_items (
+    vendor_id INT NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
+    food_id   INT NOT NULL REFERENCES food(food_id) ON DELETE CASCADE,
+    PRIMARY KEY (vendor_id, food_id)
+);
+
 CREATE TABLE bags (
     id                  SERIAL PRIMARY KEY,
     vendor_id           INT NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
@@ -117,3 +124,4 @@ CREATE TABLE reservations (
     CHECK (status IN ('reserved', 'collected', 'cancelled')),
     CHECK (payment_status IN ('paid', 'failed', 'refunded'))
 );
+
