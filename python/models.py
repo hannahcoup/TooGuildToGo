@@ -19,12 +19,6 @@ class Vendor(Base):
     email = Column(String(150), unique=True, nullable=False)
     password_hash = Column(Text, nullable=False)
 
-class Allergen(Base):
-    __tablename__ = "allergen"
-    allergen_id = Column(Integer, primary_key=True)
-    name = Column(String(120), unique=True, nullable=False)
-    notes = Column(String(300))
-
 class DietaryTag(Base):
     __tablename__ = "dietary_tags"
     id = Column(Integer, primary_key=True)
@@ -40,12 +34,6 @@ class Food(Base):
     is_vegetarian = Column(Boolean, nullable=False, default=False)
     is_gluten_free = Column(Boolean, nullable=False, default=False)
     active = Column(Boolean, nullable=False, default=True)
-
-class FoodAllergen(Base):
-    __tablename__ = "food_allergen"
-    food_id = Column(Integer, ForeignKey("food.food_id"), primary_key=True)
-    allergen_id = Column(Integer, ForeignKey("allergen.allergen_id"), primary_key=True)
-    may_contain = Column(Boolean, nullable=False, default=False)
 
 class VendorFoodItem(Base):
     __tablename__ = "vendor_food_items"
@@ -78,22 +66,10 @@ class BagDietaryTag(Base):
     bag_id = Column(Integer, ForeignKey("bags.id"), primary_key=True)
     dietary_tag_id = Column(Integer, ForeignKey("dietary_tags.id"), primary_key=True)
 
-class UserDietaryPreference(Base):
-    __tablename__ = "user_dietary_preferences"
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
-    dietary_tag_id = Column(Integer, ForeignKey("dietary_tags.id"), primary_key=True)
-
-class UserAllergenExclusion(Base):
-    __tablename__ = "user_allergen_exclusions"
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
-    allergen_id = Column(Integer, ForeignKey("allergen.allergen_id"), primary_key=True)
-
-class Reservation(Base):
-    __tablename__ = "reservations"
+class CartItem(Base):
+    __tablename__ = "cart_items"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     bag_id = Column(Integer, ForeignKey("bags.id"), nullable=False)
-    status = Column(String(20), nullable=False)
-    transaction_id = Column(String(50))
-    payment_status = Column(String(20), nullable=False)
+    quantity = Column(Integer, nullable=False)
     created_at = Column(TIMESTAMP)
