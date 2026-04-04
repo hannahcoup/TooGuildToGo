@@ -1,5 +1,6 @@
 //JS for Dashboard
-
+let bags = [];
+let allBags = [];
 const container = document.getElementById("bags");
 /** 
 const bags = JSON.parse(localStorage.getItem('bags') || '[]');

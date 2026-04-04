@@ -1,29 +1,44 @@
-const bags = JSON.parse(localStorage.getItem('bags') || '[]'); 
-const reservations = JSON.parse(localStorage.getItem('reservations') || '[]'); 
+let bags = [];
 
-//getting numbers for each status 
-const bagsSold = bags.filter(b => b.status === 'collected').length;
-const bagsReserved = bags.filter(b => b.status === 'reserved').length;
-const bagsAvailable = bags.filter(b => b.status === 'available').length;
+/**need to wait for reservation backend route to work - currently bags is returning as a view for available bags so wont filter for 
+ * bags that are collected. reservations will actually have statuses soo will be better to use
+ */
+async function loadBags() {
+  const vendor_name = localStorage.getItem('vendor_name');
+  console.log(vendor_name);
+  
+  const res = await fetch(`http://127.0.0.1:8000/bags`);
+  const data = await res.json();
+  let allBags = data;
+  bags = allBags.filter(b => b.vendor_name === vendor_name);
 
-const upcomingRes = reservations.filter(r => r.status === 'reserved').length;
-const meals_sold_overall = reservations.length;
+    const reservations = JSON.parse(localStorage.getItem('reservations') || '[]'); 
 
-const today = new Date().toDateString();
-const meals_sold_today =  bags.filter(r => r.status === 'collected' && new Date(r.pickup_window_end).toDateString() ===  today).length;
+    //getting numbers for each status 
+    const bagsSold = bags.filter(b => b.status === 'collected').length;
+    console.log(bags);
+    const bagsReserved = bags.filter(b => b.status === 'reserved').length;
+    const bagsAvailable = bags.filter(b => b.status === 'available').length;
 
-if(document.getElementById("info")){
-    document.getElementById("info").innerHTML = `
-    <h2> ${localStorage.getItem('vendor_name')}'s Profile Summary: </h2>`;
+    const upcomingRes = reservations.filter(r => r.status === 'reserved').length;
+    const meals_sold_overall = reservations.length;
+
+    const today = new Date().toDateString();
+    const meals_sold_today =  bags.filter(r => r.status === 'collected' && new Date(r.pickup_window_end).toDateString() ===  today).length;
+
+    if(document.getElementById("info")){
+        document.getElementById("info").innerHTML = `
+        <h2> ${localStorage.getItem('vendor_name')}'s Profile Summary: </h2>`;
+    }
+    document.getElementById("bags_sold").innerHTML = `${bagsSold}`;
+    document.getElementById("bags_reserved").innerHTML = `${bagsReserved}`;
+    document.getElementById("bags_available").innerHTML = `${bagsAvailable}`;
+    document.getElementById("bags_upcoming").innerHTML = `${upcomingRes}`;
+
+    document.getElementById("meals_sold_today").innerHTML = `${meals_sold_today}`;
+    document.getElementById("meals_sold_overall").innerHTML = `${meals_sold_overall}`;
 }
-document.getElementById("bags_sold").innerHTML = `${bagsSold}`;
-document.getElementById("bags_reserved").innerHTML = `${bagsReserved}`;
-document.getElementById("bags_available").innerHTML = `${bagsAvailable}`;
-document.getElementById("bags_upcoming").innerHTML = `${upcomingRes}`;
-
-document.getElementById("meals_sold_today").innerHTML = `${meals_sold_today}`;
-document.getElementById("meals_sold_overall").innerHTML = `${meals_sold_overall}`;
-
+loadBags();
 //settings page 
 function nameModal(){
     
@@ -63,13 +78,13 @@ function emailModal(){
 };
 
 const editModal = document.getElementById('editModal');
+if (document.getElementById('editClose')) {
+    document.getElementById('editClose').onclick = () => editModal.style.display = 'none';
+    window.onclick = (e) => {
+    if (e.target == editModal) editModal.style.display = 'none';
 
-document.getElementById('editClose').onclick = () => editModal.style.display = 'none';
-window.onclick = (e) => {
-  if (e.target == editModal) editModal.style.display = 'none';
-
-};
-
+    };
+}
 function saveEditName(){
     const new_name = document.getElementById('edit-vendor_name').value;
     const old_name= localStorage.getItem("vendor_name");
