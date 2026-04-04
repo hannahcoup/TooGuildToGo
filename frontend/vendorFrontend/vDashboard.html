@@ -28,33 +28,56 @@
 </header>
 
 <main>
-    <div id = "welcome"> </div>
+    <div id = "welcome" class="welcome"> </div>
   <div id="bags"></div>
 </main>
 <!-- Modal view to edit bags if they havent been collected-->
 <div id="editModal" class="modal">
   <div class="modal-content">
+    
     <span class="close" id="editClose">&times;</span>
     <h2>Edit Bag</h2>
-    <label>Name</label>
-    <input type="text" id="edit-product_name">
-    <label>Description</label>
-    <textarea id="edit-description" rows="4"></textarea>
-    <label>Category</label>
-    <select id="edit-category">
-      <option value="Pastries">Pastries</option>
-      <option value="Sandwiches">Sandwiches</option> <!--need to add all categories-->
-    </select>
-    <label>Price</label>
-    <input type="text" id="edit-price">
-    <label>Pickup Start Time</label>
-    <input type="time" id="edit-pickup_window_start">
-    <label>Pickup End Time</label>
-    <input type="time" id="edit-pickup_window_end">
-    <label>Quantity</label>
-    <input type="number" id="edit-quantity">
-    <button id="edit-save" class="bagButton">Save</button>
-    
+    <div class="form-grid">
+        <div class="full-width">
+            <label>Name</label>
+            <input type="text" id="edit-product_name">
+        </div>
+        <div class="full-width">
+            <label>Description</label>
+            <textarea id="edit-description" rows="3"></textarea>
+        </div>
+        <div>
+            <label>Category</label>
+            <select id="edit-category">
+            <option value="Hot Food">Hot Food</option>
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Bakery/Lunch">Bakery/Lunch</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Snack/Hot Food">Snack/Hot Food</option>
+            </select>
+        </div>
+        <div>
+            <label>Price £</label>
+            <input type="text" id="edit-price">
+        </div>
+        <div>
+            <label>Pickup Start</label>
+            <input type="datetime-local" id="edit-pickup_window_start">
+        </div>
+        <div>
+            <label>Pickup End</label>
+            <input type="datetime-local" id="edit-pickup_window_end">
+        </div>
+        <div>
+            <label>Quantity</label>
+            <input type="number" id="edit-quantity">
+        </div>
+        <div style="display:flex; align-items:flex-end;">
+            <button id="edit-save" class="bagButton" style="width:100%">Save Changes</button>
+        </div>
+        </div>
+        
   </div>
 </div>
 

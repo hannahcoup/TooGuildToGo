@@ -42,13 +42,15 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
    
-  const res = await fetch('http://127.0.0.1:8000/login', {
+  const res = await fetch('http://127.0.0.1:8000/vendor/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({email: email, password: password})
   });
 
   const data = await res.json();
+  
+console.log(data.message); // add this
     
   if (data.message == "login successful") {
     localStorage.setItem('token', 'fake-token');

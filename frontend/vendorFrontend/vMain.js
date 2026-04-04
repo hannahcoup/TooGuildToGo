@@ -12,12 +12,14 @@ async function loadBags() {
   
   const res = await fetch(`http://127.0.0.1:8000/bags`);
   const data = await res.json();
-  bags = data;
-  bags.forEach((bag, index) => addBagCard(bag, index));
+  let allBags = data;
+  
+    let bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
+    bags.forEach((bag, index) => addBagCard(bag, index));
 }
 
 loadBags();
-document.getElementById("welcome").innerHTML= ` <p> WELCOME BACK, ${localStorage.getItem('vendor_name')} </p>`;
+document.getElementById("welcome").innerHTML= ` <p> Welcome Back, ${localStorage.getItem('vendor_name')} </p>`;
 let editIndex = null;
 // TODO: replace with GET /bags?vendor_id=${localStorage.getItem('vendor_id')}
 
