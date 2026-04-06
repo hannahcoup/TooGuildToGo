@@ -58,7 +58,7 @@ async function searchFoodItems() {
 
 
 
-//Loading bags from db
+//Loading bags from db, reword to align wiht your variables
 let bags = [];
 const container = document.getElementById("food-items-info");
 async function loadBags() {
