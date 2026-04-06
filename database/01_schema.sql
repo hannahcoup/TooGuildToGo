@@ -1,10 +1,10 @@
-DROP VIEW  IF EXISTS view_cart_items;
+DROP VIEW  IF EXISTS view_vendor_reservations;
+DROP VIEW  IF EXISTS view_user_reservations;
 DROP VIEW  IF EXISTS view_user_safe_bags;
 DROP VIEW  IF EXISTS view_user_order_history;
 DROP VIEW  IF EXISTS view_available_bags;
 DROP VIEW  IF EXISTS view_bag_allergens;
 
-DROP TABLE IF EXISTS cart_items;
 DROP TABLE IF EXISTS vendor_food_items;
 DROP TABLE IF EXISTS user_allergen_exclusions;
 DROP TABLE IF EXISTS user_dietary_preferences;
@@ -60,7 +60,7 @@ CREATE TABLE food (
 CREATE TABLE food_allergen (
     food_id INTEGER NOT NULL REFERENCES food(food_id) ON DELETE CASCADE,
     allergen_id INTEGER NOT NULL REFERENCES allergen(allergen_id),
-    contains BOOLEAN NOT NULL,
+    may_contain BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (food_id, allergen_id)
 );
 
@@ -121,18 +121,8 @@ CREATE TABLE reservations (
     bag_id INT NOT NULL REFERENCES bags(id),
     status VARCHAR(20) NOT NULL DEFAULT 'reserved',
     transaction_id VARCHAR(50),
-    payment_status VARCHAR(20) NOT NULL DEFAULT 'paid',
+    payment_status VARCHAR(20) NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CHECK (status IN ('reserved', 'collected', 'cancelled')),
-    CHECK (payment_status IN ('paid', 'failed', 'refunded'))
+    CHECK (payment_status IN ('pending', 'paid', 'refunded'))
 );
-
-CREATE TABLE cart_items (
-    id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    bag_id INT NOT NULL REFERENCES bags(id) ON DELETE CASCADE,
-    quantity INT NOT NULL DEFAULT 1 CHECK (quantity > 0),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (user_id, bag_id)
-);
-
