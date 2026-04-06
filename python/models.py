@@ -67,10 +67,12 @@ class BagDietaryTag(Base):
     bag_id = Column(Integer, ForeignKey("bags.id"), primary_key=True)
     dietary_tag_id = Column(Integer, ForeignKey("dietary_tags.id"), primary_key=True)
 
-class CartItem(Base):
-    __tablename__ = "cart_items"
+class Reservation(Base):
+    __tablename__ = "reservations"
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     bag_id = Column(Integer, ForeignKey("bags.id"), nullable=False)
-    quantity = Column(Integer, nullable=False)
+    status = Column(String(20), nullable=False)
+    transaction_id = Column(String(50))
+    payment_status = Column(String(20), nullable=False)
     created_at = Column(TIMESTAMP)
