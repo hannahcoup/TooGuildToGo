@@ -76,3 +76,45 @@ def get_vendor_food_items(vendor_id: int, db: Session = Depends(get_db)):
     ).fetchall()
 
     return [{"food_id": row[0], "name": row[1], "category": row[2]} for row in result]
+
+
+#code for vendor updating bag
+
+
+class EditBagRequest(BaseModel):
+    product_name: str | None = None
+    description: str | None = None
+    category: str | None = None
+    discounted_price: float | None = None
+    pickup_window_start: str | None = None
+    pickup_window_end: str | None = None
+    quantity: int | None = None
+
+
+@router.patch("/vendor/bags/{bag_id}")
+def edit_bag(bag_id: int, data: EditBagRequest, db: Session = Depends(get_db)):
+    db.execute(
+        text("""
+            UPDATE bags SET
+                product_name = COALESCE(:product_name, product_name),
+                description = COALESCE(:description, description),
+                category = COALESCE(:category, category),
+                discounted_price = COALESCE(:discounted_price, discounted_price),
+                pickup_window_start = COALESCE(:pickup_window_start, pickup_window_start),
+                pickup_window_end = COALESCE(:pickup_window_end, pickup_window_end),
+                quantity = COALESCE(:quantity, quantity)
+            WHERE id = :bag_id
+        """),
+        {
+            "product_name": data.product_name,
+            "description": data.description,
+            "category": data.category,
+            "discounted_price": data.discounted_price,
+            "pickup_window_start": data.pickup_window_start,
+            "pickup_window_end": data.pickup_window_end,
+            "quantity": data.quantity,
+            "bag_id": bag_id
+        }
+    )
+    db.commit()
+    return {"message": "Bag updated successfully"}

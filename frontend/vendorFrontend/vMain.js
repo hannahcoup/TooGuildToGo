@@ -15,7 +15,7 @@ async function loadBags() {
   const data = await res.json();
   let allBags = data;
   
-    let bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
+    bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
     bags.forEach((bag, index) => addBagCard(bag, index));
 }
 
@@ -84,16 +84,31 @@ const editModal = document.getElementById('editModal');
 
 document.getElementById('editClose').onclick = () => editModal.style.display = 'none';
 
-document.getElementById('edit-save').addEventListener('click', () => {
-  bags[editIndex].description = document.getElementById('edit-description').value;
-  bags[editIndex].category = document.getElementById('edit-category').value;
-  bags[editIndex].price = document.getElementById('edit-price').value;
-  bags[editIndex].collection_time = document.getElementById('edit-time').value;
-  bags[editIndex].quantity = document.getElementById('edit-quantity').value;
+document.getElementById('edit-save').addEventListener('click', async () => {
+    let current_bag = bags[editIndex];
+    console.log(parseInt(current_bag));
+    const res = await fetch(`http://127.0.0.1:8000/vendor/bags/${current_bag.bag_id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+        product_name: document.getElementById('edit-product_name').value,
+        description: document.getElementById('edit-description').value,
+        category: document.getElementById('edit-category').value,
+        discounted_price: parseFloat(document.getElementById('edit-price').value),
+        pickup_window_start: document.getElementById('edit-pickup_window_start').value,
+        pickup_window_end: document.getElementById('edit-pickup_window_end').value,
+        quantity: parseInt(document.getElementById('edit-quantity').value)
+        })
+    });
 
-  localStorage.setItem('bags', JSON.stringify(bags));
-  editModal.style.display = 'none';
-  location.reload();
+    const data = await res.json();
+
+    if (data.message === 'Bag updated successfully') {
+        editModal.style.display = 'none';
+        location.reload();
+    } else {
+        alert('Something went wrong, please try again.');
+    }
 });
 
 window.onclick = (e) => {
