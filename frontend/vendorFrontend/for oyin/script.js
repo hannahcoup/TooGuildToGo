@@ -99,6 +99,13 @@ function addBagCard(bag, index) {
   container.appendChild(card);
 }
 
+function filterBags(tag) {
+  const container = document.getElementById('bag-container');
+  container.innerHTML = '';
+  const filtered = tag ? allBags.filter(b => b.category === tag) : allBags;
+  filtered.forEach((bag, index) => addBagCard(bag, index));
+}
+
 
 
  

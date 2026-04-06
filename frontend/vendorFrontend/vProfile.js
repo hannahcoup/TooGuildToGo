@@ -29,14 +29,15 @@ async function loadBags() {
     if(document.getElementById("info")){
         document.getElementById("info").innerHTML = `
         <h2> ${localStorage.getItem('vendor_name')}'s Profile Summary: </h2>`;
-    }
-    document.getElementById("bags_sold").innerHTML = `${bagsSold}`;
-    document.getElementById("bags_reserved").innerHTML = `${bagsReserved}`;
-    document.getElementById("bags_available").innerHTML = `${bagsAvailable}`;
-    document.getElementById("bags_upcoming").innerHTML = `${upcomingRes}`;
+        document.getElementById("bags_sold").innerHTML = `${bagsSold}`;
+        document.getElementById("bags_reserved").innerHTML = `${bagsReserved}`;
+        document.getElementById("bags_available").innerHTML = `${bagsAvailable}`;
+        document.getElementById("bags_upcoming").innerHTML = `${upcomingRes}`;
 
-    document.getElementById("meals_sold_today").innerHTML = `${meals_sold_today}`;
-    document.getElementById("meals_sold_overall").innerHTML = `${meals_sold_overall}`;
+        document.getElementById("meals_sold_today").innerHTML = `${meals_sold_today}`;
+        document.getElementById("meals_sold_overall").innerHTML = `${meals_sold_overall}`;
+    }
+    
 }
 loadBags();
 //settings page 
@@ -85,12 +86,26 @@ if (document.getElementById('editClose')) {
 
     };
 }
-function saveEditName(){
+async function saveEditName(){
     const new_name = document.getElementById('edit-vendor_name').value;
     const old_name= localStorage.getItem("vendor_name");
+    const current_id = localStorage.getItem("vendor_id");
     if(new_name !== old_name){
-        localStorage.setItem("vendor_name", new_name);
-        document.getElementById("edits").innerHTML= `Saved Successfully! \n`;
+        const res = await fetch(`http://127.0.0.1:8000/vendors/${current_id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+            name: document.getElementById('edit-vendor_name').value
+            })
+        });
+        const data = await res.json();
+
+        if (data.message === 'Setting updated successfully') {
+            localStorage.setItem("vendor_name", new_name);
+            document.getElementById("edits").innerHTML= `Saved Successfully! \n`;
+        }else{
+            document.getElementById("edits").innerHTML= `Error \n`;
+        }
     }else{
         document.getElementById("feedback").innerHTML =`
         <p>Invalid: enter a new name</p>`;
@@ -109,12 +124,26 @@ function saveEditPassword(){
     }
 }
 
-function saveEditEmail(){
+async function saveEditEmail(){
     const new_email = document.getElementById('edit-vendor_email').value;
     const old_email= localStorage.getItem("vendor_email");
+    const current_id = localStorage.getItem("vendor_id");
     if(new_email !== old_email){
-        localStorage.setItem("vendor_email", new_email);
-        document.getElementById("edits").innerHTML= `Saved Successfully! \n`;
+        const res = await fetch(`http://127.0.0.1:8000/vendors/${current_id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+            email: document.getElementById('edit-vendor_email').value
+            })
+        });
+        const data = await res.json();
+
+        if (data.message === 'Setting updated successfully') {
+            localStorage.setItem("vendor_email", new_email);
+            document.getElementById("edits").innerHTML= `Saved Successfully! \n`;
+        }else{
+            document.getElementById("edits").innerHTML= `Error \n`;
+        }
     }else{
         document.getElementById("feedback").innerHTML =`
         <p>Invalid: enter a new email</p>`;

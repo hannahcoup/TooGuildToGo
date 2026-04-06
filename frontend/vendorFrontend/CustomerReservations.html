@@ -53,11 +53,25 @@
     <p id="modal-pickup_window_end"></p>
     <p><b>Allergens:</b> <span id="modal-allergens"></span></p>
     <p><b>Dietary:</b> <span id="modal-dietary"></span></p>
-    <button id= "modal-collect" class="bagButton">Mark as Collected</button>
-    <p id="modal-payment_status"></p>
+    <button id="modal-confirm" class="bagButton">Confirm Collection</button>
+    
     
   </div>
 </div>
+
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Confirm Collection</h2>
+    <p id="confirm-student"></p>
+    <p id="confirm-bag"></p>
+    <p id="confirm-price"></p><hr class="rounded">
+    <p>Confirm student has collected and paid in person?</p>
+    <button id="confirm-yes" class="bagButton">Confirm</button>
+    <button onclick="document.getElementById('confirmModal').style.display='none'" class="bagButton">Cancel</button>
+  </div>
+</div>
+
 
 <script>
     function logout() {

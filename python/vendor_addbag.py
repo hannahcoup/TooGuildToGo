@@ -118,3 +118,17 @@ def edit_bag(bag_id: int, data: EditBagRequest, db: Session = Depends(get_db)):
     )
     db.commit()
     return {"message": "Bag updated successfully"}
+
+#code for deleting bags - used in vendor dashboard
+@router.delete("/vendor/bags/{bag_id}")
+def delete_bag(bag_id: int, db: Session = Depends(get_db)):
+    result = db.execute(
+        text("DELETE FROM bags WHERE id = :bag_id"),
+        {"bag_id": bag_id}
+    )
+    db.commit()
+    
+    if result.rowcount == 0:
+        return {"error": "Bag not found"}
+    
+    return {"message": "Bag deleted successfully"}

@@ -43,14 +43,12 @@
                 <div class = "dropdown">
                     <button><i class="fa-solid fa-chevron-down"></i> Dietry Categories</button>
                     <div class = "content">
-                        <a href="#">V — vegetarian</a>
-                        <a href="#">VG — vegan</a>
-                        <a href="#">GF — gluten free</a>
-                        <a href="#">DF — dairy free</a>
-                        <a href="#">H — halal</a>
-                        <a href="#">K — kosher</a>
-                        <a href="#">N — contains nuts</a>
-                        <a href="#">SF — sugar free</a>
+                        <a href="#" onclick="filterBags('Vegetarian')">V — vegetarian</a>
+                        <a href="#" onclick="filterBags('Vegan')">VG — vegan</a>
+                        <a href="#" onclick="filterBags('Gluten-Free')">GF — gluten free</a>
+                        <a href="#" onclick="filterBags('Contains Dairy', true)">DF — dairy free</a>
+                        <a href="#" onclick="filterBags('Halal')">H — halal</a>
+                        <a href="#" onclick="filterBags(null)">Show All</a>
                     </div>
                 </div>
 
