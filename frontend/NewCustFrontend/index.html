@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Too Guild To Go</title>
+    <link rel="stylesheet" href="style.css">    
+    <link 
+        rel = "stylesheet" 
+        href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity = "sha512-2d9QYjNqT+0VbN7jH+LZtM2+qzYpP1u5el5QYjNqT+0VbN7jH+LZt"
+        crossorigin = "anonymous" 
+        referrerpolicy = "no-referrer" 
+    />
+
+       <nav> 
+                <a href="index.html" class="logo">
+                    <img src="images/logo.png" alt="Logo">
+                </a>
+
+                <ul>
+                    <li><a href="fav.html"><i class="fa-solid fa-heart"></i> Favourites</a></li>
+                    <li><a href="res.html"><i class="fa-solid fa-cart-shopping"></i> Reserved</a></li>
+                    <li><a href="prof.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+                    <li><a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                </ul>
+
+            </nav>
+
+</head>
+    <body>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+                        
+        <!-- NAV BAR AT TOP -->
+         
+        
+        <div class="container">
+            <header>
+                <h1>
+                    Too Guild To Go
+                </h1>
+                <p> Know exactly what you get, no surprises, no funny business, just discounted food for you to enjoy and support sustainability! </p>
+            </header>
+
+           
+            <div class="search-container">
+
+                   <!-- putting drop donw here ot see if it aligns wiht search -->
+                <div class = "dropdown">
+                    <button><i class="fa-solid fa-chevron-down"></i> Dietry Categories</button>
+                    <div class = "content">
+                        <a href="#">V — vegetarian</a>
+                        <a href="#">VG — vegan</a>
+                        <a href="#">GF — gluten free</a>
+                        <a href="#">DF — dairy free</a>
+                        <a href="#">H — halal</a>
+                        <a href="#">K — kosher</a>
+                        <a href="#">N — contains nuts</a>
+                        <a href="#">SF — sugar free</a>
+                    </div>
+                </div>
+
+                <input type="text" id="search-input" placeholder="Search for food bags...">
+                
+                <button id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+
+            </div>
+
+
+            <!-- repeating hidden several times becuase these will all be hidden until a particular thing triggers it to be shown -->
+            <div id="error-container" class="hidden"> <!-- we want it hidden by default but for when we type somethig tyhat doesnt exist-->
+                <p>No results found. Please try different keywords.</p>
+            </div>
+            
+            <!-- class not used here becuase its only one item this doesnt need collective styling-->
+            <div id="results-heading"></div> <!-- this is where we will put the heading for the search results, like "Search results for 'pastry'" -->
+
+            
+        
+
+
+
+        <a href="details.html" class = "card-link">
+            <div class="food-items" data-id="mock-1">
+                <img src="images/chocCroissant.png" alt="Food item">
+
+                <div class="food-items-info">
+
+                    <!-- TOP ROW: category + favourite -->
+                    <div class="top-row">
+                        <span class="food-items-category">Pastry</span>
+
+                        <div class="favourite-wrapper">
+                            <div class="favourite-toggle">
+                                <input type="checkbox" id="favourite" name="favourite-checkbox">
+                                <label for="favourite" class="favourite-container">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-heart">
+                                        <path d="M20.8 4.6c-1.5-1.4-3.6-1.4-5.1 0L12 8.3l-3.7-3.7c-1.5-1.4-3.6-1.4-5.1 0s-1.5 3.6 0 5l8.8 8.9 8.8-8.9c1.5-1.4 1.5-3.6 0-5z"></path>
+                                    </svg>
+
+                                    <div class="action">
+                                        <span class="option-1">Add to Favourites</span>
+                                        <span class="option-2">Added to Favourites</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECOND ROW: company + collection time -->
+                    <div class="row">
+                        <h3 class="food-items-company">Union Brew</h3>
+                        <h3 class="food-items-collect-time">Collection Time: 15:00-16:00</h3>
+                    </div>
+
+                    <!-- THIRD ROW: PRICE -->
+                    <div class="row price-row">
+                        <span class="food-items-price">£3.50</span>
+                    </div>
+
+                </div>
+            </div>
+        </a>
+
+            <!-- card 2 -->
+            <div class="food-items">
+                <img src="images/chocCroissant.png" alt="Food item">
+
+                <div class="food-items-info">
+                    <span class="food-items-category">Pastry</span>
+                    <h3 class="food-items-title">Chocolate Croissant</h3>
+                </div>
+            </div>
+            
+            <!-- UNUSED -->
+            
+            <div id="food-items-details" class="hidden">
+                <button id="back-btn"><i class="fas fa-arrow-left"></i></button>
+
+                <div class="food-items-details-content">
+                    <img class="food-items-details-content-img" src="images/chocCroissant.png" alt="">
+                    <h2 class="food-items-details-title">Chocolate Croissant</h2>
+                    <span>Pastry</span>
+                    <p>Description goes here...</p>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+        
+            <script src="script.js"></script>
+    </body> 
+</html>
