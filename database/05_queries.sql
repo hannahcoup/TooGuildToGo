@@ -30,30 +30,22 @@ ORDER BY b.id;
 SELECT * FROM view_user_safe_bags
 ORDER BY user_id, bag_id;
 
-
 SELECT * FROM view_user_order_history
 ORDER BY ordered_at DESC;
 
-SELECT * FROM view_cart_items
+SELECT * FROM view_user_reservations
+ORDER BY created_at DESC;
+
+SELECT * FROM view_vendor_reservations
 ORDER BY created_at DESC;
 
 SELECT
-    u.name AS user_name,
-    COUNT(ci.id) AS cart_count
-FROM users u
-LEFT JOIN cart_items ci ON ci.user_id = u.id
-GROUP BY u.name
-ORDER BY u.name;
-
-SELECT
-    ci.id AS cart_item_id,
-    u.name AS user_name,
-    b.product_name,
-    v.name AS vendor_name,
-    b.discounted_price,
-    ci.quantity
-FROM cart_items ci
-JOIN users u ON u.id = ci.user_id
-JOIN bags b ON b.id = ci.bag_id
-JOIN vendors v ON v.id = b.vendor_id
-ORDER BY ci.created_at DESC;
+    v.vendor_name,
+    COUNT(*) FILTER (WHERE v.status = 'reserved') AS reserved_count,
+    COUNT(*) FILTER (WHERE v.status = 'collected') AS collected_count,
+    COUNT(*) FILTER (WHERE v.status = 'cancelled') AS cancelled_count,
+    COUNT(*) FILTER (WHERE v.payment_status = 'pending') AS pending_payment_count,
+    COUNT(*) FILTER (WHERE v.payment_status = 'paid') AS paid_count
+FROM view_vendor_reservations v
+GROUP BY v.vendor_id, v.vendor_name
+ORDER BY v.vendor_name;
