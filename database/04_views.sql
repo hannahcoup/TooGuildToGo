@@ -86,19 +86,44 @@ WHERE
         WHERE bi.bag_id = b.id AND uae.user_id = u.id
     );
 
-CREATE VIEW view_cart_items AS
+CREATE VIEW view_user_reservations AS
 SELECT
-    ci.id AS cart_item_id,
-    ci.user_id,
+    r.id AS reservation_id,
+    r.user_id,
     u.name AS user_name,
     u.email,
-    ci.bag_id,
+    r.bag_id,
     b.product_name,
+    v.id AS vendor_id,
     v.name AS vendor_name,
+    v.location AS vendor_location,
     b.discounted_price,
-    ci.quantity,
-    ci.created_at
-FROM cart_items ci
-JOIN users u ON u.id = ci.user_id
-JOIN bags b ON b.id = ci.bag_id
+    r.status,
+    r.payment_status,
+    r.transaction_id,
+    r.created_at
+FROM reservations r
+JOIN users u ON u.id = r.user_id
+JOIN bags b ON b.id = r.bag_id
 JOIN vendors v ON v.id = b.vendor_id;
+
+CREATE VIEW view_vendor_reservations AS
+SELECT
+    r.id AS reservation_id,
+    v.id AS vendor_id,
+    v.name AS vendor_name,
+    u.id AS user_id,
+    u.name AS user_name,
+    u.email,
+    b.id AS bag_id,
+    b.product_name,
+    b.pickup_window_start,
+    b.pickup_window_end,
+    r.status,
+    r.payment_status,
+    r.transaction_id,
+    r.created_at
+FROM reservations r
+JOIN bags b ON b.id = r.bag_id
+JOIN vendors v ON v.id = b.vendor_id
+JOIN users u ON u.id = r.user_id;
