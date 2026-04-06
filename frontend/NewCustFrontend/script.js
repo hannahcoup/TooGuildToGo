@@ -67,6 +67,7 @@ async function searchFoodItems() {
 
 //Loading bags from db
 let bags = [];
+const container = document.getElementById("food-items-info");
 async function loadBags() {
   const res = await fetch(`http://127.0.0.1:8000/bags`);
   const data = await res.json();
