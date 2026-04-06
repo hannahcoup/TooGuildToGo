@@ -65,7 +65,7 @@ async function searchFoodItems() {
 }
 
 
-
+//
 
 //Loading bags from db
 let bags = [];
