@@ -1,23 +1,10 @@
 async function loadFoodItems() {
   const vendor_id = localStorage.getItem('vendor_id') || 1;
   
-  /*const res = await fetch(`http://127.0.0.1:8000/vendor_food_items?vendor_id=${vendor_id}`);
-  const foodItems = await res.json();*/
+  const res = await fetch(`http://127.0.0.1:8000/vendor/food_items?vendor_id=${vendor_id}`);
+  const foodItems = await res.json();
 
-  const foodItems = [
-    { food_id: 1, name: "Baked Beans", category: "Hot Filling" },
-    { food_id: 2, name: "BBQ Sloppy Joe", category: "Hot Filling" },
-    { food_id: 3, name: "Garlic and Chilli Chicken", category: "Hot Filling" },
-    { food_id: 4, name: "Butters", category: "Hot Filling" },
-    { food_id: 5, name: "Seasoned", category: "Hot Filling" },
-    { food_id: 6, name: "Garlic Vegan", category: "Hot Filling" },
-    { food_id: 7, name: "Firecracker", category: "Hot Filling" },
-    { food_id: 8, name: "Tuna Mayo", category: "Cold Filling" },
-    { food_id: 9, name: "Grated Cheese", category: "Cold Filling" },
-    { food_id: 10, name: "Chicken Mayo", category: "Cold Filling" },
-    { food_id: 11, name: "Coleslaw", category: "Cold Filling" },
-    { food_id: 12, name: "Chef's Choice", category: "Cold Filling" }
-  ];
+ 
 
   const grouped = {};
   foodItems.forEach(item => {
@@ -47,14 +34,20 @@ document.getElementById('addBagForm').addEventListener('submit', async (e) => {
 
   const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
   const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
+const pickup_end = new Date(document.getElementById("pickup_window_end").value);
+const expires = new Date(document.getElementById("expires_at").value);
 
-  /*const dietaryIds = [];
+if (expires > pickup_end) {
+  document.getElementById('error').textContent = 'Expiry must be before or equal to pickup window end';
+  return;
+}
+  const dietaryIds = [];
   if (document.getElementById("is_vegan").checked) dietaryIds.push(1);
   if (document.getElementById("is_vegetarian").checked) dietaryIds.push(2);
   if (document.getElementById("is_gluten_free").checked) dietaryIds.push(3);
   if (document.getElementById("contains_meat").checked) dietaryIds.push(4);
   if (document.getElementById("contains_dairy").checked) dietaryIds.push(5);
-  if (document.getElementById("is_spicy").checked) dietaryIds.push(6);*/
+  if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
 
   const newBag = {
     vendor_id: parseInt(localStorage.getItem('vendor_id')) || 1,
@@ -67,6 +60,7 @@ document.getElementById('addBagForm').addEventListener('submit', async (e) => {
     pickup_window_end: document.getElementById("pickup_window_end").value,
     expires_at: document.getElementById("expires_at").value,
     quantity: parseInt(document.getElementById("quantity").value),
+    dietary_tag_ids: dietaryIds,
     food_ids: food_ids,
     status: 'available'
   };
