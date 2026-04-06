@@ -1,51 +1,53 @@
-from fastapi import FastAPI
+from fastapi import APIRouter
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
-import mysql.connector
+from db_connection import get_db
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from sqlalchemy import text
 import hashlib
+
 
 salt =  "5ab" # for password hashing
 
-app = FastAPI()
-
-app.add_middleware( # CORS middleware is used in situations when a frontend running in a browser has JavaScript code that communicates with a backend with different 'orign'
+router = APIRouter()
+"""
+router.add_middleware( # CORS middleware is used in situations when a frontend running in a browser has JavaScript code that communicates with a backend with different 'orign'
     CORSMiddleware,
     allow_origins=["http://127.0.0.1:5500"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-def getDatabase(): # connecting to database
-    dataBase = mysql.connector.connect (
-        host = "localhost",
-        user = "user",
-        password = "password",
-        database = "vendors",
-    )
-    return dataBase
+"""
 
 class loginRequest(BaseModel):  #  this does automatic data conversions and validaton checks 
     email: str
     password: str
 
-@app.post("/login")
-def login(data: loginRequest):
+@router.post("/vendor/login")
+def login(data: loginRequest, db: Session = Depends(get_db)):
+    print("LOGIN ENDPOINT HIT")
 
-    database = getDatabase()
-    cursorObject = database.cursor()
+    vendor = db.execute(
+        text("SELECT id, name, password_hash FROM vendors WHERE email = :email"),
+        {"email": data.email}
+    ).fetchone()
 
-    cursorObject.execute("SELECT id, name, password_hash FROM vendors WHERE email = %s", (data.email,)) # %s is a placeholder to prevent SQL injection, comma is needed after (data.email,) so it is treated as a tuple
-    #changed to select vendor id aswell
-    vendor = cursorObject.fetchone() # returns None if no data is found
+    if vendor is None:
+        return {"error": "incorrect email or password"}
 
     dataPassword = data.password + salt
-    dataPasswordHash = hashlib.sha256(dataPassword.encode()) 
+    dataPasswordHash = hashlib.sha256(dataPassword.encode()).hexdigest()
+    print("Entered password:", data.password)
+    print("Hashed input:", dataPasswordHash)
+    print("Stored hash:", vendor[2])
 
     # need to hash the password entered by the user to see if this hash matches the one stored in the database
-    if vendor != None and dataPasswordHash == vendor["password_hash"]:
-        return {"message": "login successful", "name": vendor["name"], "id": vendor[0]}
+    if vendor != None and dataPasswordHash == vendor[2]:
+        return {"message": "login successful", "name": vendor[1], "id": vendor[0]}
         
     return {"error": "incorrect email or password"} 
+
 
 '''
 Hashing passwords, using SHA-256 one-way hashing algorithm (fast and secure)

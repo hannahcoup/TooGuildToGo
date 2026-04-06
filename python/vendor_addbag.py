@@ -2,7 +2,8 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 from db_connection import get_db
-from models import Bag, VendorFoodItem, BagItem
+from models import Bag, VendorFoodItem, BagItem, BagDietaryTag
+from sqlalchemy import text
 
 router = APIRouter()
 
@@ -19,6 +20,7 @@ class AddBagRequest(BaseModel):
     expires_at: str
     status: str = "available"
     food_ids: list[int]
+    dietary_tag_ids: list[int] = []
 
 @router.post("/vendor/add-bag")
 def add_bag(data: AddBagRequest, db: Session = Depends(get_db)):
@@ -49,6 +51,28 @@ def add_bag(data: AddBagRequest, db: Session = Depends(get_db)):
 
     for food_id in data.food_ids:
         db.add(BagItem(bag_id=new_bag.id, food_id=food_id))
+    #adds dietary tag 
+    for tag_id in data.dietary_tag_ids:
+        db.add(BagDietaryTag(bag_id=new_bag.id, dietary_tag_id=tag_id))
+
     db.commit()
 
     return {"message": "bag created successfully", "bag_id": new_bag.id, "product_name": new_bag.product_name}
+
+
+#code for fetching food items per vendor for adding food items to a bag
+@router.get("/vendor/food_items")
+def get_vendor_food_items(vendor_id: int, db: Session = Depends(get_db)):
+    result = db.execute(
+        text("""
+            SELECT f.food_id, f.name, f.category
+            FROM food f
+            JOIN vendor_food_items vfi ON vfi.food_id = f.food_id
+            WHERE vfi.vendor_id = :vendor_id
+            AND f.active = TRUE
+            ORDER BY f.category, f.name
+        """),
+        {"vendor_id": vendor_id}
+    ).fetchall()
+
+    return [{"food_id": row[0], "name": row[1], "category": row[2]} for row in result]

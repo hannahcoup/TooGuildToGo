@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Text, Numeric, TIMESTAMP
 from sqlalchemy.orm import declarative_base
+from datetime import datetime
 
 Base = declarative_base()
 
@@ -54,7 +55,7 @@ class Bag(Base):
     pickup_window_end = Column(TIMESTAMP, nullable=False)
     expires_at = Column(TIMESTAMP, nullable=False)
     status = Column(String(20), nullable=False)
-    created_at = Column(TIMESTAMP)
+    created_at = Column(TIMESTAMP, default=datetime.utcnow)
 
 class BagItem(Base):
     __tablename__ = "bag_items"

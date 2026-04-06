@@ -17,7 +17,7 @@ class SignupRequest(BaseModel):
     password: str
     confirmPassword: str
 
-@router.post("/login")
+@router.post("/customer/login")
 def login(data: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == data.email).first()
     if not user or user.password_hash != data.password:
