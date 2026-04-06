@@ -17,5 +17,3 @@ CREATE INDEX idx_reservations_user ON reservations(user_id);
 CREATE INDEX idx_reservations_bag ON reservations(bag_id);
 CREATE INDEX idx_reservations_status ON reservations(status);
 CREATE INDEX idx_reservations_payment ON reservations(payment_status);
-CREATE INDEX idx_cart_items_user ON cart_items(user_id);
-CREATE INDEX idx_cart_items_bag ON cart_items(bag_id);
