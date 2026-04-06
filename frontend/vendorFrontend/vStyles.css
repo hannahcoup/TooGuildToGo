@@ -343,3 +343,28 @@ hr.rounded {
   outline: none;
   border-color: #3eb246;
 }
+
+#notification {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  display: none;
+  z-index: 999;
+  transition: opacity 0.3s;
+}
+
+#notification.success {
+  background: #eaf3de;
+  color: #27500A;
+  border: 1px solid #c0dd97;
+}
+
+#notification.error {
+  background: #fcebeb;
+  color: #501313;
+  border: 1px solid #f09595;
+}

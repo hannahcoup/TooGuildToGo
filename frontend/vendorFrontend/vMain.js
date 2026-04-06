@@ -2,27 +2,19 @@
 let bags = [];
 let allBags = [];
 const container = document.getElementById("bags");
-/** 
-const bags = JSON.parse(localStorage.getItem('bags') || '[]');
-
-bags.forEach((bag, index) => addBagCard(bag, index));
-*/
+let editIndex = null;
 
 async function loadBags() {
   const vendor_id = localStorage.getItem('vendor_id');
-  
   const res = await fetch(`http://127.0.0.1:8000/bags`);
   const data = await res.json();
   let allBags = data;
-  
-    bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
-    bags.forEach((bag, index) => addBagCard(bag, index));
+  bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
+  bags.forEach((bag, index) => addBagCard(bag, index));
 }
 
 loadBags();
 document.getElementById("welcome").innerHTML= ` <p> Welcome Back, ${localStorage.getItem('vendor_name')} </p>`;
-let editIndex = null;
-// TODO: replace with GET /bags?vendor_id=${localStorage.getItem('vendor_id')}
 
 function addBagCard(bag, index) {
   const card = document.createElement("div");
@@ -38,13 +30,11 @@ function addBagCard(bag, index) {
     ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}
     
   `;
-
   const editBtn = card.querySelector('.editBtn');
-    if (editBtn) {
+  if (editBtn) {
     editBtn.addEventListener('click', (e) => {
         e.stopPropagation();
         editIndex = index;
-
         // fills the form with current values
         document.getElementById('edit-product_name').value = bag.product_name || '';
         document.getElementById('edit-description').value = bag.description || '';
@@ -57,36 +47,49 @@ function addBagCard(bag, index) {
         document.getElementById('editModal').style.display = 'block';
     });
     }
-
+    
     const deleteButton = card.querySelector('.deleteButton');
     if (deleteButton) {
-    deleteButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        //replace following lines when backend ready - also make async
-        bags.splice(index, 1); //this removes 1 item at the index
-        localStorage.setItem('bags', JSON.stringify(bags)); // saves updated array
-        card.remove();
-        /*with this:
-        const data = await res.json();
-        if (data.message === 'Bag deleted successfully') {
-        card.remove();
-        }*/
-    });
-}
+        deleteButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            cardToDelete = card;
+            bagIdToDelete = bag.bag_id;
+            document.getElementById('delete-message').innerHTML = `Are you sure you want to delete "${bag.product_name}"?`;
+            document.getElementById('deleteModal').style.display = 'block';
+        });
+    }
   container.appendChild(card);
 }
 
 
+//modal view shows when delete button on card is clicked - opens and asks if they confirm delete
+const deleteModal = document.getElementById('deleteModal');
+let cardToDelete = null;
+let bagIdToDelete = null;
+document.getElementById('confirm-delete').addEventListener('click', async () => {
+  const res = await fetch(`http://127.0.0.1:8000/vendor/bags/${bagIdToDelete}`, {
+    method: 'DELETE'
+  });
+  const data = await res.json();
+  if (data.message === 'Bag deleted successfully') {
+    cardToDelete.remove();
+    document.getElementById('deleteModal').style.display = 'none';
+    showNotification('Bag deleted successfully');
+  } else {
+    showNotification('Something went wrong', 'error');
+  }
+});
+
+document.getElementById('deleteClose').onclick = () => document.getElementById('deleteModal').style.display = 'none';
 
 
 
+//edit modal  when edit button on card is clicked - shows current values of that bag and lets you save
 const editModal = document.getElementById('editModal');
-
 document.getElementById('editClose').onclick = () => editModal.style.display = 'none';
 
 document.getElementById('edit-save').addEventListener('click', async () => {
     let current_bag = bags[editIndex];
-    console.log(parseInt(current_bag));
     const res = await fetch(`http://127.0.0.1:8000/vendor/bags/${current_bag.bag_id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -105,36 +108,27 @@ document.getElementById('edit-save').addEventListener('click', async () => {
 
     if (data.message === 'Bag updated successfully') {
         editModal.style.display = 'none';
-        location.reload();
+        setTimeout(() => location.reload(), 1500);
+        showNotification('Bag updated successfully');
     } else {
-        alert('Something went wrong, please try again.');
+        showNotification('Something went wrong', 'error');
     }
 });
 
+//to close modals if window clicked
 window.onclick = (e) => {
   if (e.target == editModal) editModal.style.display = 'none';
 };
+window.onclick = (e) => {
+  if (e.target == deleteModal) deleteModal.style.display = 'none';
+};
 
+//notification shows when edit/delete happens - customised per action
+function showNotification(message, type = 'success') {
+  const notif = document.getElementById('notification');
+  notif.textContent = message;
+  notif.className = type;
+  notif.style.display = 'block';
+  setTimeout(() => notif.style.display = 'none', 10000);
+}
 
- /**
-   * bag schema:
-   * CREATE TABLE bags (
-    id                  SERIAL PRIMARY KEY,
-    vendor_id           INT NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
-    product_name        VARCHAR(120) NOT NULL,
-    description         TEXT,
-    category            VARCHAR(80) NOT NULL,
-    original_price      DECIMAL(6,2) NOT NULL CHECK (original_price > 0),
-    discounted_price    DECIMAL(6,2) NOT NULL CHECK (discounted_price > 0),
-    quantity            INT NOT NULL CHECK (quantity >= 0),
-    pickup_window_start TIMESTAMP NOT NULL,
-    pickup_window_end   TIMESTAMP NOT NULL,
-    expires_at          TIMESTAMP NOT NULL,
-    status              VARCHAR(20) NOT NULL DEFAULT 'available',
-    created_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CHECK (status IN ('available', 'reserved', 'collected')),
-    CHECK (discounted_price <= original_price),
-    CHECK (pickup_window_end > pickup_window_start),
-    CHECK (expires_at <= pickup_window_end)
-);
-   */

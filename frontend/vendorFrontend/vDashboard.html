@@ -28,9 +28,12 @@
 </header>
 
 <main>
-    <div id = "welcome" class="welcome"> </div>
-  <div id="bags"></div>
+    <div id = "welcome" class="welcome"> </div> <!--Creates welcome message based on vendor_name-->
+    <div id="bags"></div> <!--Container for bag cards in dashboard-->
 </main>
+
+<div id="notification"></div>
+
 <!-- Modal view to edit bags if they havent been collected-->
 <div id="editModal" class="modal">
   <div class="modal-content">
@@ -76,9 +79,18 @@
         <div style="display:flex; align-items:flex-end;">
             <button id="edit-save" class="bagButton" style="width:100%">Save Changes</button>
         </div>
-        </div>
+    </div>
         
   </div>
+</div>
+
+<div id="deleteModal" class="modal">
+    
+    <div class="modal-content">
+        <span class="close" id="deleteClose">&times;</span>
+        <p id="delete-message"></p>
+        <button id="confirm-delete" class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>
+    </div>
 </div>
 
 
