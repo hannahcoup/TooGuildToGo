@@ -12,9 +12,6 @@ const backBtn = document.getElementById("back-btn");
 
 
 
-
-
-
 searchButton.addEventListener('click', searchFoodItems);
 foodItemsContainer.addEventListener('click', handleFoodItemCardClick);
 backBtn.addEventListener('click', () => {
