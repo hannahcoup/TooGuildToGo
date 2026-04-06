@@ -11,10 +11,6 @@ const FoodItemsDetailsContent = document.querySelector(".food-items-details-cont
 const backBtn = document.getElementById("back-btn");
 
 
-
-
-
-
 searchButton.addEventListener('click', searchFoodItems);
 foodItemsContainer.addEventListener('click', handleFoodItemCardClick);
 backBtn.addEventListener('click', () => {
@@ -58,9 +54,6 @@ async function searchFoodItems() {
         errorContainer.textContent = "An error occurred while fetching food items. Please try again later.";
         errorContainer.classList.remove("hidden"); // show error message
     }
-
-    
-}
 
 
 
@@ -121,6 +114,11 @@ function addBagCard(bag, index) {
 
 
 
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 27e07b6465d0332d1efa67f4dc4a5e73eb6b66cd
 /*
 
 MESSY
