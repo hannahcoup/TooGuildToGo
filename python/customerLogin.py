@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from db_connection import get_db
 from models import User
 import hashlib
+from datetime import datetime
 
 
 salt =  "5ab" # for password hashing
@@ -43,8 +44,12 @@ def signup(data: SignupRequest, db: Session = Depends(get_db)):
     if existing_user:
         return {"error": "email already registered"}
 
-    new_user = User(name=data.name, email=data.email, password_hash=data.password)
+    dataPassword = data.password + salt
+    dataPasswordHash = hashlib.sha256(dataPassword.encode()).hexdigest()
+    
+    new_user = User(name=data.name, email=data.email, password_hash=dataPasswordHash, created_at=datetime.utcnow())
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
     return {"message": "signup successful", "user_id": new_user.id, "name": new_user.name}
+
