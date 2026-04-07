@@ -4,6 +4,10 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from db_connection import get_db
 from models import User
+import hashlib
+
+
+salt =  "5ab" # for password hashing
 
 router = APIRouter()
 
@@ -20,7 +24,9 @@ class SignupRequest(BaseModel):
 @router.post("/customer/login")
 def login(data: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == data.email).first()
-    if not user or user.password_hash != data.password:
+    dataPassword = data.password + salt
+    dataPasswordHash = hashlib.sha256(dataPassword.encode()).hexdigest()
+    if not user or user.password_hash != dataPasswordHash:
         return {"error": "incorrect email or password"}
     return {"message": "login successful", "user_id": user.id, "name": user.name}
 
