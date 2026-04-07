@@ -5,6 +5,7 @@ let bags = [];
  */
 async function loadBags() {
   const vendor_name = localStorage.getItem('vendor_name');
+  const vendor_id = localStorage.getItem('vendor_id');
   console.log(vendor_name);
   
   const res = await fetch(`http://127.0.0.1:8000/bags`);
@@ -12,19 +13,20 @@ async function loadBags() {
   let allBags = data;
   bags = allBags.filter(b => b.vendor_name === vendor_name);
 
-    const reservations = JSON.parse(localStorage.getItem('reservations') || '[]'); 
+    const res_v = await fetch(`http://127.0.0.1:8000/reservations?vendor_id=${vendor_id}`);
+    const reservations = await res_v.json();
 
     //getting numbers for each status 
-    const bagsSold = bags.filter(b => b.status === 'collected').length;
+    const bagsSold = reservations.filter(b => b.payment_status === 'paid').length;
     console.log(bags);
-    const bagsReserved = bags.filter(b => b.status === 'reserved').length;
+    const bagsReserved = reservations.filter(b => b.reservation_status === 'reserved').length;
     const bagsAvailable = bags.filter(b => b.status === 'available').length;
 
-    const upcomingRes = reservations.filter(r => r.status === 'reserved').length;
+    const upcomingRes = reservations.filter(r => r.reservation_status === 'reserved').length;
     const meals_sold_overall = reservations.length;
 
     const today = new Date().toDateString();
-    const meals_sold_today =  bags.filter(r => r.status === 'collected' && new Date(r.pickup_window_end).toDateString() ===  today).length;
+    const meals_sold_today =  bags.filter(r => r.reservation_status === 'collected' && new Date(r.pickup_window_end).toDateString() ===  today).length;
 
     if(document.getElementById("info")){
         document.getElementById("info").innerHTML = `
