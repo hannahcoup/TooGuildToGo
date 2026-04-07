@@ -31,7 +31,7 @@ async function loadReservations() {
     const shortDesc = reservation.description && reservation.description.length > 30 ? reservation.description.substring(0, 30) + '...' : reservation.description
     card.className = 'bag-card';
     card.innerHTML = `
-        <h3>${reservation.student_name}</h3> 
+        <h3>${reservation.user_name}</h3> 
         <p>${shortDesc || "No Description"}</p>
         <p>Discounted Price: £${reservation.discounted_price}</p>
         <p>Collection Window: ${reservation.pickup_window_start || "TBD"} - ${reservation.pickup_window_end || "TBD"}</p>
@@ -39,7 +39,7 @@ async function loadReservations() {
         <span style="color:${reservation.payment_status === 'paid' ? 'green' : 'orange'}">${reservation.payment_status}</span>
         
     `;
-        if (reservation.status === 'collected') {
+        if (reservation.reservation_status === 'collected') {
         past.appendChild(card);  // already collected goes to past
     } else {
         upcoming.appendChild(card);  // everything else goes to upcoming
@@ -97,7 +97,7 @@ async function loadReservations() {
     //confirm button in first modal opens confirm modal
     document.getElementById('modal-confirm').addEventListener('click', () => {
         const reservation = reservations[selectedIndex];
-        document.getElementById('confirm-student').textContent = 'Student: ' + reservation.student_name;
+        document.getElementById('confirm-student').textContent = 'Student: ' + reservation.user_name;
         document.getElementById('confirm-bag').textContent = 'Bag: ' + reservation.product_name;
         document.getElementById('confirm-price').textContent = 'Amount to collect: £' + reservation.discounted_price;
         modal.style.display = 'none';
@@ -108,19 +108,37 @@ async function loadReservations() {
     document.getElementById('confirm-yes').addEventListener('click', async () => {
         const reservation = reservations[selectedIndex];
 
-        //updates status to collected
-        await fetch(`http://127.0.0.1:8000/reservations/${reservation.reservation_id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status: 'collected' })
+        const payRes = await fetch("http://127.0.0.1:8000/vendor/mark-payment-collected", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                vendor_id: parseInt(vendor_id),
+                reservation_id: reservation.reservation_id
+            })
         });
+        const payData = await payRes.json();
+        
+        if (payData.error) {
+            alert(payData.error);
+            return;
+        }
 
-        //update payment status to paid
-        await fetch(`http://127.0.0.1:8000/reservations/${reservation.reservation_id}/payment`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ payment_status: 'paid' })
+        // then mark collected
+        const colRes = await fetch("http://127.0.0.1:8000/vendor/mark-collected", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                vendor_id: parseInt(vendor_id),
+                reservation_id: reservation.reservation_id
+            })
         });
+        const colData = await colRes.json();
+
+        if (colData.error) {
+            alert(colData.error);
+            return;
+        }
+
 
         confirmModal.style.display = 'none';
         location.reload();

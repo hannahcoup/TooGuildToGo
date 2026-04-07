@@ -13,8 +13,8 @@ class VendorReservationRequest(BaseModel):
     reservation_id: int
 
 
-@router.get("/vendor/reservations/{vendor_id}")
-def get_vendor_reservations(vendor_id: int, status: str | None = None, db: Session = Depends(get_db)):
+@router.get("/reservations")
+def get_reservations(vendor_id: int, db: Session = Depends(get_db)):
     vendor = db.query(Vendor).filter(Vendor.id == vendor_id).first()
     if not vendor:
         return {"error": "vendor not found"}
@@ -27,8 +27,6 @@ def get_vendor_reservations(vendor_id: int, status: str | None = None, db: Sessi
         Bag.vendor_id == vendor_id
     )
 
-    if status:
-        query = query.filter(Reservation.status == status)
 
     rows = query.order_by(Reservation.created_at.desc(), Reservation.id.desc()).all()
 
@@ -41,6 +39,8 @@ def get_vendor_reservations(vendor_id: int, status: str | None = None, db: Sessi
             "user_id": user.id,
             "user_name": user.name,
             "user_email": user.email,
+            "description": bag.description,
+            "discounted_price": bag.discounted_price,
             "reservation_status": reservation.status,
             "payment_status": reservation.payment_status,
             "pickup_window_start": str(bag.pickup_window_start),
