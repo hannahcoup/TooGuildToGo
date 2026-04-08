@@ -16,8 +16,11 @@ async function loadBags() {
 loadBags();
 document.getElementById("welcome").innerHTML= ` <p> Welcome Back, ${localStorage.getItem('vendor_name')} </p>`;
 
-function addBagCard(bag, index) {
+async function addBagCard(bag, index) {
   const card = document.createElement("div");
+  const allergenbag = await fetch(`http://127.0.0.1:8000/bags/${bag.bag_id}/allergens`);
+    const allergens = await allergenbag.json();
+    const filtered = allergens.filter(a => a.contains || a.may_contain);
   card.className = "bag-card";
   card.innerHTML = `
     <h3>${bag.product_name}</h3>
@@ -25,6 +28,17 @@ function addBagCard(bag, index) {
     <p>Discounted Price: £${bag.discounted_price}</p>
     <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} </span>`}</p>
     <p>Expiry Date: ${new Date(bag.expires_at) < new Date() ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${bag.expires_at} </span>`}</p>
+        
+    <p>Allergens: ${
+      filtered.length > 0
+        ? filtered
+            .map(a =>
+              a.contains
+                ? `${a.allergen_name}`
+                : `${a.allergen_name} (may contain)`
+            ).join(', ')
+        : 'None'
+    } </p>
     ${bag.status !== 'collected' ? '<button class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>'  : ''}
     
     ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}

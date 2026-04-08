@@ -2,8 +2,9 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 from db_connection import get_db
-from models import Bag, VendorFoodItem, BagItem, BagDietaryTag
+from models import Bag, VendorFoodItem, BagItem, BagDietaryTag, Food, FoodAllergen, Allergen
 from sqlalchemy import text
+
 
 router = APIRouter()
 
@@ -132,3 +133,101 @@ def delete_bag(bag_id: int, db: Session = Depends(get_db)):
         return {"error": "Bag not found"}
     
     return {"message": "Bag deleted successfully"}
+
+
+
+@router.get("/vendor/bags")
+def get_vendor_bags(vendor_id: int, db: Session = Depends(get_db)):
+    bags = db.query(Bag).filter(Bag.vendor_id == vendor_id).all()
+
+    response = []
+
+    for bag in bags:
+
+        # FOOD ITEMS
+        food_items = (
+            db.query(Food)
+            .join(BagItem, BagItem.food_id == Food.food_id)
+            .filter(BagItem.bag_id == bag.id)
+            .all()
+        )
+
+        # ALLERGENS
+        allergens = (
+            db.query(Allergen.name)
+            .join(FoodAllergen, FoodAllergen.allergen_id == Allergen.allergen_id)
+            .join(BagItem, BagItem.food_id == FoodAllergen.food_id)
+            .filter(BagItem.bag_id == bag.id, FoodAllergen.contains == True)
+            .distinct()
+            .all()
+        )
+        allergen_list = [a[0] for a in allergens]
+
+        # DIETARY TAGS
+        dietary_tags = (
+            db.query(DietaryTag.name)
+            .join(BagDietaryTag, BagDietaryTag.dietary_tag_id == DietaryTag.id)
+            .filter(BagDietaryTag.bag_id == bag.id)
+            .all()
+        )
+        dietary_list = [d[0] for d in dietary_tags]
+
+        response.append({
+            "bag_id": bag.id,
+            "product_name": bag.product_name,
+            "description": bag.description,
+            "category": bag.category,
+            "discounted_price": float(bag.discounted_price),
+            "pickup_window_start": str(bag.pickup_window_start),
+            "pickup_window_end": str(bag.pickup_window_end),
+            "quantity": bag.quantity,
+            "status": bag.status,
+            "food_items": [f.name for f in food_items],
+            "allergens": allergen_list,
+            "dietary_tags": dietary_list
+        })
+
+    return response
+
+
+
+
+#returns allergens for dashboard and reservations
+@router.get("/bags/{bag_id}/allergens")
+def get_bag_allergens(bag_id: int, db: Session = Depends(get_db)):
+
+    rows = (
+        db.query(
+            Allergen.name.label("allergen_name"),
+            FoodAllergen.contains,
+            FoodAllergen.may_contain
+        )
+        .select_from(BagItem)
+        .join(FoodAllergen, FoodAllergen.food_id == BagItem.food_id)
+        .join(Allergen, Allergen.allergen_id == FoodAllergen.allergen_id)
+        .filter(BagItem.bag_id == bag_id)
+        .all()
+    )
+
+    # Group by allergen name
+    grouped = {}
+    for row in rows:
+        name = row.allergen_name
+        if name not in grouped:
+            grouped[name] = {"contains": False, "may_contain": False}
+
+        # Priority: contains > may_contain
+        if row.contains:
+            grouped[name]["contains"] = True
+        elif row.may_contain:
+            grouped[name]["may_contain"] = True
+
+    # Convert to list
+    return [
+        {
+            "allergen_name": name,
+            "contains": info["contains"],
+            "may_contain": info["may_contain"]
+        }
+        for name, info in grouped.items()
+    ]

@@ -37,7 +37,7 @@ document.getElementById('addBagForm').addEventListener('submit', async (e) => {
 const pickup_end = new Date(document.getElementById("pickup_window_end").value);
 const expires = new Date(document.getElementById("expires_at").value);
 
-if (expires > pickup_end) {
+if (expires <= pickup_end) {
   document.getElementById('error').textContent = 'Expiry must be before or equal to pickup window end';
   return;
 }

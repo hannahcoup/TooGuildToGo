@@ -2,12 +2,12 @@ async function loadReservations() {
     const upcoming = document.getElementById('upcoming');
     const past = document.getElementById('past');
 
-    const allergenNames = {
+    /*const allergenNames = {
     1: 'Celery', 2: 'Gluten', 3: 'Crustaceans', 4: 'Eggs',
     5: 'Fish', 6: 'Lupin', 7: 'Milk', 8: 'Molluscs',
     9: 'Mustard', 10: 'Nuts', 11: 'Peanuts', 12: 'Sesame',
     13: 'Soya', 14: 'Sulphites'
-    };
+    };*/
     const vendor_id = localStorage.getItem('vendor_id');
     const res = await fetch(`http://127.0.0.1:8000/reservations?vendor_id=${vendor_id}`);
     const reservations = await res.json();
@@ -47,7 +47,7 @@ async function loadReservations() {
 
 
     //modal view shown when reservation clicked
-    card.addEventListener('click', () => {
+    card.addEventListener('click', async() => {
         selectedIndex = index;
         const modal = document.getElementById('myModal');
         document.getElementById('modal-name').textContent = reservation.product_name;
@@ -56,8 +56,16 @@ async function loadReservations() {
         document.getElementById('modal-pickup_window_start').textContent = "Pickup Window start time: " + reservation.pickup_window_start;
         document.getElementById('modal-pickup_window_end').textContent = "Pickup Window end time: " + reservation.pickup_window_end;
 
-        document.getElementById('modal-allergens').textContent = 'N/A — coming soon';
+        
         document.getElementById('modal-dietary').textContent = 'N/A — coming soon';
+
+        const allergenRes = await fetch(`http://127.0.0.1:8000/bags/${reservation.bag_id}/allergens`);
+        const allergens = await allergenRes.json();
+        
+        document.getElementById('modal-allergens').textContent = 
+            allergens.length > 0 
+            ? allergens.map(a => a.may_contain ? `${a.allergen_name} (may contain)` : a.allergen_name).join(', ')
+            : 'None';
 
         //document.getElementById('modal-dietary').textContent = dietary.length > 0 ? dietary.join(', ') : 'None';
         //document.getElementById('modal-collect').style.display = reservation.status === 'collected' ? 'none' : 'block';

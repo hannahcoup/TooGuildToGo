@@ -76,3 +76,27 @@ class Reservation(Base):
     transaction_id = Column(String(50))
     payment_status = Column(String(20), nullable=False)
     created_at = Column(TIMESTAMP)
+
+class Allergen(Base):
+    __tablename__ = "allergen"
+    allergen_id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)
+    notes = Column(String(255))
+
+class FoodAllergen(Base):
+    __tablename__ = "food_allergen"
+    food_id = Column(Integer, ForeignKey("food.food_id"), primary_key=True)
+    allergen_id = Column(Integer, ForeignKey("allergen.allergen_id"), primary_key=True)
+    contains = Column(Boolean, nullable=False, default=False)
+    may_contain = Column(Boolean, nullable=False, default=False)
+
+
+class UserAllergenExclusion(Base):
+    __tablename__ = "user_allergen_exclusions"
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    allergen_id = Column(Integer, ForeignKey("allergen.allergen_id"), primary_key=True)
+
+class UserDietaryPreference(Base):
+    __tablename__ = "user_dietary_preferences"
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    dietary_tag_id = Column(Integer, ForeignKey("dietary_tags.id"), primary_key=True)
