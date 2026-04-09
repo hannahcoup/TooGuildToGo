@@ -38,24 +38,44 @@
             </header>
 
 
-            <div class="total-co2-container">
-                <h1>
-                    <i class="fa-solid fa-bolt"></i> Total CO2 Saved: 
-                </h1>
-                <h3> 20 kWH </h3>
-            </div>
-
+            <main>
+            <div class = profile-analytics-container>
 
             
-            <div class="amount-saved-container">
-                <h1>
-                    <i class="fa-solid fa-money-bill-1-wave"></i> Total Amount Saved: 
-                </h1>
-                <h3> £34.50 </h3>
+                <div id="summary">
+                    <p>Total C02 Saved: <span id="totalCo2"></span> kg</p>
+                    <p>Total Money Saved: £<span id="totalMoney"></span></p>
+                    <p>Weekly Average C02: <span id="weeklyAverageCo2"></span> kg</p>
+                    <p>Weekly Average Money Saved: £<span id="weeklyAverageMoney"></span></p>
+                </div>
+
+                <div class="large-chart">
+                    <h3>Weekly Sustainability Report</h3>
+                    <iframe id="co2AndMoneyGraph" frameborder="0"></iframe>
+
+                </div>
+
+                <div class="small-charts">
+                    <div class="charts">
+                    <h3>CO2 Saved Over Time</h3>
+                    <iframe id="co2Graph" frameborder="0"></iframe>
+
+                    </div>
+                
+                    <div class="charts">
+                    <h3>Money Saved Over Time</h3>
+                    <iframe id="moneyGraph" frameborder="0"></iframe>
+                    </div>
+                
+                </div>
+
             </div>
+
+            </main>
 
 
             <div class="food-items-history">
+                <h3 class="food-items-title">Purchase History:</h3>
                 <img src="images/chocCroissant.png" alt="Food item">
                 <div class="food-items-info">
                     <span class="food-items-category">Pastry</span>
@@ -66,6 +86,7 @@
 
 
         </div>
+        <script src="cAnalytics.js"></script>
     </body>
 </html>
 

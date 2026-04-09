@@ -25,17 +25,26 @@ body {
     background-color: var(--beige-bg);
     color: var(--text-dark);
     line-height: 1.6;
-    /* makes content treat nav bar is the border*/
-    margin-left: 250px;
+    padding-left: 100px;
+    padding-right: 100px;
+    
 }
 
-
-.nav-container {
-    width: 100%;
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 2rem 1 rem;
+.container {
+    background-color: var(--beige-light);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
 }
+
 
 
 
@@ -54,9 +63,7 @@ h1 {
     margin-bottom: 0.5rem;
 }
 
-h1 i {
-    margin-right: 10px;
-}
+
 
 header p {
     color: var (--text-medium);
@@ -83,6 +90,8 @@ input[type="text"]:focus {
     border-color: var(--green-accent);
     box-shadow: 0 0 5px var(--green-accent);
 }
+
+
 input[type="password"] {
     flex: 1;
     padding: 10px 16px;
