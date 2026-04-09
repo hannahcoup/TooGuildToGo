@@ -21,7 +21,6 @@
 }
 
 body {
-  
     font-family: 'Arial', sans-serif;
     background-color: var(--beige-bg);
     color: var(--text-dark);
@@ -32,12 +31,11 @@ body {
 
 
 .container {
-
     justify-content: center;   /* centres left ↔ right */
     align-items: center;
     background-color: var(--beige-light);
     border-radius: var(--border-radius);
-    padding: 1rem;
+    padding: 3rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     cursor: pointer;
@@ -134,7 +132,7 @@ h2 {
 }
 
 h1 img {
-  height: 5em;   /* same height as the text */
+  height: 3em;   /* same height as the text */
   width: auto;
   vertical-align: middle; /* keeps it aligned nicely */
 }
