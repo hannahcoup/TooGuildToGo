@@ -16,12 +16,15 @@ if(loginForm){
 
     const data = await res.json();
     
-    console.log(data.message); // add this
+   
         
     if (data.message == "login successful") {
+        console.log(data.message); // add this
+            console.log("signup response:", data);
+console.log("data.id:", data.id);
         localStorage.setItem('token', 'fake-token');
-        localStorage.setItem('customer_id', data.id);  
-        localStorage.setItem('customer_name', data.name);
+        localStorage.setItem('user_id', data.user_id);  
+        localStorage.setItem('user_name', data.name);
         window.location.href = '/frontend/NewCustFrontend/index.html';
     } else {
         document.getElementById('error').textContent = 'Invalid username or password';
@@ -57,12 +60,11 @@ if(signupForm){
 
         const data = await res.json();
         
-        console.log(data.message); // add this
-            
+        
         if (data.message == "signup successful") {
             localStorage.setItem('token', 'fake-token');
-            localStorage.setItem('customer_id', data.id);  
-            localStorage.setItem('customer_name', data.name);
+            localStorage.setItem('user_id', data.id);
+            localStorage.setItem('user_name', data.name);
             window.location.href = '/frontend/NewCustFrontend/index.html';
         } else {
             document.getElementById('error').textContent = 'Invalid username or password';

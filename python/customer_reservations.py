@@ -43,7 +43,8 @@ def reserve_bag(data: ReserveBagRequest, db: Session = Depends(get_db)):
         user_id=data.user_id,
         bag_id=data.bag_id,
         status="reserved",
-        payment_status="pending"
+        payment_status="paid"
+        
     )
     db.add(new_reservation)
 

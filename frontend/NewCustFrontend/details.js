@@ -11,3 +11,28 @@ async function loadBagDetails() {
 }
 
 loadBagDetails();
+
+async function reserveBag() {
+  const userId = localStorage.getItem("user_id");
+    console.log(userId, bagId);
+    
+  const res = await fetch("http://127.0.0.1:8000/customer/reserve-bag", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      user_id: parseInt(userId),
+      bag_id: bagId
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.message === "bag reserved successfully") {
+    alert("Bag reserved successfully");
+    window.location.href = "res.html";
+  } else {
+    alert(data.error || "Something went wrong");
+  }
+}
