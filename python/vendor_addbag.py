@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 from db_connection import get_db
-from models import Bag, VendorFoodItem, BagItem, BagDietaryTag, Food, FoodAllergen, Allergen
+from models import Bag, VendorFoodItem, BagItem, BagDietaryTag, Food, FoodAllergen, Allergen, DietaryTag
 from sqlalchemy import text
 
 
@@ -90,6 +90,7 @@ class EditBagRequest(BaseModel):
     pickup_window_start: str | None = None
     pickup_window_end: str | None = None
     quantity: int | None = None
+    food_ids: list[int] | None = None 
 
 
 @router.patch("/vendor/bags/{bag_id}")
@@ -117,6 +118,14 @@ def edit_bag(bag_id: int, data: EditBagRequest, db: Session = Depends(get_db)):
             "bag_id": bag_id
         }
     )
+    if data.food_ids is not None:
+        db.execute(text("DELETE FROM bag_items WHERE bag_id = :bag_id"), {"bag_id": bag_id})
+        for food_id in data.food_ids:
+            db.execute(
+                text("INSERT INTO bag_items (bag_id, food_id) VALUES (:bag_id, :food_id)"),
+                {"bag_id": bag_id, "food_id": food_id}
+            )
+    
     db.commit()
     return {"message": "Bag updated successfully"}
 
@@ -231,3 +240,34 @@ def get_bag_allergens(bag_id: int, db: Session = Depends(get_db)):
         }
         for name, info in grouped.items()
     ]
+
+
+
+@router.get("/bags/{bag_id}/food_items")
+def get_bag_food_items(bag_id: int, db: Session = Depends(get_db)):
+    result = db.execute(
+        text("""
+            SELECT f.food_id, f.name, f.category
+            FROM food f
+            JOIN bag_items bi ON bi.food_id = f.food_id
+            WHERE bi.bag_id = :bag_id
+            ORDER BY f.category, f.name
+        """),
+        {"bag_id": bag_id}
+    ).fetchall()
+    return [{"food_id": row[0], "name": row[1], "category": row[2]} for row in result]
+
+
+@router.get("/bags/{bag_id}/dietary_tags")
+def get_bag_dietary_tags(bag_id: int, db: Session = Depends(get_db)):
+    result = db.execute(
+        text("""
+            SELECT dt.name
+            FROM dietary_tags dt
+            JOIN bag_dietary_tags bdt ON bdt.dietary_tag_id = dt.id
+            WHERE bdt.bag_id = :bag_id
+            ORDER BY dt.name
+        """),
+        {"bag_id": bag_id}
+    ).fetchall()
+    return [{"name": row[0]} for row in result]

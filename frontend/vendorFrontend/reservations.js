@@ -57,19 +57,20 @@ async function loadReservations() {
         document.getElementById('modal-pickup_window_end').textContent = "Pickup Window end time: " + reservation.pickup_window_end;
 
         
-        document.getElementById('modal-dietary').textContent = 'N/A — coming soon';
-
+        
+        //fetches allergens for the bag and filters where contains= true 
         const allergenRes = await fetch(`http://127.0.0.1:8000/bags/${reservation.bag_id}/allergens`);
         const allergens = await allergenRes.json();
+        const filtered = allergens.filter(a => a.contains || a.may_contain);
         
-        document.getElementById('modal-allergens').textContent = 
-            allergens.length > 0 
-            ? allergens.map(a => a.may_contain ? `${a.allergen_name} (may contain)` : a.allergen_name).join(', ')
-            : 'None';
+        document.getElementById('modal-allergens').textContent = filtered.length > 0 
+            ? filtered.map(a => a.may_contain ? `${a.allergen_name} (may contain)` : a.allergen_name).join(', '): 'None';
 
-        //document.getElementById('modal-dietary').textContent = dietary.length > 0 ? dietary.join(', ') : 'None';
-        //document.getElementById('modal-collect').style.display = reservation.status === 'collected' ? 'none' : 'block';
-        //document.getElementById('modal-payment_status').style.display = reservation.status === 'collected' ? reservation.payment_status ? "Payment Status: "  : "" + reservation.payment_status : 'block';
+        //fetches all dietary tags in the reservation
+        const dietaryRes = await fetch(`http://127.0.0.1:8000/bags/${reservation.bag_id}/dietary_tags`);
+        const dietaryTags = await dietaryRes.json();
+        document.getElementById('modal-dietary').textContent = dietaryTags.length > 0 ? dietaryTags.map(d => d.name).join(', ') : 'None';
+        
         modal.style.display = 'block';
         });
 

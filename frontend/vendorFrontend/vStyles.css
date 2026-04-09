@@ -208,6 +208,8 @@ main {
   box-shadow: 0 8px 32px rgba(0,0,0,0.2);
   animation-name: animatetop;
   animation-duration: 0.3s;
+  max-height: 80vh;     
+  overflow-y: auto; 
 }
 
 /* The Close Button */
@@ -290,7 +292,7 @@ hr.rounded {
 .modal-content .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 1.2rem 1.5rem;
   text-align: left;
   align-items: start;
 }
@@ -300,7 +302,7 @@ hr.rounded {
 }
 
 .modal-content {
-  margin-top: 100px;
+  margin-top: 40px;
   border-radius: 16px;
   padding: 2rem;
   width: 55%;
@@ -357,6 +359,7 @@ hr.rounded {
   transition: opacity 0.3s;
 }
 
+
 #notification.success {
   background: #eaf3de;
   color: #27500A;
@@ -367,4 +370,36 @@ hr.rounded {
   background: #fcebeb;
   color: #501313;
   border: 1px solid #f09595;
+}
+.modal-content .form-grid input[type="checkbox"] {
+  width: auto;     
+  padding: 0;
+  border: none;
+}
+#foodItemsContainer {
+  max-height: 100px;
+  overflow-y: auto;
+  border: 1px solid #c8efd0;
+  border-radius: 8px;
+  padding: 8px;
+  
+
+}
+#edit-dietary-container {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #c8efd0;
+  border-radius: 8px;
+  padding: 8px;
+
+}
+.modal-content .checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }

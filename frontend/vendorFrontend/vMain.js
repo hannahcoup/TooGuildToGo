@@ -19,8 +19,9 @@ document.getElementById("welcome").innerHTML= ` <p> Welcome Back, ${localStorage
 async function addBagCard(bag, index) {
   const card = document.createElement("div");
   const allergenbag = await fetch(`http://127.0.0.1:8000/bags/${bag.bag_id}/allergens`);
-    const allergens = await allergenbag.json();
-    const filtered = allergens.filter(a => a.contains || a.may_contain);
+  const allergens = await allergenbag.json();
+  const filtered = allergens.filter(a => a.contains || a.may_contain);
+  
   card.className = "bag-card";
   card.innerHTML = `
     <h3>${bag.product_name}</h3>
@@ -46,9 +47,21 @@ async function addBagCard(bag, index) {
   `;
   const editBtn = card.querySelector('.editBtn');
   if (editBtn) {
-    editBtn.addEventListener('click', (e) => {
+    editBtn.addEventListener('click', async (e) => {
         e.stopPropagation();
         editIndex = index;
+
+        // fetch vendor's food items
+        const vendor_id = localStorage.getItem('vendor_id');
+        const foodRes = await fetch(`http://127.0.0.1:8000/vendor/food_items?vendor_id=${vendor_id}`);
+        const foodItems = await foodRes.json();
+
+        // fetches current food items for this bag so you can pre-tick them
+        const bagFoodRes = await fetch(`http://127.0.0.1:8000/bags/${bag.bag_id}/food_items`);
+        const currentFoodIds = await bagFoodRes.json(); // returns [{food_id: 1}, ...]
+        const currentIds = currentFoodIds.map(f => f.food_id);
+
+
         // fills the form with current values
         document.getElementById('edit-product_name').value = bag.product_name || '';
         document.getElementById('edit-description').value = bag.description || '';
@@ -57,6 +70,53 @@ async function addBagCard(bag, index) {
         document.getElementById('edit-pickup_window_start').value = bag.pickup_window_start || '';
         document.getElementById('edit-pickup_window_end').value = bag.pickup_window_end || '';
         document.getElementById('edit-quantity').value = bag.quantity || '';
+
+        //for editing allergens, so all allergens for bag are fetched and pre filled in contains
+        const grouped = {};
+        foodItems.forEach(item => {
+            if (!grouped[item.category]) grouped[item.category] = [];
+            grouped[item.category].push(item);
+        });
+
+        const container = document.getElementById('foodItemsContainer');
+        container.innerHTML = '';
+        
+        Object.entries(grouped).forEach(([category, items]) => {
+            const legend = document.createElement('p');
+            legend.innerHTML = `<b>${category}</b>`;
+            container.appendChild(legend);
+            items.forEach(item => {
+                const label = document.createElement('label');
+                const checked = currentIds.includes(item.food_id) ? 'checked' : '';
+                label.innerHTML = `<input type="checkbox" id="food-${item.food_id}" name="food_item" value="${item.food_id}" ${checked}> ${item.name}`;
+                container.appendChild(label);
+            });
+        });
+
+        //fetches dietary tags and prefills checkboxes 
+        const dietaryRes = await fetch(`http://127.0.0.1:8000/bags/${bag.bag_id}/dietary_tags`);
+        const dietaryTags = await dietaryRes.json();
+        const currentDietaryNames = dietaryTags.map(d => d.name);
+
+        const allDietaryTags = [
+        { id: 1, name: 'Vegan' },
+        { id: 2, name: 'Vegetarian' },
+        { id: 3, name: 'Gluten-Free' },
+        { id: 4, name: 'Contains Meat' },
+        { id: 5, name: 'Contains Dairy' },
+        { id: 6, name: 'Spicy' },
+        { id: 7, name: 'Halal' }
+        ];
+
+        const dietaryContainer = document.getElementById('edit-dietary-container');
+        dietaryContainer.innerHTML = '';
+        allDietaryTags.forEach(tag => {
+        const checked = currentDietaryNames.includes(tag.name) ? 'checked' : '';
+        const label = document.createElement('label');
+        label.style.cssText = 'display:flex; align-items:center; gap:4px; font-size:13px;';
+        label.innerHTML = `<input type="checkbox" id="dietary-${tag.id}" name="dietary_tag" value="${tag.id}" ${checked}> ${tag.name}`;
+        dietaryContainer.appendChild(label);
+        });
 
         document.getElementById('editModal').style.display = 'block';
     });
@@ -103,6 +163,9 @@ const editModal = document.getElementById('editModal');
 document.getElementById('editClose').onclick = () => editModal.style.display = 'none';
 
 document.getElementById('edit-save').addEventListener('click', async () => {
+    const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
+    const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
+
     let current_bag = bags[editIndex];
     const res = await fetch(`http://127.0.0.1:8000/vendor/bags/${current_bag.bag_id}`, {
         method: 'PATCH',
@@ -111,6 +174,7 @@ document.getElementById('edit-save').addEventListener('click', async () => {
         product_name: document.getElementById('edit-product_name').value,
         description: document.getElementById('edit-description').value,
         category: document.getElementById('edit-category').value,
+        food_ids: food_ids ,
         discounted_price: parseFloat(document.getElementById('edit-price').value),
         pickup_window_start: document.getElementById('edit-pickup_window_start').value,
         pickup_window_end: document.getElementById('edit-pickup_window_end').value,
