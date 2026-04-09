@@ -274,7 +274,11 @@ button:hover {
 
 
 
+
+
 .profile-analytics-container {
+    margin-left: 40px;
+    margin-right: 40px;
     background-color: var(--beige-light);
     border-radius: var(--border-radius);
     padding: 1rem;
@@ -295,6 +299,8 @@ button:hover {
 }
 
 .profile-settings-container {
+    margin-left: 40px;
+    margin-right: 40px;
     background-color: var(--beige-light);
     border-radius: var(--border-radius);
     padding: 1rem;
@@ -320,6 +326,8 @@ button:hover {
 /* for history */
 
 .food-items-history {
+    margin-left: 40px;
+    margin-right: 40px;
     background-color: var(--beige-light);
     border-radius: var(--border-radius);
     padding: 1rem;
