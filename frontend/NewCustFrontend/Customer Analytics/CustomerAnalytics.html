@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Too Guild To Go</title>
+  <link rel="stylesheet" href="cStyles.css">
+</head>
+
+<body>
+
+<header>
+    <div class = "nav-container"></div>
+  <h1>Too Guild To Go</h1>
+  <nav>
+  <ul>
+  <li><a href="dashboard.html">Dashboard</a></li>
+  <li><a href="addBag.html">Add Bag</a></li>
+  <li><a href="reservations.html">Customer Reservations</a></li>
+  <li><a href="customerAnalytics.html">Customer Analytics</a></li>
+
+  
+</ul>
+</nav>
+
+</header>
+
+<main>
+ <div id="summary">
+    <p>Total C02 Saved: <span id="totalCo2"></span> kg</p>
+    <p>Total Money Saved: £<span id="totalMoney"></span></p>
+    <p>Weekly Average C02: <span id="weeklyAverageCo2"></span> kg</p>
+    <p>Weekly Average Money Saved: £<span id="weeklyAverageMoney"></span></p>
+  </div>
+
+  <div class="large-chart">
+      <h3>Weekly Sustainability Report</h3>
+      <iframe id="co2AndMoneyGraph" frameborder="0"></iframe>
+
+  </div>
+
+  <div class="small-charts">
+    <div class="charts">
+      <h3>CO2 Saved Over Time</h3>
+      <iframe id="co2Graph" frameborder="0"></iframe>
+
+    </div>
+   
+    <div class="charts">
+      <h3>Money Saved Over Time</h3>
+      <iframe id="moneyGraph" frameborder="0"></iframe>
+    </div>
+  
+  </div>
+
+</main>
+
+<script src="cAnalytics.js"></script>
+</body>
+</html>
+
+<!-- This comment is for the terminal commands I need to run so that the graphs load in live server, (base) PS C:\Users\larac\OneDrive\Documents\Lara\University of Liverpool\COMP208\TooGuildToGo-main> cd python
+(base) PS C:\Users\larac\OneDrive\Documents\Lara\University of Liverpool\COMP208\TooGuildToGo-main\python> uvicorn customerAnalytics:app --reload-->

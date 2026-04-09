@@ -1,0 +1,115 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+header {
+  background: #3eb246;
+  color: white;
+  padding: 0px;
+}
+
+
+main {
+  padding: 1rem;
+}
+.column {
+  float: left;
+  width: 50%;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+h2 {
+    text-align: center;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width:200px;
+  background-color: rgb(10, 107, 58);
+
+}
+
+li a {
+  display: block;
+  color: rgb(255, 255, 255);
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+ul li a:hover {
+  background-color: #a9f0b2;
+}
+.active{
+    background-color: #a9f0b2;
+}
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+#summary {
+  display: flex;
+  justify-content: space-around;
+  background: palegreen;
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid springgreen;
+  margin-bottom: 30px;
+}
+#summary p {
+  font-weight: bold;
+  color: darkslategray;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+#summary span {
+  display: block;
+  font-size: 1.8rem;
+  color: forestgreen;
+}
+iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+  overflow: hidden;
+}
+.large-chart {
+    width: 100%;
+    margin-bottom: 30px; 
+}
+.small-charts {
+  display: flex;
+  flex-direction: row; /* ensures graphs sit side by side */
+  gap: 20px; /*adds space between charts */
+  width: 100%;
+  margin-top: 20px;
+}
+
+.charts {
+  flex: 1;
+  min-width: 300px;
+  border-radius: 10px;
+
+}
+
+#vendors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.vendor-card {
+  background: rgb(255, 255, 255);
+  border: 1px solid #a0f3b6;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
