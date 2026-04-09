@@ -25,7 +25,7 @@ searchInput.addEventListener('keypress', event => {
     })
 
 
-    // useful for clicking functionality 
+    
 async function searchFoodItems() {
     const searchTerm = searchInput.value.trim();
 

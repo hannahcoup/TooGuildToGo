@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from db_connection import get_db
 from models import Bag, DietaryTag, BagDietaryTag, Vendor, BagItem, Food
 
 router = APIRouter()
 
 @router.get("/bags")
-def get_bags(tag: str = None, dietary_tag: str = None, vendor_id: int = None,  db: Session = Depends(get_db)):
+def get_bags(tag: str = None, dietary_tag: str = None, vendor_id: int = None, search: str = None, db: Session = Depends(get_db)):
     query = db.query(Bag, Vendor).join(Vendor, Vendor.id == Bag.vendor_id)
 
     if tag:
@@ -28,6 +29,18 @@ def get_bags(tag: str = None, dietary_tag: str = None, vendor_id: int = None,  d
 
     if vendor_id:
         query = query.filter(Bag.vendor_id == vendor_id)
+
+    if search:
+        search_term = f"%{search}%"
+        query = query.filter(
+            or_(
+                Bag.product_name.ilike(search_term),
+                Bag.description.ilike(search_term),
+                Bag.category.ilike(search_term),
+                Vendor.name.ilike(search_term)
+            )
+        )
+
 
     query = query.filter(Bag.status == "available", Bag.quantity > 0).distinct()
     
