@@ -14,10 +14,10 @@ const backBtn = document.getElementById("back-btn");
 
 
 searchButton.addEventListener('click', searchFoodItems);
-foodItemsContainer.addEventListener('click', handleFoodItemCardClick);
-backBtn.addEventListener('click', () => {
+//foodItemsContainer.addEventListener('click', handleFoodItemCardClick);
+/*backBtn.addEventListener('click', () => {
     foodItemsDetails.classList.add("hidden");
-});
+});*/
 
 // useful for clicking functionality 
 searchInput.addEventListener('keypress', event => {
@@ -29,33 +29,18 @@ searchInput.addEventListener('keypress', event => {
 async function searchFoodItems() {
     const searchTerm = searchInput.value.trim();
 
-    // error handling for when user puts in an empty search term
-    if (!searchTerm) {
-        errorContainer.textContent = "Please enter a search term.";
-        errorContainer.classList.remove("hidden"); // show error message
-        return;
+   const res = await fetch(`http://127.0.0.1:8000/bags?search=${searchTerm}`);
+    const data = await res.json();
+
+    container.innerHTML = "";
+
+    if (data.length === 0) {
+    errorContainer.textContent = "No results found.";
+    errorContainer.classList.remove("hidden");
+    return;
     }
 
-    // DOESNT WORK BECUASE HTML HAS MOCK DATA THERE NEED TO CONNECT TO DATABASE CONTENTS
-
-    try { 
-        resultsHeading.textContent = `Search results for "${searchTerm}"...`;
-        foodItemsContainer.innerHTML = ""; // clear old results
-        errorContainer.classList.add("hidden"); // hide error message
-        // add this when there is databse data
-        // if(data.foodItems === null) {
-        //     resultsHeading.textContent = "";
-        //     foodItemsContainer.innerHTML = ""; // clear old results
-        //     errorContainer.textContent = "No food items found for '${searchTerm}'. Please try a different search term.";
-        //     errorContainer.classList.remove("hidden"); // show error message
-        //     GO TO 8:07:00 OF THE VIDEO TO SEE HOW TO DO THIS
-        // }
-
-    } catch (error) {
-        console.error("Error fetching food items:", error);
-        errorContainer.textContent = "An error occurred while fetching food items. Please try again later.";
-        errorContainer.classList.remove("hidden"); // show error message
-    }
+    data.forEach(bag => addBagCard(bag));
 
     
 }
@@ -65,39 +50,75 @@ async function searchFoodItems() {
 
 //Loading bags from db
 let bags = [];
-const container = document.getElementById("food-items-info");
+const container = document.getElementById("bags-container");
 async function loadBags() {
   const res = await fetch(`http://127.0.0.1:8000/bags`);
   const data = await res.json();
-  let bags = data;
+  bags = data;
   bags.forEach((bag, index) => addBagCard(bag, index));
 }
 loadBags();
 
 let editIndex = null;
 
-function addBagCard(bag, index) {
-  const card = document.createElement("div");
-  card.className = "bag-card";
+function addBagCard(bag) {
+  const card = document.createElement("a");
+  card.href = `details.html?bag_id=${bag.bag_id}`; // links to details page
+  card.className = "card-link";
+    
   card.innerHTML = `
-    <h3>${bag.product_name}</h3>
-    <p>Category: ${bag.category}</p>
-    <p>Discounted Price: £${bag.discounted_price}</p>
-    <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} </span>`}</p>
-    <p>Expiry Date: ${new Date(bag.expires_at) < new Date() ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${bag.expires_at} </span>`}</p>
-    ${bag.status !== 'collected' ? '<button class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>'  : ''}
-    
-    ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}
-    
+    <div class="food-items">
+        <img src="images/chocCroissant.png" alt="Food item">
+
+        <div class="food-items-info">
+
+            <div class="top-row">
+                <span class="food-items-category">${bag.category}</span>
+
+                <div class="favourite-wrapper">
+                    <div class="favourite-toggle">
+                        <input type="checkbox" id="fav-${bag.id}">
+                        <label for="fav-${bag.id}" class="favourite-container">
+                            ❤️
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <h3 class="food-items-company">${bag.vendor_name || "Vendor"}</h3>
+                <h3 class="food-items-collect-time">
+                    ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}
+                </h3>
+            </div>
+
+            <div class="row price-row">
+                <span class="food-items-price">£${bag.discounted_price}</span>
+            </div>
+
+        </div>
+    </div>
   `;
+
   container.appendChild(card);
 }
 
 
-
+function formatTime(datetime) {
+  if (!datetime) return "";
+  const date = new Date(datetime);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
  
 
-
+async function filterByCategory(tag) {
+   const res = await fetch(`http://127.0.0.1:8000/bags?dietary_tag=${tag}`);
+   const data = await res.json();
+    
+  container.innerHTML = "";
+  data.forEach(addBagCard);
+  
+}
 
 
 
