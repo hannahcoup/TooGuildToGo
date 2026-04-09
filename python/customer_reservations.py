@@ -91,6 +91,7 @@ def get_customer_reservations(user_id: int, status: str | None = None, db: Sessi
             "pickup_window_start": str(bag.pickup_window_start),
             "pickup_window_end": str(bag.pickup_window_end),
             "created_at": str(reservation.created_at) if reservation.created_at else None,
+            "category": str(bag.category)
         })
 
     return response
