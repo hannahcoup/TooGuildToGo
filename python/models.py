@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Text, Numeric, TIMESTAMP
 from sqlalchemy.orm import declarative_base
+from sqlalchemy.sql import func
 from datetime import datetime
 
 Base = declarative_base()
@@ -75,7 +76,7 @@ class Reservation(Base):
     status = Column(String(20), nullable=False)
     transaction_id = Column(String(50))
     payment_status = Column(String(20), nullable=False)
-    created_at = Column(TIMESTAMP)
+    created_at = Column(TIMESTAMP, nullable=False, server_default=func.now())
 
 class Allergen(Base):
     __tablename__ = "allergen"
