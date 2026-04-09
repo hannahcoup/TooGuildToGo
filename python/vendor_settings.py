@@ -14,7 +14,7 @@ class EditVendorRequest(BaseModel):
 
 
 @router.patch("/vendors/{vendor_id}")
-def edit_bag(vendor_id: int, data: EditVendorRequest, db: Session = Depends(get_db)):
+def edit_vendor(vendor_id: int, data: EditVendorRequest, db: Session = Depends(get_db)):
     db.execute(
         text("""
             UPDATE vendors SET

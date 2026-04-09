@@ -677,3 +677,59 @@ input + label .action span.option-2 {
   box-shadow: 0 4px 16px rgba(46, 139, 87, 0.15);
   transform: translateY(-2px);
 }
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; 
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #cbedc1;
+  margin: 15% auto; 
+  padding: 20px;
+  width: 50%; 
+  text-align : center;
+  animation-name: animatetop;
+  animation-duration: 0.4s; 
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  animation-name: animatetop;
+  animation-duration: 0.3s;
+  max-height: 80vh;     
+  overflow-y: auto; 
+}
+
+/* The Close Button */
+.close {
+  color: #344d32;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+.modal-content label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a5c21;
+  margin-bottom: 4px;
+}
+#feedback{
+    background-color: #cbedc1;
+    text-align: center;
+}
