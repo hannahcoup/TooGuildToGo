@@ -9,6 +9,7 @@ import vendorLogin
 import vendor_reservations
 import vendor_settings
 import customer_settings
+import favourites
 
 app = FastAPI()
 
@@ -28,6 +29,8 @@ app.include_router(vendorLogin.router)
 app.include_router(vendor_reservations.router)
 app.include_router(vendor_settings.router)
 app.include_router(customer_settings.router)
+app.include_router(favourites.router)
+
 
 @app.get("/")
 def root():
