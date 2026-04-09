@@ -73,20 +73,20 @@ function addBagCard(bag) {
         <div class="food-items-info">
 
             <div class="top-row">
+            
                 <span class="food-items-category">${bag.category}</span>
 
                 <div class="favourite-wrapper">
                     <div class="favourite-toggle">
                         <input type="checkbox" id="fav-${bag.id}">
-                        <label for="fav-${bag.id}" class="favourite-container">
-                            ❤️
-                        </label>
+                        
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <h3 class="food-items-company">${bag.vendor_name || "Vendor"}</h3>
+                <h3 class="food-items-company">${bag.product_name || "Vendor"}</h3>
+                
                 <h3 class="food-items-collect-time">
                     ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}
                 </h3>
@@ -122,7 +122,9 @@ async function filterByCategory(tag) {
 
 
 
+function toggleFav(bag_id){
 
+}
 
 
 

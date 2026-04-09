@@ -4,10 +4,18 @@ console.log("URL ID:", bagId);
 async function loadBagDetails() {
   const res = await fetch(`http://127.0.0.1:8000/bags/${bagId}`);
   const bag = await res.json();
-    console.log("FULL BAG:", bag);
+  const allergenbag = await fetch(`http://127.0.0.1:8000/bags/${bag.bag_id}/allergens`);
+  const allergens = await allergenbag.json();
+  const filtered = allergens.filter(a => a.contains || a.may_contain);
+  
+    
   document.getElementById("title").textContent = bag.product_name;
+ 
   document.getElementById("price").textContent = `£${bag.discounted_price}`;
   document.getElementById("description").textContent = bag.description;
+  document.getElementById("pickup-window").textContent = `Collection Time: ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}`;
+  document.getElementById("allergens").innerHTML=` Allergens: ${filtered.length > 0 ? filtered.map(a =>a.contains ? `${a.allergen_name}`    
+    : `${a.allergen_name} (may contain)`).join(', '): 'None'} `;
 }
 
 loadBagDetails();
@@ -35,4 +43,10 @@ async function reserveBag() {
   } else {
     alert(data.error || "Something went wrong");
   }
+}
+
+function formatTime(datetime) {
+  if (!datetime) return "";
+  const date = new Date(datetime);
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
