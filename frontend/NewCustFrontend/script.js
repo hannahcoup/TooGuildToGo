@@ -10,6 +10,14 @@ const foodItemsDetails = document.getElementById("food-items-details");
 const FoodItemsDetailsContent = document.querySelector(".food-items-details-content");
 const backBtn = document.getElementById("back-btn");
 
+// array of images based on category
+const categoryImages = {
+  "Hot Food": "images/hotfood.png",
+  "Vegetarian": "images/vegetarian.png",
+  "Vegan": "images/vegan.png",
+  "Bakery/Lunch": "images/bakery.png",
+  "Lunch": "images/lunch.png"
+};
 
 
 
@@ -29,7 +37,7 @@ searchInput.addEventListener('keypress', event => {
 async function searchFoodItems() {
     const searchTerm = searchInput.value.trim();
 
-   const res = await fetch(`http://127.0.0.1:8000/bags?search=${searchTerm}`);
+    const res = await fetch(`http://127.0.0.1:8000/bags?search=${searchTerm}`);
     const data = await res.json();
 
     container.innerHTML = "";
@@ -184,21 +192,6 @@ async function toggleFavourite(bagId, button) {
     alert("Could not update favourite");
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

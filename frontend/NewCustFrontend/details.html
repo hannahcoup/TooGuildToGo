@@ -23,6 +23,7 @@
                     <li><a href="res.html"><i class="fa-solid fa-cart-shopping"></i> Reserved</a></li>
                     <li><a href="prof.html"><i class="fa-solid fa-user"></i> Profile</a></li>
                     <li><a href="settings.html"><i class="fa-solid fa-gear"></i> Settings</a></li>
+                    <li><a href="login.html"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log Out</a></li>
                 </ul>
 
             </nav>
@@ -39,22 +40,40 @@
                 <button><i class="fa-solid fa-arrow-left"></i> Return to Dashboard</button>
             </a>
             
-
-           
+              
             <div class="details">
-                <img src="images/chocCroissant.png" alt="Food item">
-                
+            <img id="details-image" alt="Food item">
+
                 <div class="details-content">
                     <h2 id="title"></h2>
-                    
-                    <p id="price"></p>
+                    <h2>Contents:</h2>
                     <p id="description"></p>
+                    <br>
+                    <h2>Price:</h2>
+                    <p id="price"></p>
+                    <br>
+                    <h2>Pickup Window:</h2>
                     <p id="pickup-window"></p>
+                    <br>
+                    <h2>Allergens:</h2>
                     <p id= "allergens"> </p>
                 </div>
             </div>
+            
+<!--
+            <div class="details">
+            <img src="images/chocCroissant.png" alt="Food item">
+                    <div class="details-content">
+                        <h2>Contents:</h2>
+                        <p>(id stuff)description</p>
+                        <br>
+                        <br>
+                        <h2>Price:</h2>
+                        <p>(id stuff)price</p>
 
-
+                    </div>
+            </div>
+        -->
 
             <button onclick="reserveBag()"><i class="fa-solid fa-cart-arrow-down"></i> Reserve</button>
 

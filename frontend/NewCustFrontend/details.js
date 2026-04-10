@@ -1,14 +1,26 @@
 const params = new URLSearchParams(window.location.search);
 const bagId = params.get("bag_id");
 console.log("URL ID:", bagId);
+
+const categoryImages = {
+  "Hot Food": "images/hotfood.png",
+  "Vegetarian": "images/vegetarian.png",
+  "Vegan": "images/vegan.png",
+  "Bakery/Lunch": "images/bakery.png",
+  "Lunch": "images/lunch.png"
+};
+
+
 async function loadBagDetails() {
   const res = await fetch(`http://127.0.0.1:8000/bags/${bagId}`);
   const bag = await res.json();
+
   const allergenbag = await fetch(`http://127.0.0.1:8000/bags/${bag.bag_id}/allergens`);
   const allergens = await allergenbag.json();
   const filtered = allergens.filter(a => a.contains || a.may_contain);
-  
-    
+  // to map image to a category
+  const imageSrc = categoryImages[bag.category];
+  document.getElementById("details-image").src = imageSrc;
   document.getElementById("title").textContent = bag.product_name;
  
   document.getElementById("price").textContent = `£${bag.discounted_price}`;
@@ -19,6 +31,9 @@ async function loadBagDetails() {
 }
 
 loadBagDetails();
+
+
+
 
 async function reserveBag() {
   const userId = localStorage.getItem("user_id");
