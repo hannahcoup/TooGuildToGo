@@ -11,6 +11,9 @@
 <body>
   <div class = "sidebar">
   <nav>
+    <div class="logo">
+                    <img src="/frontend/NewCustFrontend/images/logo.png" alt="Logo">
+    </div>
   <ul>
   <li><a href="vDashboard.html">Dashboard</a></li>
   <li><a href="addBag.html">Add Bag</a></li>
@@ -30,90 +33,94 @@
 </header>
 
 <main>
-    <div class="box">
-  <h2>Time to add a bag! </h2>
-  <form id="addBagForm">
+  <div class="add-bag-card">
+    <h2>Time to add a bag!</h2>
 
-  <div class="container">
-    <label for="product_name"><b>Bag Name: </b></label>
-    <input type="text" name="product_name" id="product_name" placeholder="Enter Bag Name..."><br>
-    <label for="desc"><b>Description: </b></label><br>
-    <textarea id="description" placeholder="Enter bag description..." rows="10" cols="50"> </textarea> <br>
-    <hr>
-    <label for="category"><b>Category: </b></label>
-    <select name="catergory" id="category">
-        <option value="Hot Food">Hot Food</option>
-        <option value="Vegetarian">Vegetarian</option>
-        <option value="Vegan">Vegan</option>
-        <option value="Bakery/Lunch">Bakery/Lunch</option>
-        <option value="Lunch">Lunch</option>
-        <option value="Snack/Hot Food">Snack/Hot Food</option>
-    </select>
-    <hr>
-    <label for="original_price"><b>Original Price: </b></label>
-    <input type="text" name="original_price" id="original_price" placeholder="Enter Original Price...">
-    <label for="discounted_price"><b>Discounted Price: </b></label>
-    <input type="text" name="discounted_price" id="discounted_price" placeholder="Enter Discounted Price...">
-<hr>
-    <label for="pickup_window_start"><b>Start of Pickup Window: </b></label>
-    <input type="datetime-local" id="pickup_window_start" /><br>
-    <label for="pickup_window_end"><b>End of Pickup Window: </b></label>
-    <input type="datetime-local" id="pickup_window_end" />
-<hr>
-    <label for="quantity"><b>Quantity:</b></label>
-    <input type="number" id="quantity" min="1" placeholder="How many bags?">
-<hr>
-    <label for="expires_at"><b>Expiry Date:</b></label>
-    <input type="datetime-local" id="expires_at"/>
-<hr>
-<!--<fieldset>
-  <legend><b>Allergens</b></legend>
+    <form id="addBagForm">
+      <div class="form-group">
+        <label for="product_name">Bag Name</label>
+        <input type="text" id="product_name" name="product_name" placeholder="Enter bag name..." />
+      </div>
 
-  <label><input type="checkbox" id="allergen-2" name="allergen"> Gluten</label>
-  <label><input type="checkbox" id="allergen-4" name="allergen"> Eggs</label>
-  <label><input type="checkbox" id="allergen-7" name="allergen"> Milk</label>
-  <label><input type="checkbox" id="allergen-10" name="allergen"> Nuts</label>
-  <label><input type="checkbox" id="allergen-11" name="allergen"> Peanuts</label>
-  <label><input type="checkbox" id="allergen-12" name="allergen"> Sesame</label>
-  <label><input type="checkbox" id="allergen-13" name="allergen"> Soya</label>
-  <label><input type="checkbox" id="allergen-1" name="allergen"> Celery</label>
-  <label><input type="checkbox" id="allergen-3" name="allergen"> Crustaceans</label>
-  <label><input type="checkbox" id="allergen-5" name="allergen"> Fish</label>
-  <label><input type="checkbox" id="allergen-6" name="allergen"> Lupin</label>
-  <label><input type="checkbox" id="allergen-8" name="allergen"> Molluscs</label>
-  <label><input type="checkbox" id="allergen-9" name="allergen"> Mustard</label>
-  <label><input type="checkbox" id="allergen-14" name="allergen"> Sulphites</label>
-</fieldset>-->
-    <div class="allergenSelector">
-    <fieldset class="SegmentedControl SegmentedControl--outline">
-  <legend class="accessibility-hidden"><b>Allergens</b></legend>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" placeholder="Enter bag description..."></textarea>
+      </div>
 
-  <label><input type="checkbox" id="is_vegan"> Vegan</label>
-  <label><input type="checkbox" id="is_vegetarian"> Vegetarian</label>
-  <label><input type="checkbox" id="is_gluten_free"> Gluten-Free</label>
-  <label><input type="checkbox" id="contains_meat"> Contains Meat</label>
-    <label><input type="checkbox" id="contains_dairy"> Contains Dairy</label>
-    <label><input type="checkbox" id="is_spicy"> Spicy</label>
-    
-</fieldset>
-    <fieldset>
-    <legend><b>Food Items in this bag:</b></legend>
-    <div id="foodItemsContainer">Loading food items...</div>
-    </fieldset>
-    </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category">
+            <option value="Hot Food">Hot Food</option>
+            <option value="Vegetarian">Vegetarian</option>
+            <option value="Vegan">Vegan</option>
+            <option value="Bakery/Lunch">Bakery/Lunch</option>
+            <option value="Lunch">Lunch</option>
+            <option value="Snack/Hot Food">Snack/Hot Food</option>
+          </select>
+        </div>
 
+        <div class="form-group">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" min="1" placeholder="How many bags?" />
+        </div>
+      </div>
 
-    <p id="error" style="color: red;"></p>
-    <button type="submit" class="button">Add</button>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="original_price">Original Price</label>
+          <input type="text" id="original_price" name="original_price" placeholder="Enter original price..." />
+        </div>
 
-  <div class="container">
-    <a href= "vDashboard.html">
-    <button type="button" class="button">Cancel</button>
-    </a>
+        <div class="form-group">
+          <label for="discounted_price">Discounted Price</label>
+          <input type="text" id="discounted_price" name="discounted_price" placeholder="Enter discounted price..." />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="pickup_window_start">Start of Pickup Window</label>
+          <input type="datetime-local" id="pickup_window_start" />
+        </div>
+
+        <div class="form-group">
+          <label for="pickup_window_end">End of Pickup Window</label>
+          <input type="datetime-local" id="pickup_window_end" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="expires_at">Expiry Date</label>
+        <input type="datetime-local" id="expires_at" />
+      </div>
+
+      <div class="form-group">
+        <label>Dietary Tags</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" id="is_vegan" /> Vegan</label>
+          <label><input type="checkbox" id="is_vegetarian" /> Vegetarian</label>
+          <label><input type="checkbox" id="is_gluten_free" /> Gluten-Free</label>
+          <label><input type="checkbox" id="contains_meat" /> Contains Meat</label>
+          <label><input type="checkbox" id="contains_dairy" /> Contains Dairy</label>
+          <label><input type="checkbox" id="is_spicy" /> Spicy</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Food Items in this bag</label>
+        <div id="foodItemsContainer">Loading food items...</div>
+      </div>
+
+      <p id="error" style="color: red;"></p>
+
+      <div class="form-actions">
+        <button type="submit" class="bagButton">Add</button>
+        <a href="vDashboard.html" class="bagButton cancel-link">Cancel</a>
+      </div>
+    </form>
   </div>
-  
-</form>
-</div>
+</main>
 
 <script>
     function logout() {

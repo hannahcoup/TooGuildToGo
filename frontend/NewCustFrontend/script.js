@@ -89,16 +89,19 @@ initPage();
 
 let editIndex = null;
 
+
 function addBagCard(bag) {
   const card = document.createElement("div");
   card.className = "card-link";
 
   const isChecked = favouriteBagIds.has(bag.bag_id);
 
+  const imageSrc = categoryImages[bag.category];
+
   card.innerHTML = `
     <div class="food-items">
         <a href="details.html?bag_id=${bag.bag_id}" class="bag-details-link">
-            <img src="images/chocCroissant.png" alt="Food item">
+            <img src=${imageSrc} alt="Food item">
 
             <div class="food-items-info">
                 <div class="top-row">

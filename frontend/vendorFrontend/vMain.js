@@ -14,7 +14,7 @@ async function loadBags() {
 }
 
 loadBags();
-document.getElementById("welcome").innerHTML= ` <p> Welcome Back, ${localStorage.getItem('vendor_name')} </p>`;
+document.getElementById("welcome").innerHTML= ` <p><b> Welcome Back, ${localStorage.getItem('vendor_name')} </b></p>`;
 
 async function addBagCard(bag, index) {
   const card = document.createElement("div");

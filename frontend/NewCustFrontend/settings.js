@@ -115,7 +115,65 @@ async function saveEditEmail(){
     }
 }
 
+function deleteModal(){
+    document.getElementById("edits").innerHTML= `
+        <h2>Delete account</h2>
+        <p>Enter Password...</p>
+        <input type="password" id="password">
+        
+        <button onclick=deleteAccount() id="save" class="bagButton">Confirm Delete</button> <hr>`;
+
+    
+    document.getElementById("feedback").innerHTML = ``
+    
+    document.getElementById('editModal').style.display = 'block';
+}
 async function deleteAccount(){
     const current_id = localStorage.getItem("user_id");
-    
+    const password= document.getElementById("password").value;
+    if (!password.trim()) {
+        errorEl.textContent = "Please enter your password.";
+    return;
+  }
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/customers/delete-account", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        user_id: parseInt(current_id),
+        password: password
+      })
+    });
+
+    const data = await res.json();
+
+    console.log("delete account response:", data);
+
+    if (!res.ok) {
+      feedback.textContent = data.error || data.detail || "Could not delete account.";
+      return;
+    }
+
+    if (data.error) {
+      feedback.textContent = data.error;
+      return;
+    }
+
+    if (data.message !== "account deleted successfully") {
+      feedback.textContent = "Could not delete account.";
+      return;
+    }
+
+    localStorage.clear();
+    alert("Account deleted successfully.");
+    window.location.href = "/frontend/index.html";
+
+  } catch (err) {
+    console.error("Delete account failed:", err);
+    feedback.textContent = "Something went wrong.";
+  }
+
 }
