@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base
 from sqlalchemy.sql import func
 from datetime import datetime
 
+
 Base = declarative_base()
 
 class User(Base):
@@ -101,3 +102,12 @@ class UserDietaryPreference(Base):
     __tablename__ = "user_dietary_preferences"
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
     dietary_tag_id = Column(Integer, ForeignKey("dietary_tags.id"), primary_key=True)
+
+
+
+class Favourite(Base):
+    __tablename__ = "favourites"
+
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    bag_id = Column(Integer, ForeignKey("bags.id"), primary_key=True)
+    created_at = Column(TIMESTAMP, nullable=False, server_default=func.now())

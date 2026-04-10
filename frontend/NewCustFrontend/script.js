@@ -62,14 +62,35 @@ const container = document.getElementById("bags-container");
 async function loadBags() {
   const res = await fetch(`http://127.0.0.1:8000/bags`);
   const data = await res.json();
+  container.innerHTML = "";
   bags = data;
   bags.forEach((bag, index) => addBagCard(bag, index));
 }
-loadBags();
+let favouriteBagIds = new Set();
+
+async function loadUserFavourites() {
+  const userId = localStorage.getItem("user_id");
+  if (!userId) return;
+
+  const res = await fetch(`http://127.0.0.1:8000/customer/favourites/${userId}`);
+  const data = await res.json();
+
+  if (Array.isArray(data)) {
+    favouriteBagIds = new Set(data.map(b => b.bag_id));
+  }
+}
+//to make sure pages load in right order
+async function initPage() {
+  await loadUserFavourites();
+  await loadBags();
+}
+
+initPage();
 
 let editIndex = null;
 
 function addBagCard(bag) {
+<<<<<<< HEAD
     const card = document.createElement("a");
     card.href = `details.html?bag_id=${bag.bag_id}`; // links to details page
     card.className = "card-link";
@@ -107,6 +128,45 @@ function addBagCard(bag) {
             </div>
         </div>
     `;
+=======
+  const card = document.createElement("div");
+  card.className = "card-link";
+
+  const isChecked = favouriteBagIds.has(bag.bag_id);
+
+  card.innerHTML = `
+    <div class="food-items">
+        <a href="details.html?bag_id=${bag.bag_id}" class="bag-details-link">
+            <img src="images/chocCroissant.png" alt="Food item">
+
+            <div class="food-items-info">
+                <div class="top-row">
+                    <span class="food-items-category">${bag.category}</span>
+                </div>
+
+                <div class="row">
+                    <h3 class="food-items-company">${bag.product_name || "Vendor"}</h3>
+                    <h3 class="food-items-collect-time">
+                        ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}
+                    </h3>
+                </div>
+
+                <div class="row price-row">
+                    <span class="food-items-price">£${bag.discounted_price}</span>
+                </div>
+            </div>
+        </a>
+
+        <button
+            type="button"
+            class="favourite-container"
+            onclick="toggleFavourite(${bag.bag_id}, this)"
+        >
+            ${isChecked ? "❤️" : "🤍"}
+        </button>
+    </div>
+  `;
+>>>>>>> ea0fa473eb21936ec01f0261da3e8fa66ff7d4c8
 
   container.appendChild(card);
 }
@@ -129,9 +189,48 @@ async function filterByCategory(tag) {
 }
 
 
+async function toggleFavourite(bagId, button) {
+  const userId = localStorage.getItem("user_id");
 
-function toggleFav(bag_id){
+  if (!userId) {
+    alert("Please log in first.");
+    return;
+  }
 
+  const isCurrentlyFavourite = favouriteBagIds.has(bagId);
+  const method = isCurrentlyFavourite ? "DELETE" : "POST";
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/customer/favourites", {
+      method: method,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        user_id: parseInt(userId),
+        bag_id: parseInt(bagId)
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Something went wrong");
+      return;
+    }
+
+    if (isCurrentlyFavourite) {
+      favouriteBagIds.delete(bagId);
+      button.textContent = "🤍";
+    } else {
+      favouriteBagIds.add(bagId);
+      button.textContent = "❤️";
+    }
+
+  } catch (err) {
+    console.error("Favourite toggle failed:", err);
+    alert("Could not update favourite");
+  }
 }
 
 

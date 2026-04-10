@@ -29,7 +29,7 @@ def login(data: LoginRequest, db: Session = Depends(get_db)):
     dataPasswordHash = hashlib.sha256(dataPassword.encode()).hexdigest()
     if not user or user.password_hash != dataPasswordHash:
         return {"error": "incorrect email or password"}
-    return {"message": "login successful", "user_id": user.id, "name": user.name}
+    return {"message": "login successful", "user_id": user.id, "name": user.name, "user_email":user.email}
 
 @router.post("/signup")
 def signup(data: SignupRequest, db: Session = Depends(get_db)):

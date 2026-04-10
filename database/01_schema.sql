@@ -126,3 +126,9 @@ CREATE TABLE reservations (
     CHECK (status IN ('reserved', 'collected', 'cancelled')),
     CHECK (payment_status IN ('pending', 'paid', 'refunded'))
 );
+CREATE TABLE favourites (
+    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    bag_id INT NOT NULL REFERENCES bags(id) ON DELETE CASCADE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, bag_id)
+);

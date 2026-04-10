@@ -49,3 +49,29 @@ SELECT
 FROM view_vendor_reservations v
 GROUP BY v.vendor_id, v.vendor_name
 ORDER BY v.vendor_name;
+
+INSERT INTO favourites (user_id, bag_id)
+VALUES (1, 3)
+ON CONFLICT (user_id, bag_id) DO NOTHING;
+
+DELETE FROM favourites
+WHERE user_id = 1
+AND bag_id = 3;
+
+SELECT
+    b.id AS bag_id,
+    b.product_name,
+    v.name AS vendor_name,
+    b.discounted_price,
+    b.pickup_window_start,
+    b.pickup_window_end
+FROM favourites f
+JOIN bags b ON f.bag_id = b.id
+JOIN vendors v ON b.vendor_id = v.id
+WHERE f.user_id = 1
+ORDER BY f.created_at DESC;
+
+SELECT 1
+FROM favourites
+WHERE user_id = 1
+AND bag_id = 3;
