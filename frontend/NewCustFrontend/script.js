@@ -90,45 +90,6 @@ initPage();
 let editIndex = null;
 
 function addBagCard(bag) {
-<<<<<<< HEAD
-    const card = document.createElement("a");
-    card.href = `details.html?bag_id=${bag.bag_id}`; // links to details page
-    card.className = "card-link";
-    const imageSrc = categoryImages[bag.category];
-    card.innerHTML = `
-        <div class="food-items">
-            <img src="${imageSrc}" alt="${bag.category}">
-
-            <div class="food-items-info">
-
-                <div class="top-row">
-                
-                    <span class="food-items-category">${bag.category}</span>
-
-                    <div class="favourite-wrapper">
-                        <div class="favourite-toggle">
-                            <input type="checkbox" id="fav-${bag.id}">
-                            
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <h3 class="food-items-company">${bag.product_name || "Vendor"}</h3>
-                    
-                    <h3 class="food-items-collect-time">
-                        ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}
-                    </h3>
-                </div>
-
-                <div class="row price-row">
-                    <span class="food-items-price">£${bag.discounted_price}</span>
-                </div>
-
-            </div>
-        </div>
-    `;
-=======
   const card = document.createElement("div");
   card.className = "card-link";
 
@@ -166,7 +127,6 @@ function addBagCard(bag) {
         </button>
     </div>
   `;
->>>>>>> ea0fa473eb21936ec01f0261da3e8fa66ff7d4c8
 
   container.appendChild(card);
 }

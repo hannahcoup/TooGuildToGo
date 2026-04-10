@@ -11,7 +11,6 @@ const categoryImages = {
 };
 
 
-
 async function loadBagDetails() {
   const res = await fetch(`http://127.0.0.1:8000/bags/${bagId}`);
   const bag = await res.json();
