@@ -10,6 +10,14 @@ const foodItemsDetails = document.getElementById("food-items-details");
 const FoodItemsDetailsContent = document.querySelector(".food-items-details-content");
 const backBtn = document.getElementById("back-btn");
 
+// array of images based on category
+const categoryImages = {
+  "Hot Food": "images/hotfood.png",
+  "Vegetarian": "images/vegetarian.png",
+  "Vegan": "images/vegan.png",
+  "Bakery/Lunch": "images/bakery.png",
+  "Lunch": "images/lunch.png"
+};
 
 
 
@@ -29,7 +37,7 @@ searchInput.addEventListener('keypress', event => {
 async function searchFoodItems() {
     const searchTerm = searchInput.value.trim();
 
-   const res = await fetch(`http://127.0.0.1:8000/bags?search=${searchTerm}`);
+    const res = await fetch(`http://127.0.0.1:8000/bags?search=${searchTerm}`);
     const data = await res.json();
 
     container.innerHTML = "";
@@ -62,43 +70,43 @@ loadBags();
 let editIndex = null;
 
 function addBagCard(bag) {
-  const card = document.createElement("a");
-  card.href = `details.html?bag_id=${bag.bag_id}`; // links to details page
-  card.className = "card-link";
-    
-  card.innerHTML = `
-    <div class="food-items">
-        <img src="images/chocCroissant.png" alt="Food item">
+    const card = document.createElement("a");
+    card.href = `details.html?bag_id=${bag.bag_id}`; // links to details page
+    card.className = "card-link";
+    const imageSrc = categoryImages[bag.category];
+    card.innerHTML = `
+        <div class="food-items">
+            <img src="${imageSrc}" alt="${bag.category}">
 
-        <div class="food-items-info">
+            <div class="food-items-info">
 
-            <div class="top-row">
-            
-                <span class="food-items-category">${bag.category}</span>
+                <div class="top-row">
+                
+                    <span class="food-items-category">${bag.category}</span>
 
-                <div class="favourite-wrapper">
-                    <div class="favourite-toggle">
-                        <input type="checkbox" id="fav-${bag.id}">
-                        
+                    <div class="favourite-wrapper">
+                        <div class="favourite-toggle">
+                            <input type="checkbox" id="fav-${bag.id}">
+                            
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <h3 class="food-items-company">${bag.product_name || "Vendor"}</h3>
-                
-                <h3 class="food-items-collect-time">
-                    ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}
-                </h3>
-            </div>
+                <div class="row">
+                    <h3 class="food-items-company">${bag.product_name || "Vendor"}</h3>
+                    
+                    <h3 class="food-items-collect-time">
+                        ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}
+                    </h3>
+                </div>
 
-            <div class="row price-row">
-                <span class="food-items-price">£${bag.discounted_price}</span>
-            </div>
+                <div class="row price-row">
+                    <span class="food-items-price">£${bag.discounted_price}</span>
+                </div>
 
+            </div>
         </div>
-    </div>
-  `;
+    `;
 
   container.appendChild(card);
 }
@@ -125,21 +133,6 @@ async function filterByCategory(tag) {
 function toggleFav(bag_id){
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
