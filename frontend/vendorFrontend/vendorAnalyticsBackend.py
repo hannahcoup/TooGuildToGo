@@ -54,9 +54,10 @@ def getProductAnalytics():
    bar3 = ax.bar(barPositions, reserved, color ='gold', width = barWidth, label ='Reserved', bottom=df["viewed"]+df["engaged"]) 
    
    ax.set_xticks(barPositions)
-   ax.set_xticklabels(df.index, rotation=45, ha="right", fontsize=11)
+   ax.set_xticklabels(df.index, rotation=45, ha="right", fontsize=14)
    ax.yaxis.set_major_locator(plt.MultipleLocator(10))
-   ax.legend(loc="upper left")
+   ax.legend(loc="upper left", fontsize=14)
+   ax.tick_params(axis='y', labelsize=14)
 
    plt.title("Product Analysis", fontweight ='bold', fontsize = 15, pad=14)
    plt.tight_layout()
