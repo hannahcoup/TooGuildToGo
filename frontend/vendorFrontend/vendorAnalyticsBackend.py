@@ -43,7 +43,7 @@ def getProductAnalytics():
 
    barWidth = 0.5
    barPositions = np.arange(len(df)) 
-   fig, ax = plt.subplots(figsize =(12, 8)) 
+   fig, ax = plt.subplots(figsize =(16, 12)) 
 
    viewed = df["viewed"]
    engaged = df["engaged"]
@@ -54,7 +54,7 @@ def getProductAnalytics():
    bar3 = ax.bar(barPositions, reserved, color ='gold', width = barWidth, label ='Reserved', bottom=df["viewed"]+df["engaged"]) 
    
    ax.set_xticks(barPositions)
-   ax.set_xticklabels(df.index, rotation=20, ha="right", fontsize=11)
+   ax.set_xticklabels(df.index, rotation=45, ha="right", fontsize=11)
    ax.yaxis.set_major_locator(plt.MultipleLocator(10))
    ax.legend(loc="upper left")
 
