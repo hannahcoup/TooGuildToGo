@@ -12,9 +12,11 @@ WHERE b.id NOT IN (
 )
 ORDER BY b.id;
 
+-- All bag allergen rows
 SELECT * FROM view_bag_allergens
 ORDER BY bag_id, allergen_name;
 
+-- Bag dietary tags
 SELECT
     b.id AS bag_id,
     b.product_name,
@@ -27,18 +29,23 @@ LEFT JOIN dietary_tags dt ON dt.id = bdt.dietary_tag_id
 GROUP BY b.id, b.product_name, v.name
 ORDER BY b.id;
 
+-- Safe bags per user
 SELECT * FROM view_user_safe_bags
 ORDER BY user_id, bag_id;
 
+-- User order history
 SELECT * FROM view_user_order_history
 ORDER BY ordered_at DESC;
 
+-- User reservations
 SELECT * FROM view_user_reservations
 ORDER BY created_at DESC;
 
+-- Vendor reservations
 SELECT * FROM view_vendor_reservations
 ORDER BY created_at DESC;
 
+-- Reservation/payment summary per vendor
 SELECT
     v.vendor_name,
     COUNT(*) FILTER (WHERE v.status = 'reserved') AS reserved_count,
@@ -50,14 +57,17 @@ FROM view_vendor_reservations v
 GROUP BY v.vendor_id, v.vendor_name
 ORDER BY v.vendor_name;
 
+-- Add a favourite
 INSERT INTO favourites (user_id, bag_id)
 VALUES (1, 3)
 ON CONFLICT (user_id, bag_id) DO NOTHING;
 
+-- Remove a favourite
 DELETE FROM favourites
 WHERE user_id = 1
-AND bag_id = 3;
+  AND bag_id = 3;
 
+-- List favourites for a user
 SELECT
     b.id AS bag_id,
     b.product_name,
@@ -71,7 +81,8 @@ JOIN vendors v ON b.vendor_id = v.id
 WHERE f.user_id = 1
 ORDER BY f.created_at DESC;
 
+-- Check whether a favourite exists
 SELECT 1
 FROM favourites
 WHERE user_id = 1
-AND bag_id = 3;
+  AND bag_id = 3;

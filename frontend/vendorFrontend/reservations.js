@@ -2,12 +2,7 @@ async function loadReservations() {
     const upcoming = document.getElementById('upcoming');
     const past = document.getElementById('past');
 
-    /*const allergenNames = {
-    1: 'Celery', 2: 'Gluten', 3: 'Crustaceans', 4: 'Eggs',
-    5: 'Fish', 6: 'Lupin', 7: 'Milk', 8: 'Molluscs',
-    9: 'Mustard', 10: 'Nuts', 11: 'Peanuts', 12: 'Sesame',
-    13: 'Soya', 14: 'Sulphites'
-    };*/
+    
     const vendor_id = localStorage.getItem('vendor_id');
     const res = await fetch(`http://127.0.0.1:8000/reservations?vendor_id=${vendor_id}`);
     const reservations = await res.json();
@@ -20,13 +15,13 @@ async function loadReservations() {
      * for each bag a card is created and appended to the upcoming
      *  or past section depending on their status. 
      * clicking on a bag opens a modal view which provides more detail on a bag such as a longer description and allergens
-     * +to do - get upcoming bags sorted by time - need to have CUSTOMER name aswell???
+     * +to do - get upcoming bags sorted by time 
      */
     reservations.sort((a, b) => a.pickup_window_start.localeCompare(b.pickup_window_start));
     //sorts bags by time of collection
     reservations.forEach((reservation, index) => {
     const card = document.createElement('div');
-    
+    console.log(reservation);
 
     const shortDesc = reservation.description && reservation.description.length > 30 ? reservation.description.substring(0, 30) + '...' : reservation.description
     card.className = 'bag-card';

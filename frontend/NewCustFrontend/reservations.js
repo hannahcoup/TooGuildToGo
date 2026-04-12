@@ -5,8 +5,11 @@ async function loadReservations() {
 
     const res = await fetch(`http://127.0.0.1:8000/customer/reservations/${user_id}`);
     const reservations = await res.json();
-
-    container.innerHTML = "";
+    if (!Array.isArray(reservations) || reservations.length === 0) {
+        container.innerHTML = "<p>No upcoming reservations.</p>";
+        return;
+    }
+    
 
     reservations.sort((a, b) => a.pickup_window_start.localeCompare(b.pickup_window_start));
     const filtered = reservations.filter(r => r.reservation_status !== "collected");

@@ -3,10 +3,12 @@ from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
 from db_connection import get_db
 import hashlib
+from models import User
 
 from sqlalchemy import text
 
 router = APIRouter()
+salt =  "5ab"
 
 class EditUserRequest(BaseModel):
     name: str | None = None
@@ -37,3 +39,34 @@ def edit_customer(user_id: int, data: EditUserRequest, db: Session = Depends(get
     )
     db.commit()
     return {"message": "Setting updated successfully"}
+
+
+
+
+router = APIRouter()
+
+
+class DeleteAccountRequest(BaseModel):
+    user_id: int
+    password: str
+
+
+@router.post("/customers/delete-account")
+def delete_account(data: DeleteAccountRequest, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == data.user_id).first()
+
+    if not user:
+        return {"error": "user not found"}
+
+    if not data.password or not data.password.strip():
+        return {"error": "password is required"}
+
+    password_hash = hashlib.sha256((data.password + salt).encode()).hexdigest()
+
+    if user.password_hash != password_hash:
+        return {"error": "incorrect password"}
+
+    db.delete(user)
+    db.commit()
+
+    return {"message": "account deleted successfully"}

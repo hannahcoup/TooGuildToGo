@@ -734,3 +734,64 @@ input + label .action span.option-2 {
     background-color: #cbedc1;
     text-align: center;
 }
+
+/*for customer analytics page*/
+#summary {
+  display: flex;
+  justify-content: space-around;
+  background: palegreen;
+  padding: 20px;
+  border-radius: 15px;
+  border: 2px solid springgreen;
+  margin-bottom: 30px;
+}
+#summary p {
+  font-weight: bold;
+  color: darkslategray;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+#summary span {
+  display: block;
+  font-size: 1.8rem;
+  color: forestgreen;
+}
+iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+  overflow: hidden;
+}
+.large-chart {
+    width: 100%;
+    margin-bottom: 30px; 
+}
+.small-charts {
+  display: flex;
+  flex-direction: row; /* ensures graphs sit side by side */
+  gap: 20px; /*adds space between charts */
+  width: 100%;
+  margin-top: 20px;
+}
+
+.charts {
+  flex: 1;
+  min-width: 300px;
+  border-radius: 10px;
+
+}
+
+#vendors {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.vendor-card {
+  background: rgb(255, 255, 255);
+  border: 1px solid #a0f3b6;
+  border-radius: 8px;
+  padding: 1rem;
+}
+

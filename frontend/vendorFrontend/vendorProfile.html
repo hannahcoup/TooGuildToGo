@@ -11,6 +11,9 @@
 <body>
   <div class = "sidebar">
   <nav>
+    <div class="logo">
+                    <img src="/frontend/NewCustFrontend/images/logo.png" alt="Logo">
+    </div>
   <ul>
   <li><a href="vDashboard.html">Dashboard</a></li>
   <li><a href="addBag.html">Add Bag</a></li>
@@ -52,7 +55,7 @@
             <div id="bags_upcoming"></div>
         </div>
 
-    </div><hr>
+    </div>
     <div id ="savings" class="saving_dashboard">
         <div class="card">
             <h3>Meals saved today:</h3>
@@ -62,6 +65,17 @@
         <div class="card">
             <h3>Meals saved overall:</h3>
             <div id="meals_sold_overall"></div>
+        </div>
+    </div>
+    
+    <div>
+        <div class="graph">
+            <h3>Product Analysis</h3>
+            <iframe id="productGraph" frameborder="0"></iframe>
+        </div>
+    </div>
+
+  </div>
         </div>
     </div>
 </main>

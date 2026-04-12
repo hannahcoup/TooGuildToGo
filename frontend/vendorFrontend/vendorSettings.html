@@ -11,6 +11,9 @@
 <body>
   <div class = "sidebar">
   <nav>
+    <div class="logo">
+                    <img src="/frontend/NewCustFrontend/images/logo.png" alt="Logo">
+    </div>
   <ul>
   <li><a href="vDashboard.html">Dashboard</a></li>
   <li><a href="addBag.html">Add Bag</a></li>
@@ -23,11 +26,14 @@
 </nav>
 <button onclick="logout()" class="logoutBtn">Log Out</button>
 </div>
+<header>
+  <h1>Too Guild To Go</h1>
+</header>
 
 <div class="settings-box">
     <h2>Settings: </h2>
-    <button onclick=nameModal() id="change_name" class="bagButton">Update Name</button> <hr>
-    <button onclick=passwordModal() id="change_password" class="bagButton">Update Password</button> <hr>
+    <button onclick=nameModal() id="change_name" class="bagButton">Update Name</button> 
+    <button onclick=passwordModal() id="change_password" class="bagButton">Update Password</button> 
     <button onclick= emailModal() id="change_email" class="bagButton">Update Email</button>
 
 </div>
@@ -42,9 +48,7 @@
 </div>
 
 
-<header>
-  <h1>Too Guild To Go</h1>
-</header>
+
 </body>
 
 <script>
