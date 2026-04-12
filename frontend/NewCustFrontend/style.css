@@ -234,6 +234,16 @@ button:hover {
     color: inherit;
     display: block; /* makes the whole area clickable */
 }
+.help-container {
+    display: block;
+    width: 100%;
+}
+
+.help-container * {
+    display: block;
+    margin-bottom: 1rem;
+}
+
 
 
 .details {
