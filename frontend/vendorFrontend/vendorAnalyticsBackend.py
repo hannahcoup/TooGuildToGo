@@ -22,7 +22,7 @@ app.add_middleware(
 
 # mock analytics data 
 
-def generateVendorAnalytics():
+def generateProductAnalytics():
    products = ["Pastries", "Sandwiches & Paninis", "Cakes", "Wraps", "Yogurt Pots"]
    
    viewed = [28, 35, 22, 45, 18]
@@ -37,9 +37,9 @@ def generateVendorAnalytics():
 
    return df
 
-@app.get("/graph/vendorAnalytics")
-def getVendorAnalytics():
-   df = generateVendorAnalytics()
+@app.get("/graph/productAnalytics")
+def getProductAnalytics():
+   df = generateProductAnalytics()
 
    barWidth = 0.5
    barPositions = np.arange(len(df)) 
@@ -60,7 +60,7 @@ def getVendorAnalytics():
 
    plt.title("Product Analysis", fontweight ='bold', fontsize = 15, pad=14)
    plt.tight_layout()
-   
+
    # Had to rely on medium https://medium.com/data-science/3-ways-to-embed-a-matplotlib-chart-into-an-html-page-8e11fa66a4b0 
    tempFile = io.BytesIO()
    fig.savefig(tempFile, format='png')

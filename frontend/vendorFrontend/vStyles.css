@@ -543,3 +543,13 @@ hr.rounded {
   align-items: center;
   justify-content: center;
 }
+.graph {
+  background: white;
+  border: 1px solid #c8efd0;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(46, 139, 87, 0.1);
+  padding: 2rem;
+  margin-top: 20px;
+  width: 100%;
+  max-width: 900px;
+}
