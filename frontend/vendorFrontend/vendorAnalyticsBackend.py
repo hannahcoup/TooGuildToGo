@@ -50,8 +50,8 @@ def getProductAnalytics():
    reserved = df["reserved"]
 
    bar1 = ax.bar(barPositions, viewed, color ='navy', width = barWidth, label ='Viewed') 
-   bar2 = ax.bar(barPositions, viewed, color ='steelblue', width = barWidth, label ='Engaged View', bottom=df["viewed"]) 
-   bar3 = ax.bar(barPositions, viewed, color ='gold', width = barWidth, label ='Reserved', bottom=df["viewed"]+df["engaged"]) 
+   bar2 = ax.bar(barPositions, engaged, color ='steelblue', width = barWidth, label ='Engaged View', bottom=df["viewed"]) 
+   bar3 = ax.bar(barPositions, reserved, color ='gold', width = barWidth, label ='Reserved', bottom=df["viewed"]+df["engaged"]) 
    
    ax.set_xticks(barPositions)
    ax.set_xticklabels(df.index, rotation=20, ha="right", fontsize=11)

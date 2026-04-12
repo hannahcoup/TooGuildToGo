@@ -553,3 +553,9 @@ hr.rounded {
   width: 100%;
   max-width: 900px;
 }
+iframe {
+  width: 100%;
+  height: 450px;
+  border: none;
+  overflow: hidden;
+}

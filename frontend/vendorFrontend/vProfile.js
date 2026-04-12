@@ -154,7 +154,7 @@ async function saveEditEmail(){
 /* Copied over from cAnalytics.js */ 
 
 function loadGraphs() {
-    document.getElementById('productGraph').src = 'http://127.0.0.1:8000/graph/productAnalysis'
+    document.getElementById('productGraph').src = 'http://127.0.0.1:8000/graph/productAnalytics'
 }
 window.addEventListener('load', () => {
     loadGraphs();
