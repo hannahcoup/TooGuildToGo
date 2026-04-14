@@ -16,7 +16,8 @@ const categoryImages = {
   "Vegetarian": "images/vegetarian.png",
   "Vegan": "images/vegan.png",
   "Bakery/Lunch": "images/bakery.png",
-  "Lunch": "images/lunch.png"
+  "Lunch": "images/lunch.png",
+  "Snack": "images/snack.jpg"
 };
 
 

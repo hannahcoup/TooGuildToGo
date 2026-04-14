@@ -29,14 +29,13 @@ async function loadReservations() {
         <h3>${reservation.user_name}</h3> 
         <p>${shortDesc || "No Description"}</p>
         <p>Discounted Price: £${reservation.discounted_price}</p>
-        <p>Collection Window: ${reservation.pickup_window_start || "TBD"} - ${reservation.pickup_window_end || "TBD"}</p>
-        <p><span style="font-style:italic">Reserved </span><p>
-        <span style="color:${reservation.payment_status === 'paid' ? 'green' : 'orange'}">${reservation.payment_status}</span>
+        <p>Collection Window: ${formatDateTime(reservation.pickup_window_start) || "TBD"} - ${formatDateTime(reservation.pickup_window_end) || "TBD"}</p>
+        
         
     `;
         if (reservation.reservation_status === 'collected') {
         past.appendChild(card);  // already collected goes to past
-    } else {
+    } else if(reservation.payment_status === 'paid'){
         upcoming.appendChild(card);  // everything else goes to upcoming
     }
 
@@ -48,8 +47,8 @@ async function loadReservations() {
         document.getElementById('modal-name').textContent = reservation.product_name;
         document.getElementById('modal-desc').textContent = reservation.description || "No Description";
         document.getElementById('modal-discounted_price').textContent = 'Price : £' + reservation.discounted_price;
-        document.getElementById('modal-pickup_window_start').textContent = "Pickup Window start time: " + reservation.pickup_window_start;
-        document.getElementById('modal-pickup_window_end').textContent = "Pickup Window end time: " + reservation.pickup_window_end;
+        document.getElementById('modal-pickup_window_start').textContent = "Pickup Window start time: " + formatDateTime(reservation.pickup_window_start);
+        document.getElementById('modal-pickup_window_end').textContent = "Pickup Window end time: " + formatDateTime(reservation.pickup_window_end);
 
         
         
@@ -151,6 +150,20 @@ async function loadReservations() {
 }
 
 loadReservations();
+
+
+function formatDateTime(datetime) {
+  if (!datetime) return "";
+
+  const date = new Date(datetime);
+
+  return date.toLocaleString([], {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
 
 /**
  * id             SERIAL PRIMARY KEY,

@@ -51,5 +51,5 @@ def signup(data: SignupRequest, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return {"message": "signup successful", "user_id": new_user.id, "name": new_user.name}
+    return {"message": "signup successful", "user_id": new_user.id, "name": new_user.name, "user_email": new_user.email}
 

@@ -13,17 +13,18 @@ function nameModal(){
     document.getElementById('editModal').style.display = 'block';
 };
 
-function passwordModal(){
-    document.getElementById("edits").innerHTML= `
+function passwordModal() {
+    document.getElementById("edits").innerHTML = `
         <h2>Change Password</h2>
-        <input type="text" id="edit-user_password">
-        
-        <button onclick=saveEditPassword() id="save" class="bagButton">Save</button> <hr>`;
+        <input type="password" id="edit-user_password">
+        <button onclick="saveEditPassword()" id="save" class="bagButton">Save</button>
+        <hr>
+    `;
 
-    document.getElementById('edit-user_password').value = localStorage.getItem("password") || '';
-    document.getElementById("feedback").innerHTML = ``
+    document.getElementById('edit-user_password').value = '';
+    document.getElementById("feedback").innerHTML = ``;
     document.getElementById('editModal').style.display = 'block';
-};
+}
 
 function emailModal(){
     document.getElementById("edits").innerHTML= `
@@ -70,23 +71,31 @@ async function saveEditName(){
     }
 }
 
-async function saveEditPassword(){
+async function saveEditPassword() {
     const current_id = localStorage.getItem("user_id");
     const new_password = document.getElementById('edit-user_password').value;
-    const res = await fetch(`http://127.0.0.1:8000/customers/${current_id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-            name: new_password
-            })
-        });
-        const data = await res.json();
+    const feedback = document.getElementById("feedback");
 
-        if (data.message === 'Setting updated successfully') {
-            document.getElementById("edits").innerHTML= `Saved Successfully! \n`;
-        }else{
-            document.getElementById("edits").innerHTML= `Error \n`;
-        }
+    if (!new_password.trim()) {
+        feedback.innerHTML = `<p>Enter a new password</p>`;
+        return;
+    }
+
+    const res = await fetch(`http://127.0.0.1:8000/customers/${current_id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            password: new_password
+        })
+    });
+
+    const data = await res.json();
+
+    if (data.message === 'Setting updated successfully') {
+        feedback.innerHTML = `<p>Saved successfully!</p>`;
+    } else {
+        feedback.innerHTML = `<p>Error</p>`;
+    }
 }
 
 async function saveEditEmail(){
@@ -128,52 +137,53 @@ function deleteModal(){
     
     document.getElementById('editModal').style.display = 'block';
 }
-async function deleteAccount(){
+async function deleteAccount() {
     const current_id = localStorage.getItem("user_id");
-    const password= document.getElementById("password").value;
+    const password = document.getElementById("password").value;
+    const feedback = document.getElementById("feedback");
+
     if (!password.trim()) {
-        errorEl.textContent = "Please enter your password.";
-    return;
-  }
-
-  try {
-    const res = await fetch("http://127.0.0.1:8000/customers/delete-account", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        user_id: parseInt(current_id),
-        password: password
-      })
-    });
-
-    const data = await res.json();
-
-    console.log("delete account response:", data);
-
-    if (!res.ok) {
-      feedback.textContent = data.error || data.detail || "Could not delete account.";
-      return;
+        feedback.textContent = "Please enter your password.";
+        return;
     }
 
-    if (data.error) {
-      feedback.textContent = data.error;
-      return;
+    try {
+        const res = await fetch("http://127.0.0.1:8000/customers/delete-account", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user_id: parseInt(current_id),
+                password: password
+            })
+        });
+
+        const data = await res.json();
+
+        console.log("delete account response:", data);
+
+        if (!res.ok) {
+            feedback.textContent = data.error || data.detail || "Could not delete account.";
+            return;
+        }
+
+        if (data.error) {
+            feedback.textContent = data.error;
+            return;
+        }
+
+        if (data.message !== "account deleted successfully") {
+            feedback.textContent = "Could not delete account.";
+            return;
+        }
+
+        localStorage.clear();
+        alert("Account deleted successfully.");
+        window.location.href = "/frontend/index.html";
+
+    } catch (err) {
+        console.error("Delete account failed:", err);
+        feedback.textContent = "Something went wrong.";
     }
-
-    if (data.message !== "account deleted successfully") {
-      feedback.textContent = "Could not delete account.";
-      return;
-    }
-
-    localStorage.clear();
-    alert("Account deleted successfully.");
-    window.location.href = "/frontend/index.html";
-
-  } catch (err) {
-    console.error("Delete account failed:", err);
-    feedback.textContent = "Something went wrong.";
-  }
-
 }

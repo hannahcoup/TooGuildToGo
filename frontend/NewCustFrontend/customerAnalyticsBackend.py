@@ -11,15 +11,19 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi import APIRouter
+from fastapi.responses import HTMLResponse
 
-app = FastAPI()
+router = APIRouter()
 
+
+"""
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://127.0.0.1:5500"],
     allow_methods=["*"],
     allow_headers=["*"],
-)
+)"""
 
 # mock analytics data 
 
@@ -57,7 +61,7 @@ def generateStudentAnalytics():
 
 # code from comp226
 
-@app.get("/graph/co2")
+@router.get("/graph/co2")
 def co2Graph():
    df = generateStudentAnalytics()
 
@@ -79,7 +83,7 @@ def co2Graph():
    return HTMLResponse(content=htmlString)
    
 
-@app.get("/graph/money")
+@router.get("/graph/money")
 def moneyGraph():
    df = generateStudentAnalytics()
 
@@ -101,7 +105,7 @@ def moneyGraph():
 
    return HTMLResponse(content=htmlString)
    
-@app.get("/summary")
+@router.get("/summary")
 def getSummary():
    df = generateStudentAnalytics()
 
@@ -117,7 +121,7 @@ def getSummary():
 # extra - make a bar chart with weekly c02 and money savings 
 # used https://www.geeksforgeeks.org/pandas/bar-plot-in-matplotlib/ tutorial 
 
-@app.get("/graph/bothMoneyAndCo2")
+@router.get("/graph/bothMoneyAndCo2")
 def getWeekyCo2AndMoney():
    df = generateStudentAnalytics()
 

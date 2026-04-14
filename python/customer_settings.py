@@ -21,7 +21,8 @@ def edit_customer(user_id: int, data: EditUserRequest, db: Session = Depends(get
 
     password_hash = None
     if data.password:
-        password_hash = hashlib.sha256(data.password.encode()).hexdigest()
+        password_hash = hashlib.sha256((data.password + salt).encode()).hexdigest()
+
     db.execute(
         text("""
             UPDATE users SET
@@ -32,18 +33,19 @@ def edit_customer(user_id: int, data: EditUserRequest, db: Session = Depends(get
         """),
         {
             "name": data.name,
-            "email": data.email,
+            "email": data.email,  
             "password_hash": password_hash,
             "user_id": user_id
         }
     )
     db.commit()
+
     return {"message": "Setting updated successfully"}
 
 
 
 
-router = APIRouter()
+
 
 
 class DeleteAccountRequest(BaseModel):

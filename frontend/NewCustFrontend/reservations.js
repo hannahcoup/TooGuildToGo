@@ -12,7 +12,7 @@ async function loadReservations() {
     
 
     reservations.sort((a, b) => a.pickup_window_start.localeCompare(b.pickup_window_start));
-    const filtered = reservations.filter(r => r.reservation_status !== "collected");
+    const filtered = reservations.filter(r => r.reservation_status === "reserved");
 
     filtered.forEach((reservation) => {
         const card = document.createElement('div');
@@ -23,6 +23,7 @@ async function loadReservations() {
             <p> ${reservation.category}</p>
             <p>Collection Window: ${formatDateTime(reservation.pickup_window_start) || "TBD"} - ${formatDateTime(reservation.pickup_window_end) || "TBD"}</p>
             <p><span style="font-style: italic;">${reservation.reservation_status}</span></p>
+            <button onclick="cancelRes(${reservation.reservation_id}, this)"> Cancel Reservation </button>
             
         `;
 
@@ -45,4 +46,35 @@ function formatDateTime(datetimeStr) {
         hour: "2-digit",
         minute: "2-digit"
     });
+}
+async function cancelRes(reservation_id, button) {
+  const userId = localStorage.getItem("user_id");
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/customer/cancel-reservation", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        user_id: parseInt(userId),
+        reservation_id: parseInt(reservation_id)
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.error || "Something went wrong");
+      return;
+    }
+
+    // remove card from UI instantly
+    const card = button.closest(".bag-card");
+    card.remove();
+
+  } catch (err) {
+    console.error("Remove reservation failed:", err);
+    alert("Could not remove reservation");
+  }
 }

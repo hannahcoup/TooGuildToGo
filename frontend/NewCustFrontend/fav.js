@@ -22,7 +22,7 @@ async function loadFavourites() {
       <p>${bag.description || "No description"}</p>
       <p>Vendor: ${bag.vendor_name}</p>
       <p>Price: £${bag.discounted_price}</p>
-      <p>Pickup: ${bag.pickup_window_start} - ${bag.pickup_window_end}</p>
+      <p>Pickup: ${formatDateTime(bag.pickup_window_start)} - ${formatDateTime(bag.pickup_window_end)}</p>
       <button onclick="removeFavourite(${bag.bag_id}, this)"> Remove </button>
     `;
 
@@ -35,10 +35,7 @@ loadFavourites();
 async function removeFavourite(bagId, button) {
   const userId = localStorage.getItem("user_id");
 
-  if (!userId) {
-    alert("Please log in first.");
-    return;
-  }
+  
 
   try {
     const res = await fetch("http://127.0.0.1:8000/customer/favourites", {
@@ -67,4 +64,17 @@ async function removeFavourite(bagId, button) {
     console.error("Remove favourite failed:", err);
     alert("Could not remove favourite");
   }
+}
+
+function formatDateTime(datetime) {
+  if (!datetime) return "";
+
+  const date = new Date(datetime);
+
+  return date.toLocaleString([], {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
 }

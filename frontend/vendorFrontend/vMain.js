@@ -21,6 +21,8 @@ async function addBagCard(bag, index) {
   const allergenbag = await fetch(`http://127.0.0.1:8000/bags/${bag.bag_id}/allergens`);
   const allergens = await allergenbag.json();
   const filtered = allergens.filter(a => a.contains || a.may_contain);
+  const expiryDate = new Date(bag.expires_at);
+  const isExpired = expiryDate < new Date();
   
   card.className = "bag-card";
   card.innerHTML = `
@@ -28,8 +30,7 @@ async function addBagCard(bag, index) {
     <p>Category: ${bag.category}</p>
     <p>Discounted Price: £${bag.discounted_price}</p>
     <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} </span>`}</p>
-    <p>Expiry Date: ${new Date(bag.expires_at) < new Date() ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${bag.expires_at} </span>`}</p>
-        
+    <p>Expiry Date: ${isExpired ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${formatDateTime(bag.expires_at)}</span>`}</p>   
     <p>Allergens: ${
       filtered.length > 0
         ? filtered
@@ -176,8 +177,8 @@ document.getElementById('edit-save').addEventListener('click', async () => {
         category: document.getElementById('edit-category').value,
         food_ids: food_ids ,
         discounted_price: parseFloat(document.getElementById('edit-price').value),
-        pickup_window_start: document.getElementById('edit-pickup_window_start').value,
-        pickup_window_end: document.getElementById('edit-pickup_window_end').value,
+        pickup_window_start: document.getElementById('edit-pickup_window_start').value || null,
+        pickup_window_end: document.getElementById('edit-pickup_window_end').value || null,
         quantity: parseInt(document.getElementById('edit-quantity').value)
         })
     });
@@ -210,3 +211,15 @@ function showNotification(message, type = 'success') {
   setTimeout(() => notif.style.display = 'none', 10000);
 }
 
+function formatDateTime(datetime) {
+  if (!datetime) return "";
+
+  const date = new Date(datetime);
+
+  return date.toLocaleString([], {
+    day: '2-digit',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
