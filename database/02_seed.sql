@@ -302,7 +302,8 @@ INSERT INTO reservations (user_id, bag_id, status, transaction_id, payment_statu
   (3,3,'reserved','TXN-000103','paid'),
   (1,4,'collected','TXN-000104','paid'),
   (2,5,'cancelled','TXN-000105','refunded'),
-  (3,6,'cancelled','TXN-000106','failed');
+  (3,6,'cancelled','TXN-000106','refunded'),
+  (3,10,'reserved','TXN-000107','pending');
 
 INSERT INTO cart_items (user_id, bag_id, quantity) VALUES
   (1,2,1),
