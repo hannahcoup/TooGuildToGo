@@ -11,13 +11,16 @@ import vendor_settings
 import customer_settings
 import favourites
 import customerAnalytics
-import vendorAnalyticsBackend
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500", "http://localhost:5500"],
+    allow_origins=[
+        "http://127.0.0.1:5500",
+        "http://localhost:5500",
+        "https://hannahcoup.github.io"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -33,7 +36,6 @@ app.include_router(vendor_settings.router)
 app.include_router(customer_settings.router)
 app.include_router(favourites.router)
 app.include_router(customerAnalytics.router)
-app.include_router(vendorAnalyticsBackend.router)
 
 @app.get("/")
 def root():
