@@ -180,7 +180,7 @@ async function deleteAccount() {
 
         localStorage.clear();
         alert("Account deleted successfully.");
-        window.location.href = "/frontend/index.html";
+        window.location.href = "./index.html";
 
     } catch (err) {
         console.error("Delete account failed:", err);
