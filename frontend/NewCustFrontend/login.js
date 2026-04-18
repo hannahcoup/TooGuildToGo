@@ -26,7 +26,7 @@ console.log("data.id:", data.id);
         localStorage.setItem('user_id', data.user_id);  
         localStorage.setItem('user_name', data.name);
         localStorage.setItem('user_email', data.user_email);
-        window.location.href = '/frontend/NewCustFrontend/index.html';
+        window.location.href = './index.html';
     } else {
         document.getElementById('error').textContent = 'Invalid username or password';
     }
@@ -67,7 +67,7 @@ if(signupForm){
             localStorage.setItem('user_id', data.user_id);
             localStorage.setItem('user_name', data.name);
             localStorage.setItem('user_email', data.user_email);
-            window.location.href = '/frontend/NewCustFrontend/index.html';
+            window.location.href = './index.html';
         } else {
             document.getElementById('error').textContent = 'Invalid username or password';
         }
