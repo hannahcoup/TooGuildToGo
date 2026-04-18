@@ -3,7 +3,7 @@ async function loadReservations() {
     const container = document.getElementById("bags-container");
 
 
-    const res = await fetch(`http://tooguildtogo.onrender.com/customer/reservations/${user_id}`);
+    const res = await fetch(`https://tooguildtogo.onrender.com/customer/reservations/${user_id}`);
     const reservations = await res.json();
     if (!Array.isArray(reservations) || reservations.length === 0) {
         container.innerHTML = "<p>No upcoming reservations.</p>";
@@ -51,7 +51,7 @@ async function cancelRes(reservation_id, button) {
   const userId = localStorage.getItem("user_id");
 
   try {
-    const res = await fetch("http://tooguildtogo.onrender.com/customer/cancel-reservation", {
+    const res = await fetch("https://tooguildtogo.onrender.com/customer/cancel-reservation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
