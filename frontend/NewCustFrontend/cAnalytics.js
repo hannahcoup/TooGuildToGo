@@ -1,6 +1,6 @@
  async function loadSummary() {
   try{ 
-    const res = await fetch('http://127.0.0.1:8000/summary')
+    const res = await fetch('http://tooguildtogo.onrender.com/summary')
     const data = await res.json()
 
     document.getElementById('totalCo2').textContent = data.totalCo2
@@ -13,9 +13,9 @@
   }
  }
   function loadGraphs() {
-    document.getElementById('co2AndMoneyGraph').src = 'http://127.0.0.1:8000/graph/bothMoneyAndCo2';
-    document.getElementById('co2Graph').src = 'http://127.0.0.1:8000/graph/co2';
-    document.getElementById('moneyGraph').src = 'http://127.0.0.1:8000/graph/money';
+    document.getElementById('co2AndMoneyGraph').src = 'http://tooguildtogo.onrender.com/graph/bothMoneyAndCo2';
+    document.getElementById('co2Graph').src = 'http://tooguildtogo.onrender.com/graph/co2';
+    document.getElementById('moneyGraph').src = 'http://tooguildtogo.onrender.com/graph/money';
   }
   
   window.addEventListener('load', () => {
