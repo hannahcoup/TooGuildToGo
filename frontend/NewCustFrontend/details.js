@@ -12,10 +12,10 @@ const categoryImages = {
 
 
 async function loadBagDetails() {
-  const res = await fetch(`http://127.0.0.1:8000/bags/${bagId}`);
+  const res = await fetch(`http://tooguildtogo.onrender.com/bags/${bagId}`);
   const bag = await res.json();
 
-  const allergenbag = await fetch(`http://127.0.0.1:8000/bags/${bag.bag_id}/allergens`);
+  const allergenbag = await fetch(`http://tooguildtogo.onrender.com/bags/${bag.bag_id}/allergens`);
   const allergens = await allergenbag.json();
   const filtered = allergens.filter(a => a.contains || a.may_contain);
   // to map image to a category
@@ -39,7 +39,7 @@ async function reserveBag() {
   const userId = localStorage.getItem("user_id");
     console.log(userId, bagId);
     
-  const res = await fetch("http://127.0.0.1:8000/customer/reserve-bag", {
+  const res = await fetch("http://tooguildtogo.onrender.com/customer/reserve-bag", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
