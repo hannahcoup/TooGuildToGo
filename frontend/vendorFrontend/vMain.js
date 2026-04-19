@@ -8,11 +8,11 @@ async function loadBags() {
   const vendor_id = localStorage.getItem('vendor_id');
   const res = await fetch(`https://tooguildtogo.onrender.com/bags?vendor_id=${vendor_id}`);
   const data = await res.json();
-  let allBags = data;
-  bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
+
+  container.innerHTML = "";
+  bags = data.filter(b => b.vendor_id === parseInt(vendor_id));
   bags.forEach((bag, index) => addBagCard(bag, index));
 }
-
 
 loadBags();
 document.getElementById("welcome").innerHTML= ` <p><b> Welcome Back, ${localStorage.getItem('vendor_name')} </b></p>`;
