@@ -54,11 +54,11 @@ async function addBagCard(bag, index) {
 
         // fetch vendor's food items
         const vendor_id = localStorage.getItem('vendor_id');
-        const foodRes = await fetch(`https://tooguildtogo.onrender.com/vendor/food_items?vendor_id=${vendor_id}`);
+        const foodRes = await fetch(`https://tooguildtogo-1.onrender.com/vendor/food_items?vendor_id=${vendor_id}`);
         const foodItems = await foodRes.json();
 
         // fetches current food items for this bag so you can pre-tick them
-        const bagFoodRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/food_items`);
+        const bagFoodRes = await fetch(`https://tooguildtogo-1.onrender.com/bags/${bag.bag_id}/food_items`);
         const currentFoodIds = await bagFoodRes.json(); // returns [{food_id: 1}, ...]
         const currentIds = currentFoodIds.map(f => f.food_id);
 
