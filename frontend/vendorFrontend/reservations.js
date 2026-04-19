@@ -41,32 +41,47 @@ async function loadReservations() {
 
 
     //modal view shown when reservation clicked
-    card.addEventListener('click', async() => {
+    card.addEventListener('click', async () => {
         selectedIndex = index;
         const modal = document.getElementById('myModal');
         document.getElementById('modal-name').textContent = reservation.product_name;
         document.getElementById('modal-desc').textContent = reservation.description || "No Description";
         document.getElementById('modal-discounted_price').textContent = 'Price : £' + reservation.discounted_price;
-        document.getElementById('modal-pickup_window_start').textContent = "Pickup Window start time: " + formatDateTime(reservation.pickup_window_start);
-        document.getElementById('modal-pickup_window_end').textContent = "Pickup Window end time: " + formatDateTime(reservation.pickup_window_end);
+        document.getElementById('modal-pickup_window_start').textContent =
+            "Pickup Window start time: " + formatDateTime(reservation.pickup_window_start);
+        document.getElementById('modal-pickup_window_end').textContent =
+            "Pickup Window end time: " + formatDateTime(reservation.pickup_window_end);
 
-        
-        
         //fetches allergens for the bag and filters where contains= true 
-        const allergenRes = await fetch(`https://tooguildtogo.onrender.com/bags/${reservation.bag_id}/allergens`);
-        const allergens = await allergenRes.json();
-        const filtered = allergens.filter(a => a.contains || a.may_contain);
-        
-        document.getElementById('modal-allergens').textContent = filtered.length > 0 
-            ? filtered.map(a => a.may_contain ? `${a.allergen_name} (may contain)` : a.allergen_name).join(', '): 'None';
+        let allergensTEXT = "Unavailable";
+
+        try {
+            const allergenbag = await fetch(`https://tooguildtogo.onrender.com/bags/${reservation.bag_id}/allergens`);
+            if (allergenbag.ok) {
+                const allergens = await allergenbag.json();
+                if (Array.isArray(allergens) && allergens.length > 0) {
+                    allergensText = allergens
+                        .map(a => a.may_contain ? `${a.allergen_name} (may contain)` : `${a.allergen_name}`)
+                        .join(", ");
+                } else {
+                    allergensText = "None";
+                }
+            }
+        } catch (e) {
+            console.error("Allergen fetch failed:", e);
+        }
+        document.getElementById('modal-allergens').textContent = allergensText;
+       
 
         //fetches all dietary tags in the reservation
         const dietaryRes = await fetch(`https://tooguildtogo.onrender.com/bags/${reservation.bag_id}/dietary_tags`);
         const dietaryTags = await dietaryRes.json();
-        document.getElementById('modal-dietary').textContent = dietaryTags.length > 0 ? dietaryTags.map(d => d.name).join(', ') : 'None';
+        document.getElementById('modal-dietary').textContent =
+            dietaryTags.length > 0 ? dietaryTags.map(d => d.name).join(', ') : 'None';
         
         modal.style.display = 'block';
-        });
+    });
+        
 
     const collectBtn = card.querySelector('.bagButton');
     if(collectBtn){
