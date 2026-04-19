@@ -29,8 +29,7 @@ def get_bags(tag: str = None, dietary_tag: str = None, vendor_id: int = None, se
 
     if vendor_id:
         query = query.filter(Bag.vendor_id == vendor_id)
-    else:
-        query = query.filter(Bag.status == "available", Bag.quantity > 0)
+
 
     if search:
         search_term = f"%{search}%"
