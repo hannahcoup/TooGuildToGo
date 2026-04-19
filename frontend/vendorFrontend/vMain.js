@@ -39,22 +39,19 @@ async function addBagCard(bag, index) {
     <h3>${bag.product_name}</h3>
     <p>Category: ${bag.category}</p>
     <p>Discounted Price: £${bag.discounted_price}</p>
-    <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity} </span>`}</p>
-    <p>Expiry Date: ${isExpired ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${formatDateTime(bag.expires_at)}</span>`}</p>   
+    <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity}</span>`}</p>
+    <p>Expiry Date: ${isExpired ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${formatDateTime(bag.expires_at)}</span>`}</p>
     <p>Allergens: ${
       filtered.length > 0
-        ? filtered
-            .map(a =>
-              a.contains
-                ? `${a.allergen_name}`
-                : `${a.allergen_name} (may contain)`
-            ).join(', ')
+        ? filtered.map(a =>
+            a.may_contain
+              ? `${a.allergen_name} (may contain)`
+              : `${a.allergen_name}`
+          ).join(', ')
         : 'None'
-    } </p>
-    ${bag.status !== 'collected' ? '<button class="bagButton deleteButton" ><img src="../images/binICON.png" width=20 height=20></button>'  : ''}
-    
+    }</p>
+    ${bag.status !== 'collected' ? '<button class="bagButton deleteButton"><img src="../images/binICON.png" width="20" height="20"></button>' : ''}
     ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}
-    
   `;
   const editBtn = card.querySelector('.editBtn');
   if (editBtn) {
