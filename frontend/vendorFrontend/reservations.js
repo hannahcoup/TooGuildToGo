@@ -33,7 +33,7 @@ async function loadReservations() {
         
         
     `;
-        if (reservation.reservation_status === 'collected') {
+        if (reservation.reservation.status === 'collected') {
         past.appendChild(card);  // already collected goes to past
     } else if(reservation.payment_status === 'paid'){
         upcoming.appendChild(card);  // everything else goes to upcoming
