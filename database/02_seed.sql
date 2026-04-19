@@ -19,9 +19,9 @@ INSERT INTO dietary_tags (name) VALUES
   ('Vegan'),('Vegetarian'),('Gluten-Free'),('Contains Meat'),('Contains Dairy'),('Spicy'),('Halal');
 
 INSERT INTO vendors (name, location, email, password_hash) VALUES
-  ('Spud Game',  'Guild of Students, 160 Mount Pleasant, Liverpool L3 5TR - Ground Floor',   'spudgame@guild.co.uk',  'vendor_hash_1'),
-  ('Tacontent',  'Guild of Students, 160 Mount Pleasant, Liverpool L3 5TR - First Floor',    'tacontent@guild.co.uk', 'vendor_hash_2'),
-  ('Union Brew', 'Outside Guild of Students building - right side entrance, Mount Pleasant',  'unionbrew@guild.co.uk', 'vendor_hash_3');
+  ('Spud Game',  'Guild of Students, 160 Mount Pleasant, Liverpool L3 5TR - Ground Floor',   'spudgame@guild.co.uk',  '1a32a8ec087dd4b24265c8ffbb1ede0bdc6a6968cfca00a7b588fd28b23b7422'),
+  ('Tacontent',  'Guild of Students, 160 Mount Pleasant, Liverpool L3 5TR - First Floor',    'tacontent@guild.co.uk', '1a32a8ec087dd4b24265c8ffbb1ede0bdc6a6968cfca00a7b588fd28b23b7422'),
+  ('Union Brew', 'Outside Guild of Students building - right side entrance, Mount Pleasant',  'unionbrew@guild.co.uk', '1a32a8ec087dd4b24265c8ffbb1ede0bdc6a6968cfca00a7b588fd28b23b7422');
 
 INSERT INTO users (name, email, password_hash) VALUES
   ('Sarah Wu', 'sarah.wu@liverpool.ac.uk', 'hashed_pw_a'),
