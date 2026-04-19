@@ -19,7 +19,7 @@ document.getElementById("welcome").innerHTML= ` <p><b> Welcome Back, ${localStor
 
 async function addBagCard(bag, index) {
   const card = document.createElement("div");
-  const allergenbag = await fetch(`https://tooguildtogo.onrender-1.com/bags/${bag.bag_id}/allergens`);
+  const allergenbag = await fetch(`https://tooguildtogo-1.onrender.com/bags/${bag.bag_id}/allergens`);
   const allergens = await allergenbag.json();
   const filtered = allergens.filter(a => a.contains || a.may_contain);
   const expiryDate = new Date(bag.expires_at);
@@ -96,7 +96,7 @@ async function addBagCard(bag, index) {
         });
 
         //fetches dietary tags and prefills checkboxes 
-        const dietaryRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/dietary_tags`);
+        const dietaryRes = await fetch(`https://tooguildtogo-1.onrender.com/bags/${bag.bag_id}/dietary_tags`);
         const dietaryTags = await dietaryRes.json();
         const currentDietaryNames = dietaryTags.map(d => d.name);
 
@@ -143,7 +143,7 @@ const deleteModal = document.getElementById('deleteModal');
 let cardToDelete = null;
 let bagIdToDelete = null;
 document.getElementById('confirm-delete').addEventListener('click', async () => {
-  const res = await fetch(`https://tooguildtogo.onrender.com/vendor/bags/${bagIdToDelete}`, {
+  const res = await fetch(`https://tooguildtogo-1.onrender.com/vendor/bags/${bagIdToDelete}`, {
     method: 'DELETE'
   });
   const data = await res.json();
@@ -169,7 +169,7 @@ document.getElementById('edit-save').addEventListener('click', async () => {
     const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
 
     let current_bag = bags[editIndex];
-    const res = await fetch(`https://tooguildtogo.onrender.com/vendor/bags/${current_bag.bag_id}`, {
+    const res = await fetch(`https://tooguildtogo.onrender-1.com/vendor/bags/${current_bag.bag_id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
