@@ -34,11 +34,25 @@ document.getElementById('addBagForm').addEventListener('submit', async (e) => {
 
   const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
   const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
-const pickup_end = new Date(document.getElementById("pickup_window_end").value);
-const expires = new Date(document.getElementById("expires_at").value);
+const pickup_start = document.getElementById("pickup_window_start").value;
+const pickup_end = document.getElementById("pickup_window_end").value;
+const expires = document.getElementById("expires_at").value;
 
-if (expires <= pickup_end) {
-  document.getElementById('error').textContent = 'Expiry must be before or equal to pickup window end';
+if (pickup_end <= pickup_start) {
+  document.getElementById('error').textContent =
+    'Pickup window end must be after pickup window start';
+  return;
+}
+
+if (expires < pickup_start) {
+  document.getElementById('error').textContent =
+    'Expiry must be after or equal to pickup window start';
+  return;
+}
+
+if (expires > pickup_end) {
+  document.getElementById('error').textContent =
+    'Expiry must be before or equal to pickup window end';
   return;
 }
   const dietaryIds = [];
