@@ -68,4 +68,4 @@ def getProductAnalytics():
 
    htmlString = f'<html><body><img src="data:image/png;base64,{encoded}" style="width:100%; height:100%; object-fit: contain;"></body></html>'
 
-   return HTMLResponse(content=HTMLString)
+   return HTMLResponse(content=htmlString)
