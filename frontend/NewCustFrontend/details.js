@@ -12,55 +12,60 @@ const categoryImages = {
 
 async function loadBagDetails() {
   try {
-    // Get main bag details
+    // 1. Get bag details
     const res = await fetch(`https://tooguildtogo.onrender.com/bags/${bagId}`);
     const bag = await res.json();
     console.log("Bag:", bag);
 
-    // Get allergens using bagId from URL, not bag.bag_id
-    const allergenRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bagId}/allergens`);
-    const allergens = await allergenRes.json();
-    console.log("Allergens:", allergens);
+    // Fill main info FIRST so it still appears even if allergens fail
+    const imageSrc = categoryImages[bag.category] || "./images/logo.png";
+    document.getElementById("details-image").src = imageSrc;
+    document.getElementById("title").textContent = bag.product_name || "No title";
+    document.getElementById("price").textContent = `£${bag.discounted_price}`;
+    document.getElementById("pickup-window").textContent =
+      `Collection Time: ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}`;
 
-    // Get food items / actual contents
+    // 2. Get actual contents
     const foodRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bagId}/food_items`);
     const foodItems = await foodRes.json();
     console.log("Food items:", foodItems);
 
-    // Image
-    const imageSrc = categoryImages[bag.category] || "./images/logo.png";
-    document.getElementById("details-image").src = imageSrc;
-
-    // Main details
-    document.getElementById("title").textContent = bag.product_name || "No title";
-    document.getElementById("price").textContent = bag.discounted_price ? `£${bag.discounted_price}` : "N/A";
-    document.getElementById("pickup-window").textContent =
-      `Collection Time: ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}`;
-
-    // Actual contents
     if (Array.isArray(foodItems) && foodItems.length > 0) {
-      document.getElementById("contents").textContent = foodItems
-        .map(item => item.name || item.food_name || item.product_name || "Unknown item")
-        .join(", ");
+      document.getElementById("contents").textContent =
+        foodItems.map(item => item.name).join(", ");
     } else {
       document.getElementById("contents").textContent = bag.description || "No contents available";
     }
 
-    // Allergens
-    const filtered = Array.isArray(allergens)
-      ? allergens.filter(a => a.contains || a.may_contain || a.allergen_name)
-      : [];
+    // 3. Get allergens safely
+    try {
+      const allergenRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bagId}/allergens`);
 
-    document.getElementById("allergens").textContent =
-      filtered.length > 0
-        ? filtered.map(a =>
-            a.contains
-              ? `${a.allergen_name}`
-              : a.may_contain
-                ? `${a.allergen_name} (may contain)`
-                : `${a.allergen_name}`
-          ).join(", ")
-        : "None";
+      if (!allergenRes.ok) {
+        throw new Error("Allergen endpoint failed");
+      }
+
+      const allergens = await allergenRes.json();
+      console.log("Allergens:", allergens);
+
+      const filtered = Array.isArray(allergens)
+        ? allergens.filter(a => a.contains || a.may_contain || a.allergen_name)
+        : [];
+
+      document.getElementById("allergens").textContent =
+        filtered.length > 0
+          ? filtered.map(a =>
+              a.contains
+                ? `${a.allergen_name}`
+                : a.may_contain
+                  ? `${a.allergen_name} (may contain)`
+                  : `${a.allergen_name}`
+            ).join(", ")
+          : "None";
+    } catch (err) {
+      console.error("Allergen fetch failed:", err);
+      document.getElementById("allergens").textContent = "Unavailable";
+    }
 
   } catch (err) {
     console.error("Failed to load bag details:", err);
@@ -97,5 +102,5 @@ async function reserveBag() {
 function formatTime(datetime) {
   if (!datetime) return "";
   const date = new Date(datetime);
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
