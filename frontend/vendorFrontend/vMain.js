@@ -3,7 +3,7 @@ let bags = [];
 let allBags = [];
 const container = document.getElementById("bags");
 let editIndex = null;
-/*
+
 async function loadBags() {
   const vendor_id = localStorage.getItem('vendor_id');
   const res = await fetch(`https://tooguildtogo-1.onrender.com/bags?vendor_id=${vendor_id}`);
@@ -12,36 +12,7 @@ async function loadBags() {
   bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
   bags.forEach((bag, index) => addBagCard(bag, index));
 }
-*/
-async function loadBags() {
-  const vendor_id = localStorage.getItem('vendor_id');
-  const API_BASE_URL = "https://tooguildtogo-1.onrender.com";
 
-  try {
-    // 1. Fetch the data
-    const res = await fetch(`${API_BASE_URL}/bags?vendor_id=${vendor_id}`);
-
-    // 2. CHECK IF THE RESPONSE IS OK BEFORE PARSING JSON
-    if (!res.ok) {
-        if (res.status === 404) {
-            throw new Error("The endpoint /bags was not found on the server. Check your FastAPI router.");
-        }
-        throw new Error(`Server error: ${res.status}`);
-    }
-
-    const data = await res.json();
-    let allBags = data;
-    
-    // Clear container and filter
-    container.innerHTML = '';
-    bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
-    bags.forEach((bag, index) => addBagCard(bag, index));
-
-  } catch (error) {
-    console.error("Dashboard Error:", error.message);
-    document.getElementById("bags").innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
-  }
-}
 
 loadBags();
 document.getElementById("welcome").innerHTML= ` <p><b> Welcome Back, ${localStorage.getItem('vendor_name')} </b></p>`;
