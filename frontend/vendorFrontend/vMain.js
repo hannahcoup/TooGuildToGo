@@ -19,9 +19,18 @@ document.getElementById("welcome").innerHTML= ` <p><b> Welcome Back, ${localStor
 
 async function addBagCard(bag, index) {
   const card = document.createElement("div");
-  const allergenbag = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/allergens`);
-  const allergens = await allergenbag.json();
-  const filtered = allergens.filter(a => a.contains || a.may_contain);
+
+  let filtered = [];
+  try {
+    const allergenbag = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/allergens`);
+    if (allergenbag.ok) {
+      const allergens = await allergenbag.json();
+      filtered = Array.isArray(allergens) ? allergens : [];
+    }
+  } catch (e) {
+    console.error("Allergen fetch failed:", e);
+  }
+
   const expiryDate = new Date(bag.expires_at);
   const isExpired = expiryDate < new Date();
   
