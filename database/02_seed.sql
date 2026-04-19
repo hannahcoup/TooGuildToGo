@@ -22,6 +22,7 @@ INSERT INTO vendors (name, location, email, password_hash) VALUES
   ('Spud Game',  'Guild of Students, 160 Mount Pleasant, Liverpool L3 5TR - Ground Floor',   'spudgame@guild.co.uk',  '1a32a8ec087dd4b24265c8ffbb1ede0bdc6a6968cfca00a7b588fd28b23b7422'),
   ('Tacontent',  'Guild of Students, 160 Mount Pleasant, Liverpool L3 5TR - First Floor',    'tacontent@guild.co.uk', '1a32a8ec087dd4b24265c8ffbb1ede0bdc6a6968cfca00a7b588fd28b23b7422'),
   ('Union Brew', 'Outside Guild of Students building - right side entrance, Mount Pleasant',  'unionbrew@guild.co.uk', '1a32a8ec087dd4b24265c8ffbb1ede0bdc6a6968cfca00a7b588fd28b23b7422');
+ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO users (name, email, password_hash) VALUES
   ('Sarah Wu', 'sarah.wu@liverpool.ac.uk', 'hashed_pw_a'),
@@ -254,18 +255,18 @@ INSERT INTO vendor_food_items (vendor_id, food_id) VALUES
   (3,22),(3,23),(3,24),(3,25),(3,26),(3,27),(3,28),(3,29),(3,30),(3,31),(3,32),(3,33),(3,34),(3,35),(3,36),(3,37);
 
 INSERT INTO bags (vendor_id, product_name, description, category, original_price, discounted_price, quantity, pickup_window_start, pickup_window_end, expires_at, status) VALUES
-  (1,'Spud Game Mixed Bag','Jacket potato bag with mixed hot and cold fillings','Hot Food',6.50,3.50,5,'2026-03-18 13:15:00','2026-03-18 13:45:00','2026-03-18 13:40:00','available'),
-  (1,'Spud Game Spicy Bag','Spicy fillings surplus bag with chilli options','Hot Food',6.80,3.80,3,'2026-03-18 14:00:00','2026-03-18 14:30:00','2026-03-18 14:25:00','available'),
-  (1,'Spud Game Vegetarian Bag','Vegetarian jacket potato bag with classic fillings','Vegetarian',5.80,3.20,4,'2026-03-18 14:30:00','2026-03-18 15:00:00','2026-03-18 14:55:00','available'),
+  (4,'Spud Game Mixed Bag','Jacket potato bag with mixed hot and cold fillings','Hot Food',6.50,3.50,5,'2026-03-18 13:15:00','2026-03-18 13:45:00','2026-03-18 13:40:00','available'),
+  (4,'Spud Game Spicy Bag','Spicy fillings surplus bag with chilli options','Hot Food',6.80,3.80,3,'2026-03-18 14:00:00','2026-03-18 14:30:00','2026-03-18 14:25:00','available'),
+  (4,'Spud Game Vegetarian Bag','Vegetarian jacket potato bag with classic fillings','Vegetarian',5.80,3.20,4,'2026-03-18 14:30:00','2026-03-18 15:00:00','2026-03-18 14:55:00','available'),
     
-  (2,'Tacontent Mixed Bag','Mexican surplus bag with tacos and fillings','Hot Food',7.50,4.00,4,'2026-03-18 14:45:00','2026-03-18 15:15:00','2026-03-18 15:10:00','available'),
-  (2,'Tacontent Nachos Bag','Loaded nachos and toppings bag','Hot Food',6.20,3.50,3,'2026-03-18 15:15:00','2026-03-18 15:45:00','2026-03-18 15:40:00','available'),
-  (2,'Tacontent Vegan Bag','Vegan Mexican bag with veg chilli and toppings','Vegan',6.80,3.80,2,'2026-03-18 15:45:00','2026-03-18 16:15:00','2026-03-18 16:10:00','available'),
+  (5,'Tacontent Mixed Bag','Mexican surplus bag with tacos and fillings','Hot Food',7.50,4.00,4,'2026-03-18 14:45:00','2026-03-18 15:15:00','2026-03-18 15:10:00','available'),
+  (5,'Tacontent Nachos Bag','Loaded nachos and toppings bag','Hot Food',6.20,3.50,3,'2026-03-18 15:15:00','2026-03-18 15:45:00','2026-03-18 15:40:00','available'),
+  (5,'Tacontent Vegan Bag','Vegan Mexican bag with veg chilli and toppings','Vegan',6.80,3.80,2,'2026-03-18 15:45:00','2026-03-18 16:15:00','2026-03-18 16:10:00','available'),
     
-  (3,'Union Brew Bakery Bag','Bakery bag with toasties and pastries','Bakery/Lunch',5.20,2.80,6,'2026-03-18 15:45:00','2026-03-18 16:15:00','2026-03-18 16:10:00','available'),
-  (3,'Union Brew Lunch Bag','Lunch grab-bag with baguettes and wraps','Lunch',6.00,3.20,4,'2026-03-18 16:15:00','2026-03-18 16:45:00','2026-03-18 16:40:00','available'),
-  (3,'Union Brew Vegetarian Bag','Vegetarian bakery bag with toasties and veggie options','Vegetarian',5.00,2.70,3,'2026-03-18 16:45:00','2026-03-18 17:15:00','2026-03-18 17:10:00','available'),
-  (3,'Union Brew Pastry Bag','Selection of surplus pastries and sweet baked items','Bakery',6.00,2.50,5,'2026-03-18 17:15:00','2026-03-18 17:45:00','2026-03-18 17:40:00','available');
+  (6,'Union Brew Bakery Bag','Bakery bag with toasties and pastries','Bakery/Lunch',5.20,2.80,6,'2026-03-18 15:45:00','2026-03-18 16:15:00','2026-03-18 16:10:00','available'),
+  (6,'Union Brew Lunch Bag','Lunch grab-bag with baguettes and wraps','Lunch',6.00,3.20,4,'2026-03-18 16:15:00','2026-03-18 16:45:00','2026-03-18 16:40:00','available'),
+  (6,'Union Brew Vegetarian Bag','Vegetarian bakery bag with toasties and veggie options','Vegetarian',5.00,2.70,3,'2026-03-18 16:45:00','2026-03-18 17:15:00','2026-03-18 17:10:00','available'),
+  (6,'Union Brew Pastry Bag','Selection of surplus pastries and sweet baked items','Bakery',6.00,2.50,5,'2026-03-18 17:15:00','2026-03-18 17:45:00','2026-03-18 17:40:00','available');
 
 INSERT INTO bag_items (bag_id, food_id) VALUES
   (1,1),(1,3),(1,8),(1,9),
