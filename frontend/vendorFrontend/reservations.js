@@ -4,7 +4,7 @@ async function loadReservations() {
 
     
     const vendor_id = localStorage.getItem('vendor_id');
-    const res = await fetch(`http://127.0.0.1:8000/reservations?vendor_id=${vendor_id}`);
+    const res = await fetch(`http://tooguildtogo.onrender.com/reservations?vendor_id=${vendor_id}`);
     const reservations = await res.json();
     
 
@@ -53,7 +53,7 @@ async function loadReservations() {
         
         
         //fetches allergens for the bag and filters where contains= true 
-        const allergenRes = await fetch(`http://127.0.0.1:8000/bags/${reservation.bag_id}/allergens`);
+        const allergenRes = await fetch(`http://tooguildtogo.onrender.com/bags/${reservation.bag_id}/allergens`);
         const allergens = await allergenRes.json();
         const filtered = allergens.filter(a => a.contains || a.may_contain);
         
@@ -61,7 +61,7 @@ async function loadReservations() {
             ? filtered.map(a => a.may_contain ? `${a.allergen_name} (may contain)` : a.allergen_name).join(', '): 'None';
 
         //fetches all dietary tags in the reservation
-        const dietaryRes = await fetch(`http://127.0.0.1:8000/bags/${reservation.bag_id}/dietary_tags`);
+        const dietaryRes = await fetch(`http://tooguildtogo.onrender.com/bags/${reservation.bag_id}/dietary_tags`);
         const dietaryTags = await dietaryRes.json();
         document.getElementById('modal-dietary').textContent = dietaryTags.length > 0 ? dietaryTags.map(d => d.name).join(', ') : 'None';
         
@@ -74,7 +74,7 @@ async function loadReservations() {
             e.stopPropagation(); // to stop modal view opening
             
             reservations[index].status = 'collected';
-            const res = await fetch(`http://127.0.0.1:8000/reservations/${reservation.reservation_id}`, {
+            const res = await fetch(`http://tooguildtogo.onrender.com/reservations/${reservation.reservation_id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: 'collected' })
@@ -111,7 +111,7 @@ async function loadReservations() {
     document.getElementById('confirm-yes').addEventListener('click', async () => {
         const reservation = reservations[selectedIndex];
 
-        const payRes = await fetch("http://127.0.0.1:8000/vendor/mark-payment-collected", {
+        const payRes = await fetch("http://tooguildtogo.onrender.com/vendor/mark-payment-collected", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -127,7 +127,7 @@ async function loadReservations() {
         }
 
         // then mark collected
-        const colRes = await fetch("http://127.0.0.1:8000/vendor/mark-collected", {
+        const colRes = await fetch("http://tooguildtogo.onrender.com/vendor/mark-collected", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
