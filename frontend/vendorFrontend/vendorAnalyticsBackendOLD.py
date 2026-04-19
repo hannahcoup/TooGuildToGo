@@ -1,4 +1,4 @@
-
+'''
 import pandas as pd
 import numpy as np 
 import matplotlib
@@ -68,6 +68,7 @@ def getProductAnalytics():
    plt.close(fig) 
    
    encoded = base64.b64encode(tempFile.getvalue()).decode('utf-8')
+   '''
 
    # htmlString = f'<html><body><img src="data:image/png;base64,{encoded}" style="width:100%; height:100%; object-fit: contain;"></body></html>'
 
