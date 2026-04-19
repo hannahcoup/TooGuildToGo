@@ -6,7 +6,7 @@ let editIndex = null;
 
 async function loadBags() {
   const vendor_id = localStorage.getItem('vendor_id');
-  const res = await fetch(`https://tooguildtogo-1.onrender.com/bags`);
+  const res = await fetch(`https://tooguildtogo-1.onrender.com/bags/`);
   const data = await res.json();
   let allBags = data;
   bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
