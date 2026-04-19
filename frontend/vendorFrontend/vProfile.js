@@ -153,7 +153,7 @@ async function saveEditEmail(){
 }
 /* Copied over from cAnalytics.js */ 
 
-function loadGraphs() {
+async function loadGraphs() {
     const res = await fetch('https://tooguildtogo.onrender.com/graph/productAnalytics');
     const data = await res.json();
     document.getElementById('productGraph').src = `data:image/png;base64,${data.image}`;
