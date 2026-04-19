@@ -1,30 +1,52 @@
+const API = "https://tooguildtogo.onrender.com";
+
 async function loadFoodItems() {
-  const vendor_id = localStorage.getItem('vendor_id') || 1;
-  
-  const res = await fetch(`https://tooguildtogo.onrender.com/vendor/food_items?vendor_id=${vendor_id}`);
-  const foodItems = await res.json();
-
- 
-
-  const grouped = {};
-  foodItems.forEach(item => {
-    if (!grouped[item.category]) grouped[item.category] = [];
-    grouped[item.category].push(item);
-  });
-
+  const vendor_id = parseInt(localStorage.getItem('vendor_id') || '1', 10);
   const container = document.getElementById('foodItemsContainer');
-  container.innerHTML = '';
-  
-  Object.entries(grouped).forEach(([category, items]) => {
-    const legend = document.createElement('p');
-    legend.innerHTML = `<b>${category}</b>`;
-    container.appendChild(legend);
-    items.forEach(item => {
-      const label = document.createElement('label');
-      label.innerHTML = `<input type="checkbox" id="food-${item.food_id}" name="food_item" value="${item.food_id}"> ${item.name}`;
-      container.appendChild(label);
+  container.innerHTML = 'Loading food items...';
+
+  try {
+    const res = await fetch(`${API}/vendor/food_items?vendor_id=${vendor_id}`);
+
+    if (!res.ok) {
+      throw new Error(`food items request failed: ${res.status}`);
+    }
+
+    const foodItems = await res.json();
+    console.log("food items:", foodItems);
+
+    if (!Array.isArray(foodItems) || foodItems.length === 0) {
+      container.innerHTML = '<p>No food items available.</p>';
+      return;
+    }
+
+    const grouped = {};
+    foodItems.forEach(item => {
+      if (!grouped[item.category]) grouped[item.category] = [];
+      grouped[item.category].push(item);
     });
-  });
+
+    container.innerHTML = '';
+
+    Object.entries(grouped).forEach(([category, items]) => {
+      const legend = document.createElement('p');
+      legend.innerHTML = `<b>${category}</b>`;
+      container.appendChild(legend);
+
+      items.forEach(item => {
+        const label = document.createElement('label');
+        label.innerHTML = `
+          <input type="checkbox" id="food-${item.food_id}" name="food_item" value="${item.food_id}">
+          ${item.name}
+        `;
+        container.appendChild(label);
+      });
+    });
+
+  } catch (err) {
+    console.error("Could not load food items:", err);
+    container.innerHTML = '<p>Could not load food items.</p>';
+  }
 }
 
 loadFoodItems();
@@ -32,65 +54,87 @@ loadFoodItems();
 document.getElementById('addBagForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
-  const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
-const pickup_start = document.getElementById("pickup_window_start").value;
-const pickup_end = document.getElementById("pickup_window_end").value;
-const expires = document.getElementById("expires_at").value;
+  const submitBtn = e.submitter || document.querySelector('#addBagForm button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Adding...';
+  }
 
-if (pickup_end <= pickup_start) {
-  document.getElementById('error').textContent =
-    'Pickup window end must be after pickup window start';
-  return;
-}
+  document.getElementById('error').textContent = '';
 
-if (expires < pickup_start) {
-  document.getElementById('error').textContent =
-    'Expiry must be after or equal to pickup window start';
-  return;
-}
+  try {
+    const vendor_id = parseInt(localStorage.getItem('vendor_id') || '1', 10);
 
-if (expires > pickup_end) {
-  document.getElementById('error').textContent =
-    'Expiry must be before or equal to pickup window end';
-  return;
-}
-  const dietaryIds = [];
-  if (document.getElementById("is_vegan").checked) dietaryIds.push(1);
-  if (document.getElementById("is_vegetarian").checked) dietaryIds.push(2);
-  if (document.getElementById("is_gluten_free").checked) dietaryIds.push(3);
-  if (document.getElementById("contains_meat").checked) dietaryIds.push(4);
-  if (document.getElementById("contains_dairy").checked) dietaryIds.push(5);
-  if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
+    const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
+    const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
 
-  const newBag = {
-    vendor_id: parseInt(localStorage.getItem('vendor_id')) || 1,
-    product_name: document.getElementById("product_name").value,
-    category: document.getElementById("category").value,
-    description: document.getElementById("description").value,
-    original_price: parseFloat(document.getElementById("original_price").value),
-    discounted_price: parseFloat(document.getElementById("discounted_price").value),
-    pickup_window_start: document.getElementById("pickup_window_start").value,
-    pickup_window_end: document.getElementById("pickup_window_end").value,
-    expires_at: document.getElementById("expires_at").value,
-    quantity: parseInt(document.getElementById("quantity").value),
-    dietary_tag_ids: dietaryIds,
-    food_ids: food_ids,
-    status: 'available'
-  };
+    const dietaryCheckboxes = document.querySelectorAll('input[name="dietary_tag"]:checked');
+    const dietary_tag_ids = Array.from(dietaryCheckboxes).map(cb => parseInt(cb.value));
 
-  const res = await fetch('https://tooguildtogo.onrender.com/vendor/add-bag', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(newBag)
-  });
+    const pickup_start = document.getElementById("pickup_window_start").value;
+    const pickup_end = document.getElementById("pickup_window_end").value;
+    const expires = document.getElementById("expires_at").value;
 
-  const data = await res.json();
+    if (pickup_end <= pickup_start) {
+      document.getElementById('error').textContent =
+        'Pickup window end must be after pickup window start';
+      return;
+    }
 
-  if (data.message === "bag created successfully") {
-    window.location.href = 'vDashboard.html';
-  } else {
-    document.getElementById('error').textContent = data.error || 'Something went wrong, please try again.';
+    if (expires < pickup_start) {
+      document.getElementById('error').textContent =
+        'Expiry must be after or equal to pickup window start';
+      return;
+    }
+
+    if (expires > pickup_end) {
+      document.getElementById('error').textContent =
+        'Expiry must be before or equal to pickup window end';
+      return;
+    }
+
+    const payload = {
+      vendor_id: vendor_id,
+      product_name: document.getElementById('product_name').value,
+      description: document.getElementById('description').value,
+      category: document.getElementById('category').value,
+      original_price: parseFloat(document.getElementById('original_price').value),
+      discounted_price: parseFloat(document.getElementById('discounted_price').value),
+      quantity: parseInt(document.getElementById('quantity').value),
+      pickup_window_start: pickup_start,
+      pickup_window_end: pickup_end,
+      expires_at: expires,
+      food_ids: food_ids,
+      dietary_tag_ids: dietary_tag_ids
+    };
+
+    console.log("Submitting bag:", payload);
+
+    const res = await fetch(`${API}/vendor/add-bag`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    console.log("Add bag response:", data);
+
+    if (data.message === 'bag created successfully') {
+      alert('Bag added successfully');
+      window.location.href = 'vDashboard.html';
+    } else {
+      document.getElementById('error').textContent =
+        data.error || 'Something went wrong';
+    }
+
+  } catch (err) {
+    console.error("Add bag failed:", err);
+    document.getElementById('error').textContent = 'Could not add bag';
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Add';
+    }
   }
 });
   /**
