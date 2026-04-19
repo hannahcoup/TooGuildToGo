@@ -4,7 +4,7 @@ let allBags = [];
 const container = document.getElementById("bags");
 let editIndex = null;
 
-/*
+
 async function loadBags() {
   const vendor_id = localStorage.getItem('vendor_id');
   const res = await fetch(`https://tooguildtogo.onrender.com/vendor/bags?vendor_id=${vendor_id}`);
@@ -13,25 +13,11 @@ async function loadBags() {
   bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
   bags.forEach((bag, index) => addBagCard(bag, index));
 }
-*/
-async function loadBags() {
-  const vendor_id = localStorage.getItem('vendor_id');
-  console.log('vendor_id:', vendor_id);
-  
-  const res = await fetch(`https://tooguildtogo.onrender.com/vendor/bags?vendor_id=${vendor_id}`);
-  const data = await res.json();
-  console.log('bags data:', data);
-  
-  bags = data;
-  bags.forEach((bag, index) => {
-    console.log('adding bag:', bag);
-    addBagCard(bag, index);
-  });
-}
+
 
 loadBags();
 document.getElementById("welcome").innerHTML= ` <p><b> Welcome Back, ${localStorage.getItem('vendor_name')} </b></p>`;
-
+/*
 async function addBagCard(bag, index) {
   const card = document.createElement("div");
   
@@ -153,7 +139,101 @@ async function addBagCard(bag, index) {
     }
   container.appendChild(card);
 }
+*/
 
+async function addBagCard(bag, index) {
+  const card = document.createElement("div");
+  const expiryDate = new Date(bag.expires_at);
+  const isExpired = expiryDate < new Date();
+
+  card.className = "bag-card";
+  card.innerHTML = `
+    <h3>${bag.product_name}</h3>
+    <p>Category: ${bag.category}</p>
+    <p>Discounted Price: £${bag.discounted_price}</p>
+    <p>Quantity remaining: ${bag.quantity <= 0 ? '<span style="color:red;">Sold Out</span>' : `<span style="color:green;">${bag.quantity}</span>`}</p>
+    <p>Expiry Date: ${isExpired ? '<span style="color:red;">Expired</span>' : `<span style="color:green;">${formatDateTime(bag.pickup_window_end)}</span>`}</p>
+    <p>Allergens: ${bag.allergens.length > 0 ? bag.allergens.join(', ') : 'None'}</p>
+    ${bag.status !== 'collected' ? '<button class="bagButton deleteButton"><img src="../images/binICON.png" width=20 height=20></button>' : ''}
+    ${bag.status !== 'collected' ? '<button class="bagButton editBtn">Edit</button>' : ''}
+  `;
+
+  const editBtn = card.querySelector('.editBtn');
+  if (editBtn) {
+    editBtn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      editIndex = index;
+
+      const vendor_id = localStorage.getItem('vendor_id');
+      const foodRes = await fetch(`https://tooguildtogo.onrender.com/vendor/food_items?vendor_id=${vendor_id}`);
+      const foodItems = await foodRes.json();
+
+      const bagFoodRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/food_items`);
+      const currentFoodIds = await bagFoodRes.json();
+      const currentIds = currentFoodIds.map(f => f.food_id);
+
+      document.getElementById('edit-product_name').value = bag.product_name || '';
+      document.getElementById('edit-description').value = bag.description || '';
+      document.getElementById('edit-category').value = bag.category || '';
+      document.getElementById('edit-price').value = bag.discounted_price || '';
+      document.getElementById('edit-pickup_window_start').value = bag.pickup_window_start || '';
+      document.getElementById('edit-pickup_window_end').value = bag.pickup_window_end || '';
+      document.getElementById('edit-quantity').value = bag.quantity || '';
+
+      const grouped = {};
+      foodItems.forEach(item => {
+        if (!grouped[item.category]) grouped[item.category] = [];
+        grouped[item.category].push(item);
+      });
+
+      const foodContainer = document.getElementById('foodItemsContainer');
+      foodContainer.innerHTML = '';
+
+      Object.entries(grouped).forEach(([category, items]) => {
+        const legend = document.createElement('p');
+        legend.innerHTML = `<b>${category}</b>`;
+        foodContainer.appendChild(legend);
+        items.forEach(item => {
+          const label = document.createElement('label');
+          const checked = currentIds.includes(item.food_id) ? 'checked' : '';
+          label.innerHTML = `<input type="checkbox" id="food-${item.food_id}" name="food_item" value="${item.food_id}" ${checked}> ${item.name}`;
+          foodContainer.appendChild(label);
+        });
+      });
+
+      const dietaryRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/dietary_tags`);
+      const dietaryTags = await dietaryRes.json();
+      const currentDietaryNames = dietaryTags.map(d => d.name);
+
+      const allDietaryTags = [
+        { id: 1, name: 'Vegan' },
+        { id: 2, name: 'Vegetarian' },
+        { id: 3, name: 'Gluten-Free' },
+        { id: 4, name: 'Contains Meat' },
+        { id: 5, name: 'Contains Dairy' },
+        { id: 6, name: 'Spicy' },
+        { id: 7, name: 'Halal' }
+      ];
+
+      const dietaryContainer = document.getElementById('edit-dietary-container');
+      dietaryContainer.innerHTML = '';
+      allDietaryTags.forEach(tag => {
+        const checked = currentDietaryNames.includes(tag.name) ? 'checked' : '';
+        const label = document.createElement('label');
+        label.style.cssText = 'display:flex; align-items:center; gap:4px; font-size:13px;';
+        label.innerHTML = `<input type="checkbox" id="dietary-${tag.id}" name="dietary_tag" value="${tag.id}" ${checked}> ${tag.name}`;
+        dietaryContainer.appendChild(label);
+      });
+
+      document.getElementById('editModal').style.display = 'block';
+    });
+  }
+
+  const deleteButton = card.querySelector('.deleteButton');
+  if (deleteButton) {
+    deleteButton.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cardToDelete = card;
 
 //modal view shows when delete button on card is clicked - opens and asks if they confirm delete
 const deleteModal = document.getElementById('deleteModal');
