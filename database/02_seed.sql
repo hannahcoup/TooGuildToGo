@@ -78,7 +78,7 @@ INSERT INTO food (food_id, name, description, category, is_vegan, is_vegetarian,
 SELECT setval(pg_get_serial_sequence('food', 'food_id'),
   (SELECT MAX(food_id) FROM food));
 
-INSERT INTO food_allergen (food_id, allergen_id, contains)
+INSERT INTO food_allergen (food_id, allergen_id, may_contain)
 SELECT f.food_id, a.allergen_id, FALSE
 FROM food f
 CROSS JOIN allergen a;
@@ -87,163 +87,163 @@ CROSS JOIN allergen a;
 -- FOOD ALLERGENS
 -- BBQ Sloppy Joe
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 2
 AND allergen_id IN (2, 9, 14);
 
 -- Garlic & Chilli Chicken
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 3
 AND allergen_id = 13;
 
 -- Butters
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 4
 AND allergen_id = 7;
 
 -- Tuna Mayo
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 8
 AND allergen_id IN (5, 4);
 
 -- Grated Cheese
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 9
 AND allergen_id = 7;
 
 -- Chicken Mayo
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 10
 AND allergen_id = 4;
 
 -- Coleslaw
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 11
 AND allergen_id IN (4, 9);
 
 -- Ancho Beef Chilli
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 13
 AND allergen_id IN (1, 14);
 
 -- Chicken of the Week
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 14
 AND allergen_id IN (9, 14);
 
 -- LA Pulled Pork
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 15
 AND allergen_id IN (9, 14);
 
 -- Sour Cream Cheese
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 20
 AND allergen_id = 7;
 
 -- Cheese & Onion Toastie
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 22
 AND allergen_id IN (2, 7);
 
 -- Ham Cheese Baguette
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 23
 AND allergen_id IN (2, 7);
 
 -- Mozzarella & Tomato Baguette
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 24
 AND allergen_id IN (2, 7);
 
 -- Ham & Cheese Toastie
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 25
 AND allergen_id IN (2, 7);
 
 -- Vegetarian Sausage Bun
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 26
 AND allergen_id IN (2, 13);
 
 -- Coronation Chicken Wrap
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 27
 AND allergen_id IN (2, 4, 9, 14);
 
 -- Blueberry Tulip Muffin
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 28
 AND allergen_id IN (2, 4, 7);
 
 -- Sticky Toffee Biscoff (vegan)
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 29
 AND allergen_id IN (2);
 
 -- Lemon & White Chocolate Muffin
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 30
 AND allergen_id IN (2, 4, 7);
 
 -- Doughnuts
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 31
 AND allergen_id IN (2, 4, 7);
 
 -- Double Chocolate Muffin
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 32
 AND allergen_id IN (2, 4, 7);
 
 -- Rocky Road Traybake
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 33
 AND allergen_id IN (2, 7);
 
 -- Cinnamon Swirl
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 34
 AND allergen_id IN (2, 4, 7);
 
 -- Lemon Drizzle Traybake
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 35
 AND allergen_id IN (2, 4, 7);
 
 -- Waffles (vegan version)
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 36
 AND allergen_id IN (2);
 
 -- Pain au Chocolat
 UPDATE food_allergen
-SET contains = TRUE
+SET may_contain = TRUE
 WHERE food_id = 37
 AND allergen_id IN (2, 7);
 
