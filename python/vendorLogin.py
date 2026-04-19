@@ -6,6 +6,7 @@ from fastapi import Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 import hashlib
+from models import Vendor
 
 
 salt =  "5ab" # for password hashing
