@@ -67,6 +67,10 @@ document.getElementById('addBagForm').addEventListener('submit', async (e) => {
 
     const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
     const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
+    if (food_ids.length === 0) {
+      document.getElementById('error').textContent = 'Select at least one food item';
+      return;
+    }
 
     const dietaryCheckboxes = document.querySelectorAll('input[name="dietary_tag"]:checked');
     const dietary_tag_ids = Array.from(dietaryCheckboxes).map(cb => parseInt(cb.value));
@@ -90,6 +94,10 @@ document.getElementById('addBagForm').addEventListener('submit', async (e) => {
     if (expires > pickup_end) {
       document.getElementById('error').textContent =
         'Expiry must be before or equal to pickup window end';
+      return;
+    }
+    if (food_ids.length === 0) {
+      document.getElementById('error').textContent = 'Select at least one food item';
       return;
     }
 
@@ -119,12 +127,12 @@ document.getElementById('addBagForm').addEventListener('submit', async (e) => {
     const data = await res.json();
     console.log("Add bag response:", data);
 
-    if (data.message === 'bag created successfully') {
+    if (res.ok && data.message === 'bag created successfully') {
       alert('Bag added successfully');
       window.location.href = 'vDashboard.html';
     } else {
       document.getElementById('error').textContent =
-        data.error || 'Something went wrong';
+        data.error || JSON.stringify(data.detail) || 'Something went wrong';
     }
 
   } catch (err) {
