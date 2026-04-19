@@ -63,7 +63,7 @@ CREATE TABLE food (
 CREATE TABLE food_allergen (
     food_id INTEGER NOT NULL REFERENCES food(food_id) ON DELETE CASCADE,
     allergen_id INTEGER NOT NULL REFERENCES allergen(allergen_id) ON DELETE CASCADE,
-    contains BOOLEAN NOT NULL DEFAULT FALSE,
+    may_contain BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (food_id, allergen_id)
 );
 
@@ -145,7 +145,7 @@ SELECT DISTINCT
     v.name AS vendor_name,
     a.allergen_id,
     a.name AS allergen_name,
-    fa.contains
+    fa.may_contain
 FROM bags b
 JOIN vendors v
     ON v.id = b.vendor_id
