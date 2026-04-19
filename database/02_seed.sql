@@ -73,7 +73,7 @@ INSERT INTO food (food_id, name, description, category, is_vegan, is_vegetarian,
   (35, 'Lemon Drizzle Traybake', 'Lemon drizzle cake traybake', 'Bakery/Lunch', FALSE, TRUE, FALSE, TRUE),
   (36, 'Waffles', 'Sweet waffles', 'Bakery/Lunch', TRUE, TRUE, FALSE, TRUE),
   (37, 'Pain au Chocolat', 'Chocolate-filled pastry', 'Bakery/Lunch', FALSE, TRUE, FALSE, TRUE);
-
+ON CONFLICT (food_id) DO NOTHING;
 
 -- Make next food_id continue from the last inserted value
 SELECT setval(pg_get_serial_sequence('food', 'food_id'),
@@ -253,6 +253,7 @@ INSERT INTO vendor_food_items (vendor_id, food_id) VALUES
   (1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(1,7),(1,8),(1,9),(1,10),(1,11),(1,12),
   (2,13),(2,14),(2,15),(2,16),(2,17),(2,18),(2,19),(2,20),(2,21),
   (3,22),(3,23),(3,24),(3,25),(3,26),(3,27),(3,28),(3,29),(3,30),(3,31),(3,32),(3,33),(3,34),(3,35),(3,36),(3,37);
+ON CONFLICT DO NOTHING;
 
 INSERT INTO bags (vendor_id, product_name, description, category, original_price, discounted_price, quantity, pickup_window_start, pickup_window_end, expires_at, status) VALUES
   (4,'Spud Game Mixed Bag','Jacket potato bag with mixed hot and cold fillings','Hot Food',6.50,3.50,5,'2026-03-18 13:15:00','2026-03-18 13:45:00','2026-03-18 13:40:00','available'),
