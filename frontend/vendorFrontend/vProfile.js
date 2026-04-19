@@ -154,9 +154,25 @@ async function saveEditEmail(){
 /* Copied over from cAnalytics.js */ 
 
 async function loadGraphs() {
-    const res = await fetch('https://tooguildtogo.onrender.com/graph/productAnalytics');
-    const data = await res.json();
-    document.getElementById('productGraph').src = `data:image/png;base64,${data.image}`;
+     try {
+        const res = await fetch('https://tooguildtogo.onrender.com/graph/productAnalytics');
+        
+        if (!res.ok) {
+            console.error('Server error:', res.status, res.statusText);
+            return;
+        }
+
+        const data = await res.json();
+        console.log('Graph data:', data); // check what's actually returned
+        
+        if (data.image) {
+            document.getElementById('productGraph').src = `data:image/png;base64,${data.image}`;
+        } else {
+            console.error('No image field in response:', data);
+        }
+    } catch (err) {
+        console.error('Failed to load graph:', err);
+    }
 }
 window.addEventListener('load', () => {
     loadGraphs();
