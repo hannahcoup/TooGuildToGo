@@ -11,6 +11,7 @@ import vendor_settings
 import customer_settings
 import favourites
 import customerAnalytics
+import vendorAnalyticsBackend
 
 app = FastAPI()
 
@@ -37,6 +38,7 @@ app.include_router(vendor_settings.router)
 app.include_router(customer_settings.router)
 app.include_router(favourites.router)
 app.include_router(customerAnalytics.router)
+app.include_router(vendorAnalyticsBackend.router)
 
 @app.get("/")
 def root():
