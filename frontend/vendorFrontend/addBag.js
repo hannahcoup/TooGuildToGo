@@ -1,7 +1,7 @@
 async function loadFoodItems() {
   const vendor_id = localStorage.getItem('vendor_id') || 1;
   
-  const res = await fetch(`http://tooguildtogo.onrender.com/vendor/food_items?vendor_id=${vendor_id}`);
+  const res = await fetch(`https://tooguildtogo.onrender.com/vendor/food_items?vendor_id=${vendor_id}`);
   const foodItems = await res.json();
 
  
@@ -65,7 +65,7 @@ if (expires <= pickup_end) {
     status: 'available'
   };
 
-  const res = await fetch('http://tooguildtogo.onrender.com/vendor/add-bag', {
+  const res = await fetch('https://tooguildtogo.onrender.com/vendor/add-bag', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(newBag)
