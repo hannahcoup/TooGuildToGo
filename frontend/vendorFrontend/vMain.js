@@ -19,7 +19,7 @@ document.getElementById("welcome").innerHTML= ` <p><b> Welcome Back, ${localStor
 
 async function addBagCard(bag, index) {
   const card = document.createElement("div");
-  const allergenbag = await fetch(`https://tooguildtogo-1.onrender.com/bags/${bag.bag_id}/allergens`);
+  const allergenbag = await fetch(`https://tooguildtogo.onrender.com/vendor/bags/${bag.bag_id}/allergens`);
   const allergens = await allergenbag.json();
   const filtered = allergens.filter(a => a.contains || a.may_contain);
   const expiryDate = new Date(bag.expires_at);
