@@ -4,6 +4,7 @@ let allBags = [];
 const container = document.getElementById("bags");
 let editIndex = null;
 
+/*
 async function loadBags() {
   const vendor_id = localStorage.getItem('vendor_id');
   const res = await fetch(`https://tooguildtogo.onrender.com/vendor/bags?vendor_id=${vendor_id}`);
@@ -12,7 +13,21 @@ async function loadBags() {
   bags = allBags.filter(b => b.vendor_id === parseInt(vendor_id));
   bags.forEach((bag, index) => addBagCard(bag, index));
 }
-
+*/
+async function loadBags() {
+  const vendor_id = localStorage.getItem('vendor_id');
+  console.log('vendor_id:', vendor_id);
+  
+  const res = await fetch(`https://tooguildtogo.onrender.com/vendor/bags?vendor_id=${vendor_id}`);
+  const data = await res.json();
+  console.log('bags data:', data);
+  
+  bags = data;
+  bags.forEach((bag, index) => {
+    console.log('adding bag:', bag);
+    addBagCard(bag, index);
+  });
+}
 
 loadBags();
 document.getElementById("welcome").innerHTML= ` <p><b> Welcome Back, ${localStorage.getItem('vendor_name')} </b></p>`;
