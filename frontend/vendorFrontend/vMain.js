@@ -92,20 +92,23 @@ async function addBagCard(bag, index) {
         grouped[item.category].push(item);
       });
  
-      const foodContainer = document.getElementById('foodItemsContainer');
-      foodContainer.innerHTML = '';
- 
+      const editFoodContainer = document.getElementById('edit-foodItemsContainer');
+      editFoodContainer.innerHTML = '';
+
       Object.entries(grouped).forEach(([category, items]) => {
-        const legend = document.createElement('p');
-        legend.innerHTML = `<b>${category}</b>`;
-        foodContainer.appendChild(legend);
- 
-        items.forEach(item => {
-          const label = document.createElement('label');
-          const checked = currentIds.includes(item.food_id) ? 'checked' : '';
-          label.innerHTML = `<input type="checkbox" id="food-${item.food_id}" name="food_item" value="${item.food_id}" ${checked}> ${item.name}`;
-          foodContainer.appendChild(label);
-        });
+          const legend = document.createElement('p');
+          legend.innerHTML = `<b>${category}</b>`;
+          editFoodContainer.appendChild(legend);
+
+          items.forEach(item => {
+              const label = document.createElement('label');
+              const checked = currentIds.includes(item.food_id) ? 'checked' : '';
+              label.innerHTML = `
+                <input type="checkbox" id="edit-food-${item.food_id}" name="edit_food_item" value="${item.food_id}" ${checked}>
+                ${item.name}
+              `;
+              editFoodContainer.appendChild(label);
+          });
       });
  
       const dietaryRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/dietary_tags`);

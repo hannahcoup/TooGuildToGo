@@ -145,7 +145,7 @@ function formatTime(datetime) {
  
 
 async function filterByCategory(tag) {
-   const res = await fetch(`https://tooguildtogo.onrender.com/bags?dietary_tag=${tag}`);
+   const res = await fetch(`https://tooguildtogo.onrender.com/bags?dietary_tag=${encodeURIComponent(tag)}`);
    const data = await res.json();
     
   container.innerHTML = "";

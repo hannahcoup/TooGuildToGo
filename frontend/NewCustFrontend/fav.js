@@ -56,7 +56,7 @@ async function removeFavourite(bagId, button) {
       return;
     }
 
-    // remove card from UI instantly
+    
     const card = button.closest(".bag-card");
     card.remove();
 
