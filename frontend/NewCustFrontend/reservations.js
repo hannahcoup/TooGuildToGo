@@ -69,7 +69,7 @@ async function cancelRes(reservation_id, button) {
       return;
     }
 
-    // remove card from UI instantly
+    
     const card = button.closest(".bag-card");
     card.remove();
 
