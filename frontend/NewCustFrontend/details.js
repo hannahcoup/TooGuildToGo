@@ -12,12 +12,12 @@ const categoryImages = {
 
 async function loadBagDetails() {
   try {
-    // 1. Get bag details
+    
     const res = await fetch(`https://tooguildtogo.onrender.com/bags/${bagId}`);
     const bag = await res.json();
     console.log("Bag:", bag);
 
-    // Fill main info FIRST so it still appears even if allergens fail
+    
     const imageSrc = categoryImages[bag.category] || "./images/logo.png";
     document.getElementById("details-image").src = imageSrc;
     document.getElementById("title").textContent = bag.product_name || "No title";
@@ -25,7 +25,7 @@ async function loadBagDetails() {
     document.getElementById("pickup-window").textContent =
       `Collection Time: ${formatTime(bag.pickup_window_start)} - ${formatTime(bag.pickup_window_end)}`;
 
-    // 2. Get actual contents
+   
     const foodRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bagId}/food_items`);
     const foodItems = await foodRes.json();
     console.log("Food items:", foodItems);
@@ -37,7 +37,7 @@ async function loadBagDetails() {
       document.getElementById("contents").textContent = bag.description || "No contents available";
     }
 
-    // 3. Get allergens safely
+   
     try {
       const allergenRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bagId}/allergens`);
 
