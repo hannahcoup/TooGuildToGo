@@ -102,7 +102,7 @@ async function addBagCard(bag, index) {
 
           items.forEach(item => {
               const label = document.createElement('label');
-              const checked = currentIds.includes(item.food_id) ? 'checked' : '';
+              const checked = currentIds.includes(parseInt(item.food_id)) ? 'checked' : '';
               label.innerHTML = `
                 <input type="checkbox" id="edit-food-${item.food_id}" name="edit_food_item" value="${item.food_id}" ${checked}>
                 ${item.name}
