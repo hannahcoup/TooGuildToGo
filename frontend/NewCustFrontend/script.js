@@ -38,7 +38,7 @@ searchInput.addEventListener('keypress', event => {
 async function searchFoodItems() {
     const searchTerm = searchInput.value.trim();
 
-    const res = await fetch(`http://127.0.0.1:8000/bags?search=${searchTerm}`);
+    const res = await fetch(`https://tooguildtogo.onrender.com/bags?search=${searchTerm}`);
     const data = await res.json();
 
     container.innerHTML = "";
@@ -61,7 +61,7 @@ async function searchFoodItems() {
 let bags = [];
 const container = document.getElementById("bags-container");
 async function loadBags() {
-  const res = await fetch(`http://127.0.0.1:8000/bags`);
+  const res = await fetch(`https://tooguildtogo.onrender.com/bags`);
   const data = await res.json();
   container.innerHTML = "";
   bags = data;
@@ -73,7 +73,7 @@ async function loadUserFavourites() {
   const userId = localStorage.getItem("user_id");
   if (!userId) return;
 
-  const res = await fetch(`http://127.0.0.1:8000/customer/favourites/${userId}`);
+  const res = await fetch(`https://tooguildtogo.onrender.com/customer/favourites/${userId}`);
   const data = await res.json();
 
   if (Array.isArray(data)) {
@@ -144,7 +144,7 @@ function formatTime(datetime) {
  
 
 async function filterByCategory(tag) {
-   const res = await fetch(`http://127.0.0.1:8000/bags?dietary_tag=${tag}`);
+   const res = await fetch(`https://tooguildtogo.onrender.com/bags?dietary_tag=${tag}`);
    const data = await res.json();
     
   container.innerHTML = "";
@@ -165,7 +165,7 @@ async function toggleFavourite(bagId, button) {
   const method = isCurrentlyFavourite ? "DELETE" : "POST";
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/customer/favourites", {
+    const res = await fetch("https://tooguildtogo.onrender.com/customer/favourites", {
       method: method,
       headers: {
         "Content-Type": "application/json"

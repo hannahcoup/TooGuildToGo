@@ -50,7 +50,7 @@ async function saveEditName(){
     const old_name= localStorage.getItem("user_name");
     const current_id = localStorage.getItem("user_id");
     if(new_name !== old_name){
-        const res = await fetch(`http://127.0.0.1:8000/customers/${current_id}`, {
+        const res = await fetch(`https://tooguildtogo.onrender.com/customers/${current_id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -81,7 +81,7 @@ async function saveEditPassword() {
         return;
     }
 
-    const res = await fetch(`http://127.0.0.1:8000/customers/${current_id}`, {
+    const res = await fetch(`https://tooguildtogo.onrender.com/customers/${current_id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -103,7 +103,7 @@ async function saveEditEmail(){
     const old_email= localStorage.getItem("user_email");
     const current_id = localStorage.getItem("user_id");
     if(new_email !== old_email){
-        const res = await fetch(`http://127.0.0.1:8000/customers/${current_id}`, {
+        const res = await fetch(`https://tooguildtogo.onrender.com/customers/${current_id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -148,7 +148,7 @@ async function deleteAccount() {
     }
 
     try {
-        const res = await fetch("http://127.0.0.1:8000/customers/delete-account", {
+        const res = await fetch("https://tooguildtogo.onrender.com/customers/delete-account", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -180,7 +180,7 @@ async function deleteAccount() {
 
         localStorage.clear();
         alert("Account deleted successfully.");
-        window.location.href = "/frontend/index.html";
+        window.location.href = "./index.html";
 
     } catch (err) {
         console.error("Delete account failed:", err);

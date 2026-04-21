@@ -8,12 +8,12 @@ async function loadBags() {
   const vendor_id = localStorage.getItem('vendor_id');
   console.log(vendor_name);
   
-  const res = await fetch(`http://127.0.0.1:8000/bags`);
+  const res = await fetch(`https://tooguildtogo.onrender.com/bags`);
   const data = await res.json();
   let allBags = data;
   bags = allBags.filter(b => b.vendor_name === vendor_name);
 
-    const res_v = await fetch(`http://127.0.0.1:8000/reservations?vendor_id=${vendor_id}`);
+    const res_v = await fetch(`https://tooguildtogo.onrender.com/reservations?vendor_id=${vendor_id}`);
     const reservations = await res_v.json();
 
     //getting numbers for each status 
@@ -93,7 +93,7 @@ async function saveEditName(){
     const old_name= localStorage.getItem("vendor_name");
     const current_id = localStorage.getItem("vendor_id");
     if(new_name !== old_name){
-        const res = await fetch(`http://127.0.0.1:8000/vendors/${current_id}`, {
+        const res = await fetch(`https://tooguildtogo.onrender.com/vendors/${current_id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -131,7 +131,7 @@ async function saveEditEmail(){
     const old_email= localStorage.getItem("vendor_email");
     const current_id = localStorage.getItem("vendor_id");
     if(new_email !== old_email){
-        const res = await fetch(`http://127.0.0.1:8000/vendors/${current_id}`, {
+        const res = await fetch(`https://tooguildtogo.onrender.com/vendors/${current_id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -154,7 +154,7 @@ async function saveEditEmail(){
 /* Copied over from cAnalytics.js */ 
 
 function loadGraphs() {
-    document.getElementById('productGraph').src = 'http://127.0.0.1:8000/graph/productAnalytics'
+     document.getElementById('productGraph').src = 'https://tooguildtogo.onrender.com/graph/productAnalytics';
 }
 window.addEventListener('load', () => {
     loadGraphs();

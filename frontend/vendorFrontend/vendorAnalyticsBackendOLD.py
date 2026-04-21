@@ -1,4 +1,4 @@
-
+'''
 import pandas as pd
 import numpy as np 
 import matplotlib
@@ -9,13 +9,13 @@ import base64
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -68,7 +68,8 @@ def getProductAnalytics():
    plt.close(fig) 
    
    encoded = base64.b64encode(tempFile.getvalue()).decode('utf-8')
+   '''
 
-   htmlString = f'<html><body><img src="data:image/png;base64,{encoded}" style="width:100%; height:100%; object-fit: contain;"></body></html>'
+   # htmlString = f'<html><body><img src="data:image/png;base64,{encoded}" style="width:100%; height:100%; object-fit: contain;"></body></html>'
 
-   return HTMLResponse(content=htmlString)
+   return JSONResponse(content={"image": encoded})

@@ -1,10 +1,12 @@
-# Database connection
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# Database URL for establishing connection
-#DATABASE_URL = "postgresql://postgres:Bliskuz1212@localhost:5432/tooguildtogo"
-DATABASE_URL = "postgresql://hannahcoup@localhost/tooguildtogo"
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is not set")
+
 engine = create_engine(DATABASE_URL)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

@@ -42,7 +42,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   const email = document.getElementById('email').value;
   const password = document.getElementById('password').value;
    
-  const res = await fetch('http://127.0.0.1:8000/vendor/login', {
+  const res = await fetch('https://tooguildtogo.onrender.com/vendor/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({email: email, password: password})

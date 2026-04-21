@@ -8,7 +8,7 @@ if(loginForm){
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     
-    const res = await fetch('http://127.0.0.1:8000/customer/login', {
+    const res = await fetch('https://tooguildtogo.onrender.com/customer/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({email: email, password: password})
@@ -26,7 +26,7 @@ console.log("data.id:", data.id);
         localStorage.setItem('user_id', data.user_id);  
         localStorage.setItem('user_name', data.name);
         localStorage.setItem('user_email', data.user_email);
-        window.location.href = '/frontend/NewCustFrontend/index.html';
+        window.location.href = './index.html';
     } else {
         document.getElementById('error').textContent = 'Invalid username or password';
     }
@@ -53,7 +53,7 @@ if(signupForm){
     const password = document.getElementById('password').value;
     const confirmPassword= document.getElementById('confirmPassword').value;
 
-    const res = await fetch('http://127.0.0.1:8000/signup', {
+    const res = await fetch('https://tooguildtogo.onrender.com/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({name: name ,email: email, password: password, confirmPassword: confirmPassword})
@@ -67,7 +67,7 @@ if(signupForm){
             localStorage.setItem('user_id', data.user_id);
             localStorage.setItem('user_name', data.name);
             localStorage.setItem('user_email', data.user_email);
-            window.location.href = '/frontend/NewCustFrontend/index.html';
+            window.location.href = './index.html';
         } else {
             document.getElementById('error').textContent = 'Invalid username or password';
         }

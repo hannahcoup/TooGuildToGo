@@ -1,82 +1,180 @@
-async function loadFoodItems() {
-  const vendor_id = localStorage.getItem('vendor_id') || 1;
-  
-  const res = await fetch(`http://127.0.0.1:8000/vendor/food_items?vendor_id=${vendor_id}`);
-  const foodItems = await res.json();
-
+const API = "https://tooguildtogo.onrender.com";
  
-
-  const grouped = {};
-  foodItems.forEach(item => {
-    if (!grouped[item.category]) grouped[item.category] = [];
-    grouped[item.category].push(item);
-  });
-
+async function loadFoodItems() {
+  const vendor_id = parseInt(localStorage.getItem('vendor_id') || '1', 10);
   const container = document.getElementById('foodItemsContainer');
-  container.innerHTML = '';
-  
-  Object.entries(grouped).forEach(([category, items]) => {
-    const legend = document.createElement('p');
-    legend.innerHTML = `<b>${category}</b>`;
-    container.appendChild(legend);
-    items.forEach(item => {
-      const label = document.createElement('label');
-      label.innerHTML = `<input type="checkbox" id="food-${item.food_id}" name="food_item" value="${item.food_id}"> ${item.name}`;
-      container.appendChild(label);
+  container.innerHTML = 'Loading food items...';
+ 
+  try {
+    const res = await fetch(`${API}/vendor/food_items?vendor_id=${vendor_id}`);
+ 
+    if (!res.ok) {
+      throw new Error(`food items request failed: ${res.status}`);
+    }
+ 
+    const foodItems = await res.json();
+    console.log("food items:", foodItems);
+ 
+    if (!Array.isArray(foodItems) || foodItems.length === 0) {
+      container.innerHTML = '<p>No food items available.</p>';
+      return;
+    }
+ 
+    const grouped = {};
+    foodItems.forEach(item => {
+      if (!grouped[item.category]) grouped[item.category] = [];
+      grouped[item.category].push(item);
     });
-  });
+ 
+    container.innerHTML = '';
+ 
+    Object.entries(grouped).forEach(([category, items]) => {
+      const legend = document.createElement('p');
+      legend.innerHTML = `<b>${category}</b>`;
+      container.appendChild(legend);
+ 
+      items.forEach(item => {
+        const label = document.createElement('label');
+        label.innerHTML = `
+          <input type="checkbox" id="food-${item.food_id}" name="food_item" value="${item.food_id}">
+          ${item.name}
+        `;
+        container.appendChild(label);
+      });
+    });
+ 
+  } catch (err) {
+    console.error("Could not load food items:", err);
+    container.innerHTML = '<p>Could not load food items.</p>';
+  }
 }
-
+ 
 loadFoodItems();
-
+ 
 document.getElementById('addBagForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-
-  const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
-  const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
-const pickup_end = new Date(document.getElementById("pickup_window_end").value);
-const expires = new Date(document.getElementById("expires_at").value);
-
-if (expires <= pickup_end) {
-  document.getElementById('error').textContent = 'Expiry must be before or equal to pickup window end';
-  return;
-}
-  const dietaryIds = [];
-  if (document.getElementById("is_vegan").checked) dietaryIds.push(1);
-  if (document.getElementById("is_vegetarian").checked) dietaryIds.push(2);
-  if (document.getElementById("is_gluten_free").checked) dietaryIds.push(3);
-  if (document.getElementById("contains_meat").checked) dietaryIds.push(4);
-  if (document.getElementById("contains_dairy").checked) dietaryIds.push(5);
-  if (document.getElementById("is_spicy").checked) dietaryIds.push(6);
-
-  const newBag = {
-    vendor_id: parseInt(localStorage.getItem('vendor_id')) || 1,
-    product_name: document.getElementById("product_name").value,
-    category: document.getElementById("category").value,
-    description: document.getElementById("description").value,
-    original_price: parseFloat(document.getElementById("original_price").value),
-    discounted_price: parseFloat(document.getElementById("discounted_price").value),
-    pickup_window_start: document.getElementById("pickup_window_start").value,
-    pickup_window_end: document.getElementById("pickup_window_end").value,
-    expires_at: document.getElementById("expires_at").value,
-    quantity: parseInt(document.getElementById("quantity").value),
-    dietary_tag_ids: dietaryIds,
-    food_ids: food_ids,
-    status: 'available'
-  };
-
-  const res = await fetch('http://127.0.0.1:8000/vendor/add-bag', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(newBag)
-  });
-
-  const data = await res.json();
-
-  if (data.message === "bag created successfully") {
-    window.location.href = 'vDashboard.html';
-  } else {
-    document.getElementById('error').textContent = data.error || 'Something went wrong, please try again.';
+ 
+  const submitBtn = e.submitter || document.querySelector('#addBagForm button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Adding...';
+  }
+ 
+  document.getElementById('error').textContent = '';
+ 
+  try {
+    const vendor_id = parseInt(localStorage.getItem('vendor_id') || '1', 10);
+ 
+    const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
+    const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
+    if (food_ids.length === 0) {
+      document.getElementById('error').textContent = 'Select at least one food item';
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Add'; }
+      return;
+    }
+ 
+    const dietaryCheckboxes = document.querySelectorAll('input[name="dietary_tag"]:checked');
+    const dietary_tag_ids = Array.from(dietaryCheckboxes).map(cb => parseInt(cb.value));
+ 
+    const pickup_start = document.getElementById("pickup_window_start").value;
+    const pickup_end = document.getElementById("pickup_window_end").value;
+    const expires = document.getElementById("expires_at").value;
+ 
+    if (pickup_end <= pickup_start) {
+      document.getElementById('error').textContent = 'Pickup window end must be after pickup window start';
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Add'; }
+      return;
+    }
+ 
+    if (expires < pickup_start) {
+      document.getElementById('error').textContent = 'Expiry must be after or equal to pickup window start';
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Add'; }
+      return;
+    }
+ 
+    if (expires > pickup_end) {
+      document.getElementById('error').textContent = 'Expiry must be before or equal to pickup window end';
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Add'; }
+      return;
+    }
+ 
+    const quantityVal = document.getElementById('quantity').value;
+    if (!quantityVal || isNaN(parseInt(quantityVal))) {
+      document.getElementById('error').textContent = 'Please enter a valid quantity';
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Add'; }
+      return;
+    }
+ 
+    const payload = {
+      vendor_id: vendor_id,
+      product_name: document.getElementById('product_name').value,
+      description: document.getElementById('description').value,
+      category: document.getElementById('category').value,
+      original_price: parseFloat(document.getElementById('original_price').value),
+      discounted_price: parseFloat(document.getElementById('discounted_price').value),
+      quantity: parseInt(quantityVal),
+      pickup_window_start: pickup_start,
+      pickup_window_end: pickup_end,
+      expires_at: expires,
+      food_ids: food_ids,
+      dietary_tag_ids: dietary_tag_ids
+    };
+ 
+    console.log("Submitting bag:", payload);
+ 
+    let responseOk = false;
+    let data = null;
+ 
+    try {
+      const res = await fetch(`${API}/vendor/add-bag`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      responseOk = res.ok;
+      data = await res.json();
+      console.log("Add bag response:", data);
+    } catch (fetchErr) {
+      // CORS blocks reading the response but the request may have succeeded.
+      // Verify by checking if the bag was actually created.
+      console.warn("Fetch/CORS error on response, verifying if bag was created:", fetchErr);
+      try {
+        const verifyRes = await fetch(`${API}/bags?vendor_id=${vendor_id}`);
+        if (verifyRes.ok) {
+          const bags = await verifyRes.json();
+          const justAdded = bags.find(b =>
+            b.product_name === payload.product_name &&
+            b.vendor_id === vendor_id
+          );
+          if (justAdded) {
+            alert('Bag added successfully');
+            window.location.href = 'vDashboard.html';
+            return;
+          }
+        }
+      } catch (verifyErr) {
+        console.error("Could not verify bag creation:", verifyErr);
+      }
+      document.getElementById('error').textContent = 'Could not add bag';
+      return;
+    }
+ 
+    if (responseOk && data && data.message === 'bag created successfully') {
+      alert('Bag added successfully');
+      window.location.href = 'vDashboard.html';
+    } else {
+      document.getElementById('error').textContent =
+        (data && (data.error || JSON.stringify(data.detail))) || 'Something went wrong';
+    }
+ 
+  } catch (err) {
+    console.error("Add bag failed:", err);
+    document.getElementById('error').textContent = 'Could not add bag';
+  } finally {
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Add';
+    }
   }
 });
   /**

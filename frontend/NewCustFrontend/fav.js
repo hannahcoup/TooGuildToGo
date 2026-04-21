@@ -3,7 +3,7 @@ async function loadFavourites() {
   const container = document.getElementById("bags-container");
 
 
-  const res = await fetch(`http://127.0.0.1:8000/customer/favourites/${userId}`);
+  const res = await fetch(`https://tooguildtogo.onrender.com/customer/favourites/${userId}`);
   const favourites = await res.json();
 
   container.innerHTML = "";
@@ -38,7 +38,7 @@ async function removeFavourite(bagId, button) {
   
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/customer/favourites", {
+    const res = await fetch("https://tooguildtogo.onrender.com/customer/favourites", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
