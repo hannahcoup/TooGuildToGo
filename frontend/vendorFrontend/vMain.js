@@ -102,7 +102,7 @@ async function addBagCard(bag, index) {
 
           items.forEach(item => {
               const label = document.createElement('label');
-              const checked = currentIds.includes(parseInt(item.food_id)) ? 'checked' : '';
+              const checked = currentIds.includes(item.food_id) ? 'checked' : '';
               label.innerHTML = `
                 <input type="checkbox" id="edit-food-${item.food_id}" name="edit_food_item" value="${item.food_id}" ${checked}>
                 ${item.name}
@@ -128,7 +128,7 @@ async function addBagCard(bag, index) {
       const dietaryContainer = document.getElementById('edit-dietary-container');
       dietaryContainer.innerHTML = '';
       allDietaryTags.forEach(tag => {
-        const checked = currentIds.includes(parseInt(item.food_id)) ? 'checked' : '';
+        const checked = currentDietaryNames.includes(tag.name.trim().toLowerCase()) ? 'checked' : '';
         const label = document.createElement('label');
         label.style.cssText = 'display:flex; align-items:center; gap:4px; font-size:13px;';
         label.innerHTML = `<input type="checkbox" id="dietary-${tag.id}" name="dietary_tag" value="${tag.id}" ${checked}> ${tag.name}`;
