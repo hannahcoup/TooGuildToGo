@@ -10,16 +10,9 @@ router = APIRouter()
 def get_bags(tag: str = None, dietary_tag: str = None, vendor_id: int = None, search: str = None, db: Session = Depends(get_db)):
     query = db.query(Bag, Vendor).join(Vendor, Vendor.id == Bag.vendor_id)
 
-    if tag:
-        dietary_tag = db.query(DietaryTag).filter(DietaryTag.name == tag).first()
-        if not dietary_tag:
-            return []
-        query = query.join(BagDietaryTag, BagDietaryTag.bag_id == Bag.id).filter(
-            BagDietaryTag.dietary_tag_id == dietary_tag.id
-        )
 
     if dietary_tag:
-        tag_obj = db.query(DietaryTag).filter(DietaryTag.name == dietary_tag).first()
+        tag_obj = db.query(DietaryTag).filter(DietaryTag.name.ilike(dietary_tag)).first()
         if not tag_obj:
             return []
 

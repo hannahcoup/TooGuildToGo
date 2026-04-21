@@ -76,7 +76,7 @@ async function addBagCard(bag, index) {
  
       const bagFoodRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/food_items`);
       const currentFoodIds = await bagFoodRes.json();
-      const currentIds = currentFoodIds.map(f => f.food_id);
+      const currentIds = currentFoodIds.map(f => parseInt(f.food_id));
  
       document.getElementById('edit-product_name').value = bag.product_name || '';
       document.getElementById('edit-description').value = bag.description || '';
@@ -113,7 +113,7 @@ async function addBagCard(bag, index) {
  
       const dietaryRes = await fetch(`https://tooguildtogo.onrender.com/bags/${bag.bag_id}/dietary_tags`);
       const dietaryTags = await dietaryRes.json();
-      const currentDietaryNames = dietaryTags.map(d => d.name);
+      const currentDietaryNames = dietaryTags.map(d => d.name.trim().toLowerCase());
  
       const allDietaryTags = [
         { id: 1, name: 'Vegan' },
@@ -128,7 +128,7 @@ async function addBagCard(bag, index) {
       const dietaryContainer = document.getElementById('edit-dietary-container');
       dietaryContainer.innerHTML = '';
       allDietaryTags.forEach(tag => {
-        const checked = currentDietaryNames.includes(tag.name) ? 'checked' : '';
+        const checked = currentIds.includes(parseInt(item.food_id)) ? 'checked' : '';
         const label = document.createElement('label');
         label.style.cssText = 'display:flex; align-items:center; gap:4px; font-size:13px;';
         label.innerHTML = `<input type="checkbox" id="dietary-${tag.id}" name="dietary_tag" value="${tag.id}" ${checked}> ${tag.name}`;
@@ -175,10 +175,13 @@ document.getElementById('deleteClose').onclick = () => deleteModal.style.display
 document.getElementById('editClose').onclick = () => editModal.style.display = 'none';
  
 document.getElementById('edit-save').addEventListener('click', async () => {
-  const foodCheckboxes = document.querySelectorAll('input[name="food_item"]:checked');
+  const foodCheckboxes = document.querySelectorAll('input[name="edit_food_item"]:checked');
   const food_ids = Array.from(foodCheckboxes).map(cb => parseInt(cb.value));
  
   const current_bag = bags[editIndex];
+
+  const dietaryCheckboxes = document.querySelectorAll('input[name="dietary_tag"]:checked');
+  const dietary_tag_ids = Array.from(dietaryCheckboxes).map(cb => parseInt(cb.value));
  
   const res = await fetch(`https://tooguildtogo.onrender.com/vendor/bags/${current_bag.bag_id}`, {
     method: 'PATCH',
@@ -188,6 +191,7 @@ document.getElementById('edit-save').addEventListener('click', async () => {
       description: document.getElementById('edit-description').value,
       category: document.getElementById('edit-category').value,
       food_ids: food_ids,
+      dietary_tag_ids : dietary_tag_ids,
       discounted_price: parseFloat(document.getElementById('edit-price').value),
       pickup_window_start: document.getElementById('edit-pickup_window_start').value || null,
       pickup_window_end: document.getElementById('edit-pickup_window_end').value || null,

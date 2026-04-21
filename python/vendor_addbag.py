@@ -91,6 +91,7 @@ class EditBagRequest(BaseModel):
     pickup_window_end: str | None = None
     quantity: int | None = None
     food_ids: list[int] | None = None 
+    dietary_tag_ids: list[int] | None = None
 
 
 @router.patch("/vendor/bags/{bag_id}")
@@ -125,7 +126,16 @@ def edit_bag(bag_id: int, data: EditBagRequest, db: Session = Depends(get_db)):
                 text("INSERT INTO bag_items (bag_id, food_id) VALUES (:bag_id, :food_id)"),
                 {"bag_id": bag_id, "food_id": food_id}
             )
-    
+    if data.dietary_tag_ids is not None:
+        db.execute(
+            text("DELETE FROM bag_dietary_tags WHERE bag_id = :bag_id"),
+            {"bag_id": bag_id}
+        )
+        for tag_id in data.dietary_tag_ids:
+            db.execute(
+                text("INSERT INTO bag_dietary_tags (bag_id, dietary_tag_id) VALUES (:bag_id, :tag_id)"),
+                {"bag_id": bag_id, "tag_id": tag_id}
+            )
     db.commit()
     return {"message": "Bag updated successfully"}
 
